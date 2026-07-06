@@ -1,0 +1,395 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SpecTag from '../components/SpecTag.astro';
+
+const vibes = [
+  'Not sure yet -- help me find it',
+  'The Showpiece -- motion-first brand',
+  'The Product Site -- structure & conversion',
+  'The Storefront -- commerce',
+  'The Statement -- aesthetic personality',
+  'The Editorial -- content & reading',
+];
+
+const involvement = [
+  'Point us at it -- you make the calls',
+  'Collaborate -- I pick the vibe, you design inside it',
+  'Hands on the dials -- I want a say in everything',
+];
+---
+
+<BaseLayout
+  title="Contact -- Artifice UI"
+  description="Tell us what you're building. A real form, honest about how it works."
+>
+  <div class="page">
+    <SiteHeader current="contact" />
+
+    <main class="contact">
+      <div class="contact-grid">
+        <!-- LEFT: the pitch -->
+        <div class="contact-copy">
+          <p class="kicker">Start a conversation</p>
+          <h1>Tell us what you're building.</h1>
+          <p class="lede">
+            No sales funnel, no auto-responder pretending to be a person. This
+            actually goes to a human who'll read it and write back. The two
+            questions below aren't required -- but they're the fastest way to
+            skip the small talk.
+          </p>
+          <SpecTag
+            feature="Inline validation"
+            verdict="essential"
+            note="A form that tells you what's wrong as you go -- not after you've hit submit and lost your place -- is honestly the single kindest thing you can do for the person filling it in. Genuinely essential, and cheap to get right too."
+            tech="Native HTML validation types (email, required) plus a small script that surfaces errors on blur and on submit, with aria-invalid and linked error text for screen readers."
+          />
+          <SpecTag
+            feature="Form vs. a plain email link"
+            verdict="situational"
+            note="A form's worth it when the structure actually helps -- the vibe and involvement pickers below genuinely speed things up. When it doesn't though, a mailto link is more honest than a form pretending to be a CRM. This one's upfront about being mailto-powered until a backend actually earns its place."
+            tech="On submit it composes a prefilled email to us and opens your mail client. No database, no third-party tracker, no cost we'd pass to a client for a contact page. When volume justifies a backend, this swaps to a serverless action without changing the UI."
+          />
+        </div>
+
+        <!-- RIGHT: the form -->
+        <div class="contact-form-wrap">
+          <form class="contact-form" data-form novalidate>
+            <div class="field">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" required autocomplete="name" />
+              <span class="field-error" data-error-for="name"></span>
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required autocomplete="email" />
+              <span class="field-error" data-error-for="email"></span>
+            </div>
+
+            <div class="field">
+              <label for="vibe">Which vibe caught your eye? <span class="opt">optional</span></label>
+              <select id="vibe" name="vibe">
+                {vibes.map((v) => <option value={v}>{v}</option>)}
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="say">How much say do you want? <span class="opt">optional</span></label>
+              <select id="say" name="say">
+                {involvement.map((v) => <option value={v}>{v}</option>)}
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="message">What are you building?</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+              <span class="field-error" data-error-for="message"></span>
+            </div>
+
+            <button type="submit" class="submit">Send it →</button>
+            <p class="form-note">
+              Opens your email client with everything filled in -- you send
+              the final word. Prefer to skip the form?
+              <a href="mailto:johnathanmoore9066@gmail.com">Email us directly.</a>
+            </p>
+          </form>
+
+          <!-- confirmation (revealed on submit) -->
+          <div class="form-done" data-form-done hidden>
+            <p class="done-mark">✓ Off it goes</p>
+            <h2>Check your email client.</h2>
+            <p>
+              We've composed the message and handed it off to your mail app --
+              give it a read and hit send. If nothing opened, just write to
+              <a href="mailto:johnathanmoore9066@gmail.com">johnathanmoore9066@gmail.com</a>
+              and we'll pick it up there.
+            </p>
+            <button type="button" class="btn ghost" data-form-reset>← Edit the message</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <SiteFooter />
+  </div>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>('[data-form]');
+    const done = document.querySelector<HTMLElement>('[data-form-done]');
+    const resetBtn = document.querySelector<HTMLButtonElement>('[data-form-reset]');
+    const CONTACT = 'johnathanmoore9066@gmail.com';
+
+    if (form && done) {
+      const fields = ['name', 'email', 'message'] as const;
+
+      /** Validate one field; returns an error string, or '' if valid. */
+      function errorFor(id: string): string {
+        const el = form!.elements.namedItem(id) as HTMLInputElement | null;
+        if (!el) return '';
+        const v = el.value.trim();
+        if (!v) return 'This one\'s required.';
+        if (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+          return 'That doesn\'t look like an email address.';
+        }
+        return '';
+      }
+
+      /** Paint (or clear) the error state for a field. */
+      function paint(id: string): boolean {
+        const el = form!.elements.namedItem(id) as HTMLElement | null;
+        const slot = form!.querySelector<HTMLElement>(`[data-error-for="${id}"]`);
+        const msg = errorFor(id);
+        if (el) {
+          el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+          if (slot) el.setAttribute('aria-describedby', `err-${id}`);
+        }
+        if (slot) {
+          slot.id = `err-${id}`;
+          slot.textContent = msg;
+        }
+        return !msg;
+      }
+
+      // Re-validate a touched field as the person fixes it.
+      fields.forEach((id) => {
+        const el = form.elements.namedItem(id) as HTMLElement | null;
+        el?.addEventListener('blur', () => paint(id));
+        el?.addEventListener('input', () => {
+          if ((el as HTMLElement).getAttribute('aria-invalid') === 'true') paint(id);
+        });
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const results = fields.map((id) => paint(id));
+        if (results.includes(false)) {
+          const firstBad = fields.find((id) => errorFor(id) !== '');
+          const el = firstBad && (form.elements.namedItem(firstBad) as HTMLElement | null);
+          el?.focus();
+          return;
+        }
+
+        const data = new FormData(form);
+        const get = (k: string) => String(data.get(k) ?? '').trim();
+        const lines = [
+          `Name: ${get('name')}`,
+          `Email: ${get('email')}`,
+          `Vibe: ${get('vibe')}`,
+          `Involvement: ${get('say')}`,
+          '',
+          get('message'),
+        ];
+        const subject = `New project enquiry -- ${get('name')}`;
+        const href =
+          `mailto:${CONTACT}` +
+          `?subject=${encodeURIComponent(subject)}` +
+          `&body=${encodeURIComponent(lines.join('\n'))}`;
+
+        window.location.href = href;
+        form.hidden = true;
+        done.hidden = false;
+        done.querySelector('h2')?.setAttribute('tabindex', '-1');
+        (done.querySelector('h2') as HTMLElement | null)?.focus();
+      });
+
+      resetBtn?.addEventListener('click', () => {
+        done.hidden = true;
+        form.hidden = false;
+        (form.elements.namedItem('name') as HTMLElement | null)?.focus();
+      });
+    }
+  </script>
+
+  <style>
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .contact {
+      max-width: 1080px;
+      width: 100%;
+      margin: 0 auto;
+      padding: clamp(3rem, 8vh, 6rem) 6vw clamp(3.5rem, 9vh, 6rem);
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: start;
+    }
+
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 0.7rem;
+    }
+    .contact-copy h1 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.1rem;
+    }
+    .lede {
+      font-size: 1.12rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      max-width: 46ch;
+    }
+    .contact-copy :global(.spec-tag) {
+      margin-top: 1.4rem;
+    }
+
+    /* form */
+    .contact-form-wrap {
+      position: sticky;
+      top: 5rem;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      padding: clamp(1.4rem, 3vw, 2rem);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 24px 60px -40px rgba(0, 0, 0, 0.5);
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .field label {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+    }
+    .opt {
+      color: var(--ink-soft);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      font-family: var(--font-body);
+      font-size: 0.98rem;
+      padding: 0.7rem 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--paper);
+      color: var(--ink);
+      width: 100%;
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+    .field textarea {
+      resize: vertical;
+      min-height: 6rem;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--ink);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 12%, transparent);
+    }
+    .field [aria-invalid='true'] {
+      border-color: var(--v-manipulative);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--v-manipulative) 14%, transparent);
+    }
+    .field-error {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--v-manipulative);
+      min-height: 0.9rem;
+    }
+    .field-error:empty {
+      display: none;
+    }
+    .submit {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      padding: 0.9rem 1.4rem;
+      border: none;
+      border-radius: 7px;
+      background: var(--ink);
+      color: var(--paper);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .submit:hover {
+      transform: translateY(-2px);
+    }
+    .form-note {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    .form-note a {
+      color: var(--ink);
+    }
+
+    /* confirmation */
+    .form-done {
+      padding: clamp(1.6rem, 3vw, 2.2rem);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .done-mark {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--v-essential);
+      margin-bottom: 0.6rem;
+    }
+    .form-done h2 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 1.6rem;
+      margin-bottom: 0.7rem;
+      outline: none;
+    }
+    .form-done p {
+      color: var(--ink-soft);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+    .form-done a {
+      color: var(--ink);
+    }
+    .btn.ghost {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      text-decoration: none;
+      padding: 0.7rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      background: none;
+      cursor: pointer;
+    }
+
+    @media (max-width: 760px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-form-wrap {
+        position: static;
+      }
+    }
+  </style>
+</BaseLayout>

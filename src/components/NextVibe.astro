@@ -1,0 +1,49 @@
+---
+// The "read next" link that chains the demos into a guided tour.
+// Designed for the dark outro sections every demo ends on.
+interface Props {
+  href: string;
+  name: string;
+  kicker?: string;
+}
+
+const { href, name, kicker = 'Next vibe' } = Astro.props;
+---
+
+<a class="next-vibe" href={href}>
+  <span class="nv-kicker">{kicker}</span>
+  <span class="nv-name">{name} <span class="nv-arrow">→</span></span>
+</a>
+
+<style>
+  .next-vibe {
+    display: block;
+    margin-top: 3rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid rgba(244, 241, 234, 0.22);
+    text-decoration: none;
+    color: var(--paper);
+  }
+  .nv-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.4rem;
+  }
+  .nv-name {
+    font-family: var(--font-quiet);
+    font-style: italic;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    line-height: 1.1;
+  }
+  .nv-arrow {
+    display: inline-block;
+    transition: transform 0.25s ease;
+  }
+  .next-vibe:hover .nv-arrow {
+    transform: translateX(0.35em);
+  }
+</style>

@@ -1,0 +1,289 @@
+---
+interface Props {
+  category: string;
+  collapsed?: boolean;
+}
+
+const { category, collapsed = false } = Astro.props;
+---
+
+<aside
+  class="hud"
+  aria-label="Demo spec sheet"
+  data-collapsed={collapsed ? 'true' : 'false'}
+>
+  <div class="hud-head">
+    <span class="hud-cat">{category}</span>
+    <span class="hud-count">
+      <span data-hud-seen>0</span>/<span data-hud-total>0</span>
+    </span>
+    <button
+      class="hud-toggle"
+      data-hud-toggle
+      type="button"
+      aria-label="Toggle spec sheet"
+      aria-expanded={collapsed ? 'false' : 'true'}>{collapsed ? '+' : '–'}</button
+    >
+  </div>
+  <div class="hud-body">
+    <ol class="hud-list" data-hud-list></ol>
+    <button
+      class="hud-specs"
+      data-specs-toggle
+      type="button"
+      aria-pressed="true"
+      title="Hide the spec tags and experience this vibe the way a visitor would"
+      >narration: on</button
+    >
+  </div>
+  <div class="hud-progress"><span class="hud-bar" data-hud-bar></span></div>
+</aside>
+
+<script>
+  const list = document.querySelector<HTMLOListElement>('[data-hud-list]');
+  const sections = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-feature]'),
+  );
+  const totalEl = document.querySelector('[data-hud-total]');
+  const seenEl = document.querySelector('[data-hud-seen]');
+  const bar = document.querySelector<HTMLElement>('[data-hud-bar]');
+
+  if (list && totalEl && seenEl && bar) {
+    const seen = new Set<Element>();
+    const itemFor = new Map<Element, HTMLLIElement>();
+    totalEl.textContent = String(sections.length);
+
+    sections.forEach((section) => {
+      const li = document.createElement('li');
+      li.className = 'hud-item';
+      li.dataset.verdict = section.dataset.verdict ?? '';
+      const check = document.createElement('span');
+      check.className = 'hud-check';
+      check.textContent = '○';
+      const name = document.createElement('span');
+      name.className = 'hud-name';
+      name.textContent = section.dataset.feature ?? '';
+      li.append(check, name);
+      list.appendChild(li);
+      itemFor.set(section, li);
+    });
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          seen.add(entry.target);
+          const li = itemFor.get(entry.target);
+          if (li) {
+            li.classList.add('is-seen');
+            const check = li.querySelector('.hud-check');
+            if (check) check.textContent = '●';
+          }
+          seenEl.textContent = String(seen.size);
+        }
+      },
+      { threshold: 0.35 },
+    );
+    sections.forEach((section) => io.observe(section));
+
+    const onScroll = () => {
+      const el = document.documentElement;
+      const max = el.scrollHeight - el.clientHeight;
+      bar.style.transform = `scaleX(${max > 0 ? el.scrollTop / max : 0})`;
+    };
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // Collapse / expand
+  const hud = document.querySelector<HTMLElement>('.hud');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-hud-toggle]');
+  if (hud && toggle) {
+    toggle.addEventListener('click', () => {
+      const collapsed = hud.getAttribute('data-collapsed') === 'true';
+      hud.setAttribute('data-collapsed', String(!collapsed));
+      toggle.setAttribute('aria-expanded', String(collapsed));
+      toggle.textContent = collapsed ? '–' : '+';
+    });
+  }
+
+  // Narration on/off: hide every spec tag so the vibe can be experienced
+  // "clean" — the way a client's visitors would see it.
+  const specsBtn =
+    document.querySelector<HTMLButtonElement>('[data-specs-toggle]');
+  if (specsBtn) {
+    specsBtn.addEventListener('click', () => {
+      const off = document.documentElement.toggleAttribute('data-specs-off');
+      specsBtn.setAttribute('aria-pressed', String(!off));
+      specsBtn.textContent = off ? 'narration: off' : 'narration: on';
+      // Removing the tags changes section heights; nudge ScrollTrigger et al.
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
+  // Get out of the way of closing sections (e.g. the outro CTAs)
+  const hideTriggers = document.querySelectorAll('[data-hud-hide]');
+  if (hud && hideTriggers.length) {
+    const hideIo = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          hud.classList.toggle('is-hidden', entry.isIntersecting);
+        }
+      },
+      { threshold: 0.15 },
+    );
+    hideTriggers.forEach((el) => hideIo.observe(el));
+  }
+</script>
+
+<style>
+  .hud {
+    position: fixed;
+    right: 1.1rem;
+    bottom: 1.1rem;
+    z-index: 60;
+    width: 220px;
+    padding: 0.75rem 0.85rem;
+    background: rgba(20, 18, 16, 0.9);
+    color: #f4f1ea;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 40px -14px rgba(0, 0, 0, 0.6);
+    transition:
+      opacity 0.4s ease,
+      transform 0.4s ease;
+  }
+  .hud.is-hidden {
+    opacity: 0;
+    transform: translateY(14px);
+    pointer-events: none;
+  }
+  .hud-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .hud-cat {
+    flex: 1;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .hud-count {
+    opacity: 0.7;
+  }
+  .hud-toggle {
+    background: none;
+    border: none;
+    color: inherit;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0 0.15rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+  .hud-toggle:hover {
+    opacity: 1;
+  }
+  .hud-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+  }
+  .hud-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+  .hud-item.is-seen {
+    opacity: 1;
+  }
+  .hud-check {
+    font-size: 0.6rem;
+    color: var(--v-situational);
+  }
+  .hud-item[data-verdict='essential'] .hud-check {
+    color: var(--v-essential);
+  }
+  .hud-item[data-verdict='vanity'] .hud-check {
+    color: var(--v-vanity);
+  }
+  .hud-item[data-verdict='manipulative'] .hud-check {
+    color: var(--v-manipulative);
+  }
+  .hud-specs {
+    margin-top: 0.6rem;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    background: none;
+    color: inherit;
+    opacity: 0.75;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  .hud-specs:hover {
+    opacity: 1;
+  }
+  .hud-progress {
+    margin-top: 0.6rem;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .hud-bar {
+    display: block;
+    height: 100%;
+    background: #f4f1ea;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  /* collapsed state */
+  .hud[data-collapsed='true'] {
+    width: auto;
+  }
+  .hud[data-collapsed='true'] .hud-body {
+    display: none;
+  }
+  .hud[data-collapsed='true'] .hud-head {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+  .hud[data-collapsed='true'] .hud-progress {
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 720px) {
+    .hud {
+      width: auto;
+      left: 0.6rem;
+      right: 0.6rem;
+      bottom: 0.6rem;
+    }
+    .hud-list {
+      display: none;
+    }
+    .hud-toggle {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,363 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Vibe {
+  slug: string;
+  name: string;
+  overview: string;
+  mechanic: string;
+  status: 'live' | 'building';
+}
+
+const vibes: Vibe[] = [
+  {
+    slug: 'showpiece',
+    name: 'The Showpiece',
+    overview:
+      'Motion-first branding -- big, cinematic, scroll-driven. Made to be felt, not skimmed.',
+    mechanic: 'A loud ↔ quiet dial -- same engine whether it\'s agency or luxury.',
+    status: 'live',
+  },
+  {
+    slug: 'product',
+    name: 'The Product Site',
+    overview:
+      'Structure and conversion -- trust signals, feature grids, pricing, CTAs.',
+    mechanic: 'Swap the arrangement: corporate, SaaS, or one-CTA.',
+    status: 'live',
+  },
+  {
+    slug: 'storefront',
+    name: 'The Storefront',
+    overview: 'Commerce -- grids, carts, badges, and some honest urgency.',
+    mechanic: 'An actual working cart, with real product state.',
+    status: 'live',
+  },
+  {
+    slug: 'statement',
+    name: 'The Statement',
+    overview:
+      'Aesthetic personality -- playful, brutalist, web3, retro. Attitude over utility, basically.',
+    mechanic: 'A skin-swap -- the vibe is just a stylesheet here, not a different engine.',
+    status: 'live',
+  },
+  {
+    slug: 'editorial',
+    name: 'The Editorial',
+    overview: 'Content and reading -- typography, drop caps, pull quotes, menus.',
+    mechanic: 'An actual reading system.',
+    status: 'live',
+  },
+];
+---
+
+<BaseLayout
+  title="The Vibes -- [ARTIFICE UI]"
+  description="Five working demos of what a website can feel like -- Showpiece, Product, Storefront, Statement, Editorial -- each one performs its own features and rates them honestly."
+>
+  <main class="gallery">
+    <header class="gallery-head">
+      <a class="back" href="/">← [ARTIFICE UI]</a>
+      <h1>The Vibes</h1>
+      <p class="intro">
+        Every website has a vibe. Each demo below actually <em>performs</em> its
+        own -- and tells you, straight up, which features are worth it and
+        which ones are just vanity. The cards are already doing it, too: each
+        one's dressed in the vibe it leads to.
+      </p>
+      <div class="legend" aria-label="Verdict legend">
+        <p class="legend-title">Every feature gets stamped with a verdict:</p>
+        <ul class="legend-list">
+          <li data-v="essential"><strong>Essential</strong> -- earns its place</li>
+          <li data-v="situational">
+            <strong>Situational</strong> -- only in the right context
+          </li>
+          <li data-v="vanity"><strong>Vanity</strong> -- looks great, does little</li>
+          <li data-v="manipulative">
+            <strong>⚠ Manipulative</strong> -- converts, but costs trust
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <ul class="grid">
+      {
+        vibes.map((vibe) => (
+          <li
+            class:list={['card', { disabled: vibe.status === 'building' }]}
+            data-vibe={vibe.slug}
+          >
+            <a
+              href={vibe.status === 'live' ? `/vibes/${vibe.slug}` : undefined}
+              aria-disabled={vibe.status === 'building'}
+            >
+              <span class="card-status">
+                {vibe.status === 'live' ? 'Enter the demo →' : 'In progress'}
+              </span>
+              <h2>{vibe.name}</h2>
+              <p class="card-overview">{vibe.overview}</p>
+              <p class="card-mechanic">{vibe.mechanic}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+
+  <style>
+    .gallery {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6vh 6vw;
+    }
+    .back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: var(--ink-soft);
+    }
+    .gallery-head h1 {
+      font-family: var(--font-loud);
+      font-size: clamp(3rem, 11vw, 8rem);
+      text-transform: uppercase;
+      line-height: 0.95;
+      margin: 0.4rem 0 0.8rem;
+    }
+    .intro {
+      max-width: 52ch;
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+    }
+    .intro em {
+      font-family: var(--font-quiet);
+      font-style: italic;
+    }
+
+    /* ---- verdict legend: teach the colour language before the demos ---- */
+    .legend {
+      margin-top: 2rem;
+      padding: 1rem 1.2rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .legend-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 0.6rem;
+    }
+    .legend-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+    }
+    .legend-list li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .legend-list li::before {
+      content: '';
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--v-situational);
+      flex: none;
+    }
+    .legend-list li[data-v='essential']::before {
+      background: var(--v-essential);
+    }
+    .legend-list li[data-v='vanity']::before {
+      background: var(--v-vanity);
+    }
+    .legend-list li[data-v='manipulative']::before {
+      background: var(--v-manipulative);
+    }
+    .legend-list strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .grid {
+      list-style: none;
+      padding: 0;
+      margin: 3rem 0 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem;
+    }
+    .card a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      height: 100%;
+      padding: 1.5rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      text-decoration: none;
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+    .card:not(.disabled) a:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.35);
+    }
+    .card.disabled a {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .card-status {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--sp-accent, #b0463b);
+    }
+    .card h2 {
+      font-family: var(--font-quiet);
+      font-size: 1.7rem;
+      font-weight: 600;
+    }
+    .card-overview {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+    .card-mechanic {
+      margin-top: auto;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink);
+      padding-top: 0.6rem;
+      border-top: 1px dashed var(--line);
+    }
+
+    /* ============================================================
+       Each card wears its own vibe — the gallery is the sampler
+       platter. Same card skeleton, five skins (sound familiar?).
+       ============================================================ */
+
+    /* Showpiece: cinematic dark, loud type that goes quiet on hover */
+    .card[data-vibe='showpiece'] a {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--paper);
+    }
+    .card[data-vibe='showpiece'] h2 {
+      font-family: var(--font-loud);
+      text-transform: uppercase;
+      font-size: 2.1rem;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      transition: letter-spacing 0.5s ease;
+    }
+    .card[data-vibe='showpiece'] a:hover h2 {
+      letter-spacing: 0.12em; /* the loud→quiet dial, in miniature */
+    }
+    .card[data-vibe='showpiece'] .card-overview {
+      color: rgba(244, 241, 234, 0.72);
+    }
+    .card[data-vibe='showpiece'] .card-mechanic {
+      color: var(--paper);
+      border-top-color: rgba(244, 241, 234, 0.28);
+    }
+
+    /* Product Site: corporate blue, a whisper of mesh gradient */
+    .card[data-vibe='product'] a {
+      background:
+        radial-gradient(90% 70% at 88% 0%, rgba(47, 111, 208, 0.16), transparent 60%),
+        #fff;
+      border-color: rgba(31, 95, 191, 0.35);
+    }
+    .card[data-vibe='product'] .card-status {
+      color: #1f5fbf;
+    }
+
+    /* Storefront: boutique cream, forest-green awning */
+    .card[data-vibe='storefront'] a {
+      background: #faf7ef;
+      border-color: #e3ddd2;
+      border-top: 4px solid #2f6b4f;
+    }
+    .card[data-vibe='storefront'] .card-status {
+      color: #2f6b4f;
+    }
+
+    /* Statement: brutalist frame, playful pink, all four skins in the strip */
+    .card[data-vibe='statement'] a {
+      position: relative;
+      background: #fdeffb;
+      border: 3px solid #000;
+      border-radius: 0;
+      box-shadow: 6px 6px 0 #000;
+      overflow: hidden;
+    }
+    .card[data-vibe='statement'] a::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 6px;
+      background: linear-gradient(
+        90deg,
+        #ff4fa3 0 25%,
+        #000 25% 50%,
+        #23e5ff 50% 75%,
+        #ff5cc8 75%
+      );
+    }
+    .card[data-vibe='statement'] h2 {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      font-size: 1.4rem;
+    }
+    .card[data-vibe='statement'] .card-status {
+      color: #ff4fa3;
+    }
+    .card[data-vibe='statement'] a:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 10px 10px 0 #000;
+      animation: card-wobble 0.5s ease;
+    }
+    @keyframes card-wobble {
+      15% {
+        transform: translate(-3px, -3px) rotate(-1.6deg);
+      }
+      45% {
+        transform: translate(-3px, -3px) rotate(1.1deg);
+      }
+      75% {
+        transform: translate(-3px, -3px) rotate(-0.6deg);
+      }
+    }
+
+    /* Editorial: paper, serif, and a real drop cap in miniature */
+    .card[data-vibe='editorial'] a {
+      background: var(--paper);
+    }
+    .card[data-vibe='editorial'] .card-overview {
+      font-family: var(--font-quiet);
+      font-size: 1.02rem;
+      line-height: 1.55;
+    }
+    .card[data-vibe='editorial'] .card-overview::first-letter {
+      float: left;
+      font-size: 2.7em;
+      line-height: 0.8;
+      padding: 0.05em 0.12em 0 0;
+      font-weight: 600;
+      color: #8a2b2b;
+    }
+    .card[data-vibe='editorial'] .card-status {
+      color: #8a2b2b;
+    }
+  </style>
+</BaseLayout>

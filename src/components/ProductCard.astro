@@ -1,0 +1,320 @@
+---
+export interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  was?: number;
+  color: string;
+  colors: string[];
+  rating: number;
+  reviews: number;
+  badge?: 'sale' | 'new';
+  stock: number;
+}
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const { id, name, category, price, was, color, colors, rating, reviews, badge, stock } = product;
+
+// Minimal line-art silhouettes so a colored tile reads as a real product.
+const icons: Record<string, string> = {
+  Kitchen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h9v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V8Z"/><path d="M14 9h2a2 2 0 0 1 0 4h-2"/></svg>',
+  Bags: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9h12l-1 9H7L6 9Z"/><path d="M9 9V7a3 3 0 0 1 6 0v2"/></svg>',
+  Lighting: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h6l2 6H6l2-6Z"/><path d="M11 10v8"/><path d="M8 20h6"/></svg>',
+  Home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16v3a5 5 0 0 1-5 5H4V8Z"/><path d="M4 12h11"/></svg>',
+  Furniture: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/><path d="M5 10h14v4H5z"/><path d="M6 14v4M18 14v4"/></svg>',
+  Garden: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h10l-1 8H8l-1-8Z"/><path d="M12 10c0-3 1-5 4-5-1 3-2 5-4 5Z"/></svg>',
+};
+const icon = icons[category] ?? icons.Home;
+---
+
+<article
+  class="pcard"
+  style={`--pc:${color}`}
+  data-product-id={id}
+  data-name={name}
+  data-price={price}
+  data-category={category}
+  data-rating={rating}
+  data-color={color}
+>
+  <div class="pcard-media">
+    <div class="pcard-img front" set:html={icon} />
+    <div class="pcard-img back" set:html={icon} />
+    {badge && <span class={`pcard-badge is-${badge}`}>{badge === 'sale' ? 'Sale' : 'New'}</span>}
+    <button class="pcard-fav" type="button" data-fav aria-label="Save to wishlist" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C12 21 4 14.5 4 9C4 6.5 6 5 8 5C9.5 5 11 5.8 12 7C13 5.8 14.5 5 16 5C18 5 20 6.5 20 9C20 14.5 12 21 12 21Z"/></svg>
+    </button>
+    {stock <= 5 && <span class="pcard-stock">Only {stock} left</span>}
+    <button class="pcard-add" type="button" data-add>Add to cart</button>
+  </div>
+
+  <div class="pcard-body">
+    <div class="pcard-top">
+      <h3 class="pcard-name">{name}</h3>
+      <p class="pcard-price">
+        {was && <s class="was">${was}</s>}
+        <span class={`now${was ? ' is-sale' : ''}`}>${price}</span>
+      </p>
+    </div>
+    <div class="pcard-rating">
+      <span class="stars" style={`--r:${rating}`} aria-hidden="true"></span>
+      <span class="rcount">{rating.toFixed(1)} ({reviews})</span>
+    </div>
+    <div class="pcard-swatches">
+      {
+        colors.map((c, i) => (
+          <button
+            class="swatch"
+            type="button"
+            style={`--sc:${c}`}
+            data-swatch={c}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            aria-label={`Colour option`}
+          />
+        ))
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .pcard {
+    display: flex;
+    flex-direction: column;
+    background: var(--sf-card, #fff);
+    border: 1px solid var(--sf-line, #e3ddd2);
+    border-radius: var(--sf-radius, 10px);
+    overflow: hidden;
+  }
+  .pcard-media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+  .pcard-img {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.9);
+    transition:
+      opacity 0.45s ease,
+      background 0.4s ease;
+  }
+  .pcard-img :global(svg) {
+    width: 34%;
+    height: 34%;
+    opacity: 0.9;
+  }
+  .pcard-img.front {
+    background:
+      radial-gradient(120% 100% at 25% 18%, color-mix(in srgb, var(--pc) 55%, white), transparent 55%),
+      linear-gradient(158deg, var(--pc), color-mix(in srgb, var(--pc) 68%, #000 22%));
+  }
+  .pcard-img.back {
+    opacity: 0;
+    background:
+      radial-gradient(120% 120% at 78% 84%, color-mix(in srgb, var(--pc) 45%, white 12%), transparent 60%),
+      conic-gradient(from 210deg at 62% 38%, color-mix(in srgb, var(--pc) 85%, #000 12%), color-mix(in srgb, var(--pc) 60%, #000 28%), color-mix(in srgb, var(--pc) 88%, white 8%));
+  }
+  .pcard:hover .pcard-img.back {
+    opacity: 1;
+  }
+  .pcard-badge {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.5rem;
+    border-radius: 999px;
+    color: #fff;
+    z-index: 2;
+  }
+  .pcard-badge.is-sale {
+    background: var(--sf-sale, #c85a3c);
+  }
+  .pcard-badge.is-new {
+    background: var(--sf-ink, #1c1a17);
+  }
+  .pcard-stock {
+    position: absolute;
+    bottom: 0.7rem;
+    left: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    padding: 0.22rem 0.5rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sf-sale, #c85a3c) 16%, white);
+    color: var(--sf-sale, #c85a3c);
+    z-index: 2;
+  }
+  /* wishlist heart (situational) */
+  .pcard-fav {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    color: var(--sf-muted, #8a8175);
+    cursor: pointer;
+    box-shadow: 0 2px 8px -3px rgba(0, 0, 0, 0.4);
+    transition:
+      transform 0.15s ease,
+      color 0.2s ease;
+  }
+  .pcard-fav svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+  }
+  .pcard-fav:hover {
+    transform: scale(1.12);
+  }
+  .pcard-fav[aria-pressed='true'] {
+    color: var(--sf-sale, #c85a3c);
+  }
+  .pcard-fav[aria-pressed='true'] svg {
+    fill: currentColor;
+  }
+  .pcard-fav.bump {
+    animation: fav-bump 0.35s ease;
+  }
+  @keyframes fav-bump {
+    40% {
+      transform: scale(1.4);
+    }
+  }
+  .pcard-add {
+    position: absolute;
+    left: 0.7rem;
+    right: 0.7rem;
+    bottom: 0.7rem;
+    padding: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    border: none;
+    border-radius: calc(var(--sf-radius, 10px) - 3px);
+    background: var(--sf-ink, #1c1a17);
+    color: var(--sf-paper, #f5f2ea);
+    cursor: pointer;
+    transform: translateY(130%);
+    opacity: 0;
+    transition:
+      transform 0.28s ease,
+      opacity 0.28s ease,
+      background 0.2s ease;
+    z-index: 3;
+  }
+  .pcard:hover .pcard-add,
+  .pcard:focus-within .pcard-add {
+    transform: none;
+    opacity: 1;
+  }
+  .pcard-add:hover {
+    background: var(--sf-accent, #2f6b4f);
+  }
+  @media (hover: none) {
+    .pcard-add {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .pcard-body {
+    padding: 0.9rem 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .pcard-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .pcard-name {
+    font-family: var(--font-quiet);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .pcard-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+  }
+  .pcard-price .was {
+    color: var(--sf-muted, #8a8175);
+    font-size: 0.82rem;
+  }
+  .pcard-price .now.is-sale {
+    color: var(--sf-sale, #c85a3c);
+  }
+  .pcard-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--sf-muted, #8a8175);
+  }
+  .stars {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .stars::before {
+    content: '★★★★★';
+    letter-spacing: 1px;
+    color: var(--sf-line, #ddd6c9);
+  }
+  .stars::after {
+    content: '★★★★★';
+    letter-spacing: 1px;
+    color: var(--sf-star, #e0a83e);
+    position: absolute;
+    inset: 0;
+    width: calc(var(--r) / 5 * 100%);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .pcard-swatches {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.1rem;
+  }
+  .swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--sc);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 0 0 2px transparent;
+    transition: box-shadow 0.2s ease;
+  }
+  .swatch[aria-pressed='true'] {
+    box-shadow: 0 0 0 2px var(--sf-ink, #1c1a17);
+  }
+</style>

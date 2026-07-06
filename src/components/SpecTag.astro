@@ -1,0 +1,106 @@
+---
+type Verdict = 'essential' | 'situational' | 'vanity' | 'manipulative';
+
+interface Props {
+  feature: string;
+  verdict: Verdict;
+  note: string;
+  tech?: string;
+}
+
+const { feature, verdict, note, tech } = Astro.props;
+
+const verdictLabel: Record<Verdict, string> = {
+  essential: 'Essential',
+  situational: 'Situational',
+  vanity: 'Vanity',
+  manipulative: '⚠ Manipulative',
+};
+---
+
+<aside class="spec-tag" data-verdict={verdict}>
+  <div class="spec-head">
+    <span class="spec-feature">❯ {feature}</span>
+    <span class="spec-verdict">{verdictLabel[verdict]}</span>
+  </div>
+  <p class="spec-note">{note}</p>
+  {
+    tech && (
+      <details class="spec-tech">
+        <summary>How it's done</summary>
+        <p>{tech}</p>
+      </details>
+    )
+  }
+</aside>
+
+<style>
+  .spec-tag {
+    --verdict-color: var(--v-vanity);
+    width: min(360px, 100%);
+    padding: 0.75rem 0.9rem;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--verdict-color);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    box-shadow: 0 6px 24px -12px rgba(0, 0, 0, 0.35);
+  }
+  .spec-tag[data-verdict='essential'] {
+    --verdict-color: var(--v-essential);
+  }
+  .spec-tag[data-verdict='situational'] {
+    --verdict-color: var(--v-situational);
+  }
+  .spec-tag[data-verdict='vanity'] {
+    --verdict-color: var(--v-vanity);
+  }
+  .spec-tag[data-verdict='manipulative'] {
+    --verdict-color: var(--v-manipulative);
+  }
+  .spec-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+  }
+  .spec-feature {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .spec-verdict {
+    flex: none;
+    font-size: 0.62rem;
+    font-weight: 500;
+    padding: 0.12rem 0.4rem;
+    border-radius: 999px;
+    color: #fff;
+    background: var(--verdict-color);
+    white-space: nowrap;
+  }
+  .spec-note {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .spec-tech {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+  }
+  .spec-tech summary {
+    cursor: pointer;
+    color: var(--verdict-color);
+    font-weight: 500;
+    user-select: none;
+  }
+  .spec-tech p {
+    margin-top: 0.35rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+</style>

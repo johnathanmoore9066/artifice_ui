@@ -1,0 +1,133 @@
+/* ============================================================
+   [ARTIFICE UI] — global foundation
+   Design tokens + reset + the narration system's verdict palette.
+   The Showpiece "dial" is driven entirely by the single --dial
+   custom property (0 = quiet/luxury, 1 = loud/agency).
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+/* Visually hidden, still read by assistive tech (e.g. a section heading that
+   the visual design carries some other way). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard focus: one warm ring that stays visible on every palette the site
+   uses — cream, near-black, blue, green, pink, brutalist white. Mouse clicks
+   don't trigger it (:focus-visible), so it never nags pointer users. */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+:root {
+  /* palette */
+  --paper: #f4f1ea;
+  --ink: #141210;
+  --ink-soft: #4a453d;
+  --line: #d8d2c6;
+
+  /* type */
+  --font-loud: 'Anton', 'Arial Narrow', system-ui, sans-serif;
+  --font-quiet: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  /* verdict palette (the house voice) */
+  --v-essential: #2f9e6f;
+  --v-situational: #c98a1a;
+  --v-vanity: #a24bd6;
+  --v-manipulative: #d4483b;
+
+  /* keyboard focus ring — warm, visible on both light and dark surfaces */
+  --focus: #c8492f;
+
+  /* ---- the dial (Showpiece) ---- */
+  --dial: 1;
+  --sp-display-vw: calc(8.5 + 13.5 * var(--dial)); /* 8.5vw quiet -> 22vw loud */
+  --sp-track: calc((0.14 - 0.17 * var(--dial)) * 1em); /* wide quiet -> tight loud */
+  --sp-space: calc((15 - 7 * var(--dial)) * 1vh); /* airier when quiet */
+  --sp-accent: hsl(8 calc(var(--dial) * 80%) 52%);
+  --sp-motion: calc(1.4 - 0.9 * var(--dial)); /* slower when quiet */
+}
+
+@property --dial {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* "View it clean": the HUD's narration toggle hides every spec tag so a
+   vibe can be experienced the way a client's visitors would see it. */
+html[data-specs-off] .spec-tag {
+  display: none;
+}
+
+/* Lenis smooth-scroll requirements */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}

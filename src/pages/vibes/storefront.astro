@@ -1,0 +1,1188 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpecTag from '../../components/SpecTag.astro';
+import Hud from '../../components/Hud.astro';
+import NextVibe from '../../components/NextVibe.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import type { Product } from '../../components/ProductCard.astro';
+
+const products: Product[] = [
+  { id: 'mug', name: 'Stoneware Mug', category: 'Kitchen', price: 24, was: 32, color: '#3a6b52', colors: ['#3a6b52', '#b5643c', '#2a3550'], rating: 4.6, reviews: 128, badge: 'sale', stock: 12 },
+  { id: 'tote', name: 'Canvas Tote', category: 'Bags', price: 38, color: '#b5643c', colors: ['#b5643c', '#1c1a17', '#7a8b6f'], rating: 4.8, reviews: 64, badge: 'new', stock: 3 },
+  { id: 'lamp', name: 'Arc Table Lamp', category: 'Lighting', price: 89, was: 120, color: '#2a3550', colors: ['#2a3550', '#8a3b3b', '#c9a24b'], rating: 4.9, reviews: 210, badge: 'sale', stock: 5 },
+  { id: 'throw', name: 'Wool Throw', category: 'Home', price: 72, color: '#7a8b6f', colors: ['#7a8b6f', '#b5643c', '#39352f'], rating: 4.4, reviews: 41, stock: 2 },
+  { id: 'chair', name: 'Oak Lounge Chair', category: 'Furniture', price: 340, color: '#9c6b3f', colors: ['#9c6b3f', '#2f2a25', '#6b6f74'], rating: 4.7, reviews: 88, stock: 8 },
+  { id: 'planter', name: 'Ceramic Planter', category: 'Garden', price: 29, was: 36, color: '#c9a24b', colors: ['#c9a24b', '#3a6b52', '#b5643c'], rating: 4.5, reviews: 156, badge: 'sale', stock: 20 },
+];
+
+const categories = ['All', ...Array.from(new Set(products.map((p) => p.category)))];
+---
+
+<BaseLayout
+  title="The Storefront -- [ARTIFICE UI]"
+  description="A commerce demo with a genuinely working cart -- variants, quantities, live subtotal, free-shipping meter -- plus honest verdicts on scarcity cues and sale-price anchoring."
+>
+  <Hud category="Storefront" collapsed />
+
+  <nav class="shop-nav">
+    <a class="shop-back" href="/vibes">← Vibes</a>
+    <span class="shop-name">MERIDIAN&nbsp;&&nbsp;CO.</span>
+    <div class="nav-right">
+      <span class="wish-ind" data-wish-ind aria-label="Saved items">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C12 21 4 14.5 4 9C4 6.5 6 5 8 5C9.5 5 11 5.8 12 7C13 5.8 14.5 5 16 5C18 5 20 6.5 20 9C20 14.5 12 21 12 21Z"/></svg>
+        <span data-wish-count>0</span>
+      </span>
+      <button class="cart-btn" type="button" data-cart-open>
+        Cart <span class="cart-count" data-cart-count>0</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="storefront">
+    <header class="shop-hero">
+      <p class="shop-eyebrow">The Storefront</p>
+      <h1>Goods that actually add to cart.</h1>
+      <p class="shop-lede">
+        Everything on this page actually works -- add items, switch colours,
+        adjust quantities, watch the total move. It's the one demo with real
+        state behind it.
+      </p>
+    </header>
+
+    <!-- FILTER & SORT -->
+    <section class="sf-sec toolbar-sec" data-feature="Filter & sort" data-verdict="situational">
+      <div class="shop-toolbar">
+        <div class="filters" data-filters>
+          {
+            categories.map((c, i) => (
+              <button type="button" class="filter" data-filter={c} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {c}
+              </button>
+            ))
+          }
+        </div>
+        <label class="sort">
+          Sort
+          <select data-sort>
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="rating">Top rated</option>
+          </select>
+        </label>
+      </div>
+      <SpecTag
+        feature="Filter & sort"
+        verdict="situational"
+        note="Essential once a catalogue gets big -- it's basically how people cope with hundreds of items. On a curated shop of six products though, it's just friction pretending to be help."
+        tech="Filter toggles the visible cards by category; sort reorders them by price or rating in place."
+      />
+    </section>
+
+    <!-- PRODUCT GRID -->
+    <section class="sf-sec grid-sec" data-feature="Product grid" data-verdict="essential">
+      <h2 class="sr-only">Products</h2>
+      <div class="product-grid" data-grid>
+        {products.map((p) => <ProductCard product={p} />)}
+      </div>
+      <SpecTag
+        feature="Product grid"
+        verdict="essential"
+        note="The retail workhorse, basically. A scannable grid of image + name + price + rating is what shoppers expect, and how they actually compare things. Not much point reinventing this one."
+        tech="A responsive CSS grid of reusable ProductCard components -- each carrying its own price, variants, rating, and stock."
+      />
+    </section>
+
+    <!-- HOVER-SWAP -->
+    <section class="sf-sec callout" data-feature="Image hover-swap" data-verdict="essential">
+      <div class="callout-demo">
+        <ProductCard product={products[1]} />
+      </div>
+      <div class="callout-copy">
+        <h2>Hover-swap</h2>
+        <p>Hover the card -- the image flips to a second angle. Seeing the back, or a detail shot, answers a real question before the shopper even has to ask it.</p>
+        <SpecTag
+          feature="Image hover-swap"
+          verdict="essential"
+          note="One of the few 'flourishes' that genuinely helps a purchase decision. A second view actually reduces returns and hesitation. Worth the effort here."
+          tech="Two stacked images; the back one fades in on :hover with a CSS opacity transition."
+        />
+      </div>
+    </section>
+
+    <!-- VARIANT SWATCHES -->
+    <section class="sf-sec callout reverse" data-feature="Variant swatches" data-verdict="essential">
+      <div class="callout-demo">
+        <ProductCard product={products[4]} />
+      </div>
+      <div class="callout-copy">
+        <h2>Variant swatches</h2>
+        <p>Click a colour dot -- the product recolours instantly, and that choice follows the item right into the cart. Let people pick what they actually want.</p>
+        <SpecTag
+          feature="Variant swatches"
+          verdict="essential"
+          note="If a product comes in variants, showing them up front is basically non-negotiable. Hiding colours behind a click just loses sales. The selected variant has to carry through to the cart."
+          tech="Each swatch sets the card's --pc custom property (recolouring the gradient) and stores the choice in data-color for add-to-cart."
+        />
+      </div>
+    </section>
+
+    <!-- SALE BADGE -->
+    <section class="sf-sec callout" data-feature="Sale badge & strikethrough" data-verdict="situational">
+      <div class="callout-demo mini">
+        <div class="mini-demo">
+          <span class="mini-badge">Sale</span>
+          <p class="mini-price"><s>$120</s> <span>$89</span></p>
+        </div>
+      </div>
+      <div class="callout-copy">
+        <h2>Sale badge &amp; strikethrough</h2>
+        <p>A crossed-out "was" price makes the brain read "deal" instantly. It works -- and that's exactly why it's regulated.</p>
+        <SpecTag
+          feature="Sale badge & strikethrough"
+          verdict="situational"
+          note="Powerful and legitimate when the 'was' price was actually real. Invented or permanent 'sales' are a legal and trust risk in most markets -- don't fake the anchor."
+          tech="A strikethrough original price beside the current one, plus a badge. The comparison does the persuading."
+        />
+      </div>
+    </section>
+
+    <!-- STAR RATINGS -->
+    <section class="sf-sec callout reverse" data-feature="Star ratings" data-verdict="situational">
+      <div class="callout-demo mini">
+        <div class="mini-demo">
+          <span class="stars-lg" style="--r:4.6" aria-hidden="true"></span>
+          <p class="mini-caption">4.6 · 128 reviews</p>
+        </div>
+      </div>
+      <div class="callout-copy">
+        <h2>Star ratings</h2>
+        <p>Quantified social proof, right where the decision happens. Half-filled stars and a review count carry more weight than any adjective you could write.</p>
+        <SpecTag
+          feature="Star ratings"
+          verdict="situational"
+          note="Only as trustworthy as the reviews actually behind them. Real ratings convert -- decorative five-star rows with no reviews just read as fake, and can backfire."
+          tech="Two layered star strings -- a grey base and a gold overlay clipped to (rating ÷ 5) width."
+        />
+      </div>
+    </section>
+
+    <!-- WISHLIST -->
+    <section class="sf-sec callout" data-feature="Wishlist" data-verdict="situational">
+      <div class="callout-demo mini">
+        <div class="mini-demo">
+          <button class="wish-demo" type="button" data-wish-demo aria-pressed="false" aria-label="Save">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C12 21 4 14.5 4 9C4 6.5 6 5 8 5C9.5 5 11 5.8 12 7C13 5.8 14.5 5 16 5C18 5 20 6.5 20 9C20 14.5 12 21 12 21Z"/></svg>
+          </button>
+          <p class="mini-caption" data-wish-demo-cap>tap to save</p>
+        </div>
+      </div>
+      <div class="callout-copy">
+        <h2>Wishlist</h2>
+        <p>Tap the heart on any product to save it -- the count in the header keeps a running tally that sticks around as you browse. Try it on the grid above.</p>
+        <SpecTag
+          feature="Wishlist"
+          verdict="situational"
+          note="A save-for-later heart is genuinely useful on a store people actually come back to -- basically a memory that spans visits. On a site nobody returns to though, it's just saving things into a void. It's worth exactly as much as your return traffic; without that, it implies a relationship the shop doesn't really have."
+          tech="Clicking a heart writes the product id to sessionStorage and updates the header count. Real builds tie it to an account so the list survives across devices; ours survives the session -- enough to feel the pattern."
+        />
+      </div>
+    </section>
+
+    <!-- SCARCITY -->
+    <section class="sf-sec callout" data-feature="Scarcity cue" data-verdict="manipulative">
+      <div class="callout-demo mini">
+        <div class="mini-demo">
+          <span class="mini-stock">Only 2 left</span>
+        </div>
+      </div>
+      <div class="callout-copy">
+        <h2>Scarcity cue</h2>
+        <p>"Only 2 left" adds pressure to decide right now. It's effective -- and honestly the feature most often faked.</p>
+        <SpecTag
+          feature="Scarcity cue"
+          verdict="manipulative"
+          note="Real low stock is useful information. Fabricated or perpetual 'only 2 left' counters are a dark pattern though -- they convert short-term, and erode trust the second someone notices."
+          tech="A stock badge shown only when real inventory drops below a threshold. Ours reflects the demo product's actual stock number."
+        />
+      </div>
+    </section>
+
+    <!-- CART DRAWER -->
+    <section class="sf-sec callout reverse" data-feature="Cart drawer" data-verdict="essential">
+      <div class="callout-demo">
+        <div class="cart-cta">
+          <p>The cart is real. Add a few things, then reopen it.</p>
+          <button class="btn-solid" type="button" data-cart-open>Open the cart</button>
+        </div>
+      </div>
+      <div class="callout-copy">
+        <h2>Cart drawer</h2>
+        <p>Add-to-cart slides open a drawer with live quantities, a running subtotal, a free-shipping meter -- no full-page reload, no losing your place.</p>
+        <SpecTag
+          feature="Cart drawer"
+          verdict="essential"
+          note="A slide-over cart keeps people shopping instead of bouncing off to a checkout page. Instant feedback -- the count bump, the moving total -- is honestly what makes a store feel trustworthy and alive."
+          tech="Real client-side state: a variant-keyed line-item list that re-renders the drawer, subtotal, count badge, and shipping meter on every change."
+        />
+      </div>
+    </section>
+
+    <!-- RECENTLY VIEWED -->
+    <section class="sf-sec rv-sec" data-feature="Recently viewed" data-verdict="situational">
+      <div class="rv-head">
+        <h2>Recently viewed</h2>
+        <p>Tap any product's image, or add it to the cart, and it lands here -- a running memory of what caught your eye, kept for the session.</p>
+      </div>
+      <div class="rv-row" data-rv-row>
+        <p class="rv-empty" data-rv-empty>Nothing yet -- tap a product image above and it'll show up here.</p>
+      </div>
+      <SpecTag
+        feature="Recently viewed"
+        verdict="situational"
+        note="A low-key memory of what you looked at, so you can double back without hunting for it. Genuinely handy in a big catalogue; pure clutter in a shop of six things you can already see at once. Situational -- and quietly one of the most-clicked rows in real retail, for what it's worth."
+        tech="Each product you tap is pushed to the front of a short list in sessionStorage (newest first, de-duplicated, capped at five). Real builds tie it to an account; ours lasts the session."
+      />
+    </section>
+
+    <!-- OUTRO -->
+    <section class="sf-outro" data-hud-hide>
+      <p class="outro-kicker">That's the Storefront.</p>
+      <h2 class="outro-line">The one that <em>actually works</em>.</h2>
+      <div class="outro-actions">
+        <a class="btn-ghost" href="/vibes">← Back to the vibes</a>
+        <a class="btn-solid light" href="/">Get this for my brand →</a>
+      </div>
+      <NextVibe href="/vibes/statement" name="The Statement" />
+    </section>
+  </main>
+
+  <!-- CART DRAWER OVERLAY -->
+  <div class="cart-overlay" data-cart-overlay></div>
+  <aside
+    class="cart-drawer"
+    data-cart-drawer
+    data-feature="Free-shipping meter"
+    data-verdict="situational"
+    aria-label="Shopping cart"
+    aria-hidden="true"
+    inert
+  >
+    <header class="cart-head">
+      <span>Your cart (<span data-cart-count>0</span>)</span>
+      <button class="cart-close" type="button" data-cart-close aria-label="Close cart">×</button>
+    </header>
+    <div class="cart-ship" data-ship>
+      <p data-ship-msg></p>
+      <div class="ship-bar"><span data-ship-fill></span></div>
+    </div>
+    <div class="cart-spec">
+      <SpecTag
+        feature="Free-shipping meter"
+        verdict="situational"
+        note="Probably the most defensible nudge in commerce: 'you're $12 away' grows the order, but the reward's real and the math is honest. It only turns manipulative once the threshold starts moving. (Yes, the narration follows you into the cart.)"
+        tech="Re-rendered with the cart on every change -- the bar's fill is subtotal ÷ threshold, and the message counts down the real remaining gap."
+      />
+    </div>
+    <ul class="cart-items" data-cart-items></ul>
+    <p class="cart-empty" data-cart-empty>Your cart is empty -- add something from the grid.</p>
+    <footer class="cart-foot">
+      <div class="cart-subtotal">
+        <span>Subtotal</span><span data-cart-subtotal>$0</span>
+      </div>
+      <ul class="trust-badges">
+        <li>Free shipping over $75</li>
+        <li>Secure checkout</li>
+        <li>30-day returns</li>
+      </ul>
+      <button class="checkout" type="button">Checkout →</button>
+    </footer>
+  </aside>
+
+  <script>
+    const FREE_SHIP = 75;
+
+    type Line = { key: string; id: string; name: string; price: number; color: string; qty: number };
+    const cart = new Map<string, Line>();
+
+    const drawer = document.querySelector<HTMLElement>('[data-cart-drawer]')!;
+    const overlay = document.querySelector<HTMLElement>('[data-cart-overlay]')!;
+    const itemsEl = document.querySelector<HTMLElement>('[data-cart-items]')!;
+    const emptyEl = document.querySelector<HTMLElement>('[data-cart-empty]')!;
+    const subtotalEl = document.querySelector<HTMLElement>('[data-cart-subtotal]')!;
+    const countEls = document.querySelectorAll<HTMLElement>('[data-cart-count]');
+    const shipMsg = document.querySelector<HTMLElement>('[data-ship-msg]')!;
+    const shipFill = document.querySelector<HTMLElement>('[data-ship-fill]')!;
+
+    const money = (n: number) => `$${n.toFixed(n % 1 ? 2 : 0)}`;
+
+    function openCart() {
+      drawer.classList.add('is-open');
+      overlay.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      drawer.removeAttribute('inert'); // let keyboard reach the drawer controls
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCart() {
+      drawer.classList.remove('is-open');
+      overlay.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      drawer.setAttribute('inert', ''); // take the closed drawer out of tab order
+      document.body.style.overflow = '';
+    }
+
+    function render() {
+      itemsEl.innerHTML = '';
+      let count = 0;
+      let subtotal = 0;
+      for (const line of cart.values()) {
+        count += line.qty;
+        subtotal += line.qty * line.price;
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+        li.innerHTML = `
+          <span class="ci-dot" style="background:${line.color}"></span>
+          <span class="ci-info">
+            <span class="ci-name">${line.name}</span>
+            <span class="ci-price">${money(line.price)}</span>
+          </span>
+          <span class="ci-qty">
+            <button type="button" data-dec="${line.key}" aria-label="Decrease">−</button>
+            <span>${line.qty}</span>
+            <button type="button" data-inc="${line.key}" aria-label="Increase">+</button>
+          </span>
+          <button type="button" class="ci-remove" data-remove="${line.key}" aria-label="Remove">×</button>`;
+        itemsEl.appendChild(li);
+      }
+      emptyEl.style.display = cart.size ? 'none' : 'block';
+      subtotalEl.textContent = money(subtotal);
+      countEls.forEach((el) => (el.textContent = String(count)));
+
+      const remaining = Math.max(0, FREE_SHIP - subtotal);
+      shipMsg.textContent = remaining
+        ? `You're ${money(remaining)} away from free shipping`
+        : "You've unlocked free shipping ✓";
+      shipFill.style.transform = `scaleX(${Math.min(1, subtotal / FREE_SHIP)})`;
+    }
+
+    function bump() {
+      countEls.forEach((el) => {
+        el.classList.remove('bump');
+        void el.offsetWidth;
+        el.classList.add('bump');
+      });
+    }
+
+    function addToCart(id: string, name: string, price: number, color: string) {
+      const key = `${id}|${color}`;
+      const existing = cart.get(key);
+      if (existing) existing.qty += 1;
+      else cart.set(key, { key, id, name, price, color, qty: 1 });
+      render();
+      bump();
+      openCart();
+    }
+
+    // Add-to-cart (event delegation across grid + callouts)
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const add = target.closest<HTMLElement>('[data-add]');
+      if (add) {
+        const card = add.closest<HTMLElement>('.pcard');
+        if (card) {
+          addToCart(
+            card.dataset.productId ?? '',
+            card.dataset.name ?? 'Item',
+            parseFloat(card.dataset.price ?? '0'),
+            card.dataset.color ?? '#000',
+          );
+        }
+        return;
+      }
+      if (target.closest('[data-cart-open]')) openCart();
+      if (target.closest('[data-cart-close]') || target === overlay) closeCart();
+
+      const inc = target.closest<HTMLElement>('[data-inc]');
+      const dec = target.closest<HTMLElement>('[data-dec]');
+      const rem = target.closest<HTMLElement>('[data-remove]');
+      if (inc) {
+        const l = cart.get(inc.dataset.inc!);
+        if (l) { l.qty += 1; render(); }
+      } else if (dec) {
+        const l = cart.get(dec.dataset.dec!);
+        if (l) { l.qty -= 1; if (l.qty <= 0) cart.delete(l.key); render(); }
+      } else if (rem) {
+        cart.delete(rem.dataset.remove!);
+        render();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCart();
+    });
+
+    // Swatch selection (recolour + remember choice)
+    document.addEventListener('click', (e) => {
+      const swatch = (e.target as HTMLElement).closest<HTMLElement>('.swatch');
+      if (!swatch) return;
+      const card = swatch.closest<HTMLElement>('.pcard');
+      if (!card) return;
+      const color = swatch.dataset.swatch ?? card.dataset.color ?? '#000';
+      card.style.setProperty('--pc', color);
+      card.dataset.color = color;
+      card
+        .querySelectorAll<HTMLElement>('.swatch')
+        .forEach((s) => s.setAttribute('aria-pressed', String(s === swatch)));
+    });
+
+    // Filter + sort
+    const grid = document.querySelector<HTMLElement>('[data-grid]');
+    if (grid) {
+      const cards = Array.from(grid.querySelectorAll<HTMLElement>('.pcard'));
+      const order = cards.map((c) => c.dataset.productId);
+      let activeFilter = 'All';
+
+      const apply = () => {
+        cards.forEach((c) => {
+          const match = activeFilter === 'All' || c.dataset.category === activeFilter;
+          c.style.display = match ? '' : 'none';
+        });
+      };
+
+      document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeFilter = btn.dataset.filter ?? 'All';
+          document
+            .querySelectorAll<HTMLButtonElement>('[data-filter]')
+            .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+          apply();
+        });
+      });
+
+      const sortSel = document.querySelector<HTMLSelectElement>('[data-sort]');
+      sortSel?.addEventListener('change', () => {
+        const v = sortSel.value;
+        const sorted = [...cards].sort((a, b) => {
+          const pa = parseFloat(a.dataset.price ?? '0');
+          const pb = parseFloat(b.dataset.price ?? '0');
+          const ra = parseFloat(a.dataset.rating ?? '0');
+          const rb = parseFloat(b.dataset.rating ?? '0');
+          if (v === 'price-asc') return pa - pb;
+          if (v === 'price-desc') return pb - pa;
+          if (v === 'rating') return rb - ra;
+          return order.indexOf(a.dataset.productId) - order.indexOf(b.dataset.productId);
+        });
+        sorted.forEach((c) => grid.appendChild(c));
+      });
+    }
+
+    // --- Wishlist (situational): persistent saved set + header count ---
+    const WISH_KEY = 'artifice-wishlist';
+    const wish = new Set<string>(
+      JSON.parse(sessionStorage.getItem(WISH_KEY) || '[]'),
+    );
+    const wishCountEls = document.querySelectorAll<HTMLElement>('[data-wish-count]');
+    const wishInd = document.querySelector<HTMLElement>('[data-wish-ind]');
+    const saveWish = () =>
+      sessionStorage.setItem(WISH_KEY, JSON.stringify([...wish]));
+    const renderWish = () => {
+      wishCountEls.forEach((el) => (el.textContent = String(wish.size)));
+      wishInd?.classList.toggle('has-items', wish.size > 0);
+      document.querySelectorAll<HTMLElement>('.pcard').forEach((card) => {
+        card
+          .querySelector<HTMLElement>('[data-fav]')
+          ?.setAttribute('aria-pressed', String(wish.has(card.dataset.productId ?? '')));
+      });
+    };
+    document.addEventListener('click', (e) => {
+      const fav = (e.target as HTMLElement).closest<HTMLElement>('[data-fav]');
+      if (!fav) return;
+      const id = fav.closest<HTMLElement>('.pcard')?.dataset.productId;
+      if (!id) return;
+      wish.has(id) ? wish.delete(id) : wish.add(id);
+      saveWish();
+      renderWish();
+      fav.classList.remove('bump');
+      void fav.offsetWidth;
+      fav.classList.add('bump');
+    });
+    renderWish();
+
+    // Standalone demo heart in the callout (illustrative, not a real product).
+    const wishDemo = document.querySelector<HTMLButtonElement>('[data-wish-demo]');
+    wishDemo?.addEventListener('click', () => {
+      const on = wishDemo.getAttribute('aria-pressed') !== 'true';
+      wishDemo.setAttribute('aria-pressed', String(on));
+      const cap = document.querySelector('[data-wish-demo-cap]');
+      if (cap) cap.textContent = on ? 'saved ♥' : 'tap to save';
+    });
+
+    // --- Recently viewed (situational): sessionStorage, newest first, capped ---
+    const RV_KEY = 'artifice-recently-viewed';
+    const rvRow = document.querySelector<HTMLElement>('[data-rv-row]');
+    const rvEmpty = document.querySelector<HTMLElement>('[data-rv-empty]');
+    // Build id -> {name,color} from the grid cards (product data lives server-side).
+    const cardInfo = new Map<string, { name: string; color: string }>();
+    document.querySelectorAll<HTMLElement>('.pcard').forEach((c) => {
+      const id = c.dataset.productId ?? '';
+      if (id && !cardInfo.has(id))
+        cardInfo.set(id, { name: c.dataset.name ?? 'Item', color: c.dataset.color ?? '#888' });
+    });
+    let viewed: string[] = JSON.parse(sessionStorage.getItem(RV_KEY) || '[]');
+    const renderViewed = () => {
+      if (!rvRow || !rvEmpty) return;
+      rvRow.querySelectorAll('.rv-item').forEach((el) => el.remove());
+      rvEmpty.style.display = viewed.length ? 'none' : 'block';
+      viewed.forEach((id) => {
+        const info = cardInfo.get(id);
+        if (!info) return;
+        const item = document.createElement('div');
+        item.className = 'rv-item';
+        item.innerHTML = `<span class="rv-dot" style="background:${info.color}"></span><span class="rv-name">${info.name}</span>`;
+        rvRow.appendChild(item);
+      });
+    };
+    const markViewed = (id: string) => {
+      viewed = [id, ...viewed.filter((x) => x !== id)].slice(0, 5);
+      sessionStorage.setItem(RV_KEY, JSON.stringify(viewed));
+      renderViewed();
+    };
+    // A "view" = tapping a product's media (image or add button), not the heart.
+    document.addEventListener('click', (e) => {
+      const media = (e.target as HTMLElement).closest<HTMLElement>('.pcard-media');
+      if (!media || (e.target as HTMLElement).closest('[data-fav]')) return;
+      const id = media.closest<HTMLElement>('.pcard')?.dataset.productId;
+      if (id) markViewed(id);
+    });
+    renderViewed();
+
+    render();
+  </script>
+
+  <style>
+    .storefront {
+      --sf-paper: #f5f2ea;
+      --sf-card: #ffffff;
+      --sf-ink: #1c1a17;
+      --sf-muted: #8a8175;
+      --sf-line: #e3ddd2;
+      --sf-accent: #2f6b4f;
+      --sf-sale: #c85a3c;
+      --sf-star: #e0a83e;
+      --sf-radius: 12px;
+      background: var(--sf-paper);
+      color: var(--sf-ink);
+    }
+
+    /* ---- nav ---- */
+    .shop-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0.9rem 1.4rem;
+      background: color-mix(in srgb, var(--sf-paper) 88%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--sf-line);
+    }
+    .shop-back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: var(--sf-ink);
+    }
+    .shop-name {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+    .cart-btn {
+      justify-self: end;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.45rem 0.9rem;
+      background: var(--sf-ink);
+      color: var(--sf-paper);
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .cart-count {
+      display: inline-grid;
+      place-items: center;
+      min-width: 1.3rem;
+      height: 1.3rem;
+      padding: 0 0.3rem;
+      border-radius: 999px;
+      background: var(--sf-accent);
+      font-size: 0.75rem;
+    }
+    .cart-count.bump {
+      animation: count-bump 0.4s ease;
+    }
+    @keyframes count-bump {
+      40% {
+        transform: scale(1.5);
+      }
+    }
+
+    /* ---- hero ---- */
+    .shop-hero {
+      padding: clamp(3rem, 8vh, 6rem) 6vw 2rem;
+      max-width: 1180px;
+      margin-inline: auto;
+    }
+    .shop-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sf-accent);
+      margin-bottom: 0.7rem;
+    }
+    .shop-hero h1 {
+      font-family: var(--font-quiet);
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      line-height: 1.02;
+      margin-bottom: 1rem;
+    }
+    .shop-lede {
+      max-width: 52ch;
+      color: var(--sf-muted);
+      font-size: 1.1rem;
+    }
+
+    /* ---- sections ---- */
+    .sf-sec {
+      max-width: 1180px;
+      margin-inline: auto;
+      padding: clamp(2.5rem, 6vh, 4rem) 6vw;
+    }
+    .toolbar-sec {
+      padding-block: 1.5rem;
+    }
+    .shop-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .filter {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.4rem 0.85rem;
+      border: 1px solid var(--sf-line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--sf-ink);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .filter[aria-pressed='true'] {
+      background: var(--sf-ink);
+      color: var(--sf-paper);
+      border-color: var(--sf-ink);
+    }
+    .sort {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--sf-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sort select {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid var(--sf-line);
+      border-radius: 8px;
+      background: var(--sf-card);
+      color: var(--sf-ink);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1.2rem;
+    }
+
+    /* ---- callouts ---- */
+    .callout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(1.5rem, 5vw, 4rem);
+      align-items: center;
+      border-top: 1px solid var(--sf-line);
+    }
+    .callout.reverse .callout-demo {
+      order: 2;
+    }
+    .callout-demo {
+      max-width: 320px;
+    }
+    .callout.reverse .callout-copy {
+      order: 1;
+    }
+    .callout-copy h2 {
+      font-family: var(--font-quiet);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      margin-bottom: 0.7rem;
+    }
+    .callout-copy > p {
+      color: var(--sf-muted);
+      font-size: 1.05rem;
+      max-width: 46ch;
+      margin-bottom: 1.4rem;
+    }
+    .callout-demo.mini {
+      display: grid;
+      place-items: center;
+    }
+    .mini-demo {
+      display: grid;
+      place-items: center;
+      gap: 0.8rem;
+      padding: 2.5rem;
+      width: 100%;
+      background: var(--sf-card);
+      border: 1px solid var(--sf-line);
+      border-radius: var(--sf-radius);
+    }
+    .mini-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: var(--sf-sale);
+      color: #fff;
+    }
+    .mini-price {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: baseline;
+    }
+    .mini-price s {
+      color: var(--sf-muted);
+      font-size: 1.1rem;
+    }
+    .mini-price span {
+      color: var(--sf-sale);
+    }
+    .mini-stock {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--sf-sale) 16%, white);
+      color: var(--sf-sale);
+    }
+    .mini-caption {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--sf-muted);
+    }
+    .stars-lg {
+      position: relative;
+      display: inline-block;
+      font-size: 2rem;
+      white-space: nowrap;
+    }
+    .stars-lg::before {
+      content: '★★★★★';
+      letter-spacing: 3px;
+      color: var(--sf-line);
+    }
+    .stars-lg::after {
+      content: '★★★★★';
+      letter-spacing: 3px;
+      color: var(--sf-star);
+      position: absolute;
+      inset: 0;
+      width: calc(var(--r) / 5 * 100%);
+      overflow: hidden;
+    }
+    .cart-cta {
+      display: grid;
+      gap: 1rem;
+      padding: 2.5rem;
+      background: var(--sf-ink);
+      color: var(--sf-paper);
+      border-radius: var(--sf-radius);
+      text-align: center;
+    }
+
+    .btn-solid {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      padding: 0.8rem 1.3rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--sf-accent);
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-solid.light {
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .btn-ghost {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      padding: 0.8rem 1.3rem;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
+      color: var(--paper);
+      text-decoration: none;
+    }
+
+    /* ---- wishlist ---- */
+    .nav-right {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .wish-ind {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--sf-muted);
+    }
+    .wish-ind svg {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+    }
+    .wish-ind.has-items {
+      color: var(--sf-sale);
+    }
+    .wish-ind.has-items svg {
+      fill: currentColor;
+    }
+    .wish-demo {
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      border: 1px solid var(--sf-line);
+      border-radius: 50%;
+      background: var(--sf-card);
+      color: var(--sf-muted);
+      cursor: pointer;
+      transition:
+        transform 0.15s ease,
+        color 0.2s ease;
+    }
+    .wish-demo svg {
+      width: 30px;
+      height: 30px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.6;
+    }
+    .wish-demo:hover {
+      transform: scale(1.06);
+    }
+    .wish-demo[aria-pressed='true'] {
+      color: var(--sf-sale);
+      border-color: var(--sf-sale);
+    }
+    .wish-demo[aria-pressed='true'] svg {
+      fill: currentColor;
+    }
+
+    /* ---- recently viewed ---- */
+    .rv-head h2 {
+      font-family: var(--font-quiet);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      margin-bottom: 0.6rem;
+    }
+    .rv-head p {
+      color: var(--sf-muted);
+      font-size: 1.02rem;
+      max-width: 52ch;
+      margin-bottom: 1.4rem;
+    }
+    .rv-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+    .rv-empty {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--sf-muted);
+    }
+    /* rv items are built at runtime via innerHTML, so they don't get Astro's
+       scope hash — these selectors must be :global to apply (cf. cart items). */
+    :global(.rv-item) {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.9rem 0.5rem 0.55rem;
+      background: var(--sf-card, #fff);
+      border: 1px solid var(--sf-line, #e3ddd2);
+      border-radius: 999px;
+    }
+    :global(.rv-dot) {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      flex: none;
+    }
+    :global(.rv-name) {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--sf-ink, #1c1a17);
+    }
+
+    /* ---- outro ---- */
+    .sf-outro {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 12vh 8vw;
+    }
+    .outro-kicker {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+    .outro-line {
+      font-family: var(--font-loud);
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 2rem;
+    }
+    .outro-line em {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      text-transform: none;
+      color: #7bbf9c;
+    }
+    .outro-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* ---- cart drawer ---- */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      background: rgba(20, 18, 16, 0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .cart-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 71;
+      display: flex;
+      flex-direction: column;
+      width: min(400px, 92vw);
+      height: 100%;
+      background: var(--sf-paper, #f5f2ea);
+      color: var(--sf-ink, #1c1a17);
+      box-shadow: -20px 0 60px -30px rgba(0, 0, 0, 0.5);
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.1, 1);
+    }
+    .cart-drawer.is-open {
+      transform: translateX(0);
+    }
+    .cart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.3rem 1.4rem;
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 1.2rem;
+      border-bottom: 1px solid var(--sf-line, #e3ddd2);
+    }
+    .cart-close {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+      color: inherit;
+    }
+    .cart-ship {
+      padding: 1rem 1.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--sf-muted, #8a8175);
+    }
+    .ship-bar {
+      margin-top: 0.5rem;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--sf-line, #e3ddd2);
+      overflow: hidden;
+    }
+    .ship-bar span {
+      display: block;
+      height: 100%;
+      background: var(--sf-accent, #2f6b4f);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+    .cart-spec {
+      padding: 0 1.4rem 0.6rem;
+    }
+    .cart-items {
+      list-style: none;
+      margin: 0;
+      padding: 0.5rem 1.4rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+    /* Cart line items are built via innerHTML at runtime, so they don't get
+       Astro's scope attribute — these selectors must be :global to apply. */
+    :global(.cart-item) {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--sf-line, #e3ddd2);
+    }
+    :global(.ci-dot) {
+      width: 26px;
+      height: 26px;
+      flex: none;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+    }
+    :global(.ci-info) {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    :global(.ci-name) {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+    }
+    :global(.ci-price) {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--sf-muted, #8a8175);
+    }
+    :global(.ci-qty) {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+    :global(.ci-qty button) {
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--sf-line, #e3ddd2);
+      background: var(--sf-card, #fff);
+      border-radius: 6px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    :global(.ci-remove) {
+      background: none;
+      border: none;
+      color: var(--sf-muted, #8a8175);
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    .cart-empty {
+      padding: 2rem 1.4rem;
+      color: var(--sf-muted, #8a8175);
+      font-size: 0.95rem;
+    }
+    .cart-foot {
+      padding: 1.2rem 1.4rem 1.5rem;
+      border-top: 1px solid var(--sf-line, #e3ddd2);
+    }
+    .cart-subtotal {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+    .trust-badges {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--sf-muted, #8a8175);
+      margin-bottom: 1rem;
+    }
+    .checkout {
+      width: 100%;
+      padding: 0.9rem;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--sf-ink, #1c1a17);
+      color: var(--sf-paper, #f5f2ea);
+      cursor: pointer;
+    }
+
+    @media (max-width: 720px) {
+      .callout {
+        grid-template-columns: 1fr;
+      }
+      .callout.reverse .callout-demo {
+        order: 0;
+      }
+      .callout.reverse .callout-copy {
+        order: 0;
+      }
+      .callout-demo {
+        max-width: 260px;
+      }
+    }
+  </style>
+</BaseLayout>

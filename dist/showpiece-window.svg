@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1400" width="1000" height="1400" role="img" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0eade" />
+      <stop offset="0.45" stop-color="#e8ddcc" />
+      <stop offset="1" stop-color="#ddceb7" />
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.4" r="0.44">
+      <stop offset="0" stop-color="#f6ecd7" />
+      <stop offset="0.55" stop-color="#efe1c8" stop-opacity="0.65" />
+      <stop offset="1" stop-color="#efe1c8" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#241d16" stop-opacity="0" />
+      <stop offset="1" stop-color="#241d16" stop-opacity="0.28" />
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+    </filter>
+  </defs>
+
+  <!-- sky + a pale, low sun (no bright orange — just a warm cream glow) -->
+  <rect width="1000" height="1400" fill="url(#sky)" />
+  <circle cx="500" cy="560" r="250" fill="url(#sun)" />
+  <circle cx="500" cy="560" r="116" fill="#ecdcbe" fill-opacity="0.75" />
+
+  <!-- receding tonal strata: light near the horizon, deep at the foot -->
+  <path d="M0 720 Q250 662 500 706 T1000 700 V1400 H0 Z" fill="#d7c8ac" />
+  <path d="M0 852 Q300 786 560 842 T1000 836 V1400 H0 Z" fill="#bfad8d" />
+  <path d="M0 992 Q270 928 520 986 T1000 980 V1400 H0 Z" fill="#9c8b6b" />
+  <path d="M0 1140 Q330 1072 600 1132 T1000 1126 V1400 H0 Z" fill="#6b5d4b" />
+  <path d="M0 1288 Q260 1232 520 1280 T1000 1274 V1400 H0 Z" fill="#3c342a" />
+
+  <!-- one restrained warm note: a thin rim-light catching a ridge -->
+  <path d="M0 992 Q270 928 520 986 T1000 980" fill="none" stroke="#c17f4d" stroke-opacity="0.45" stroke-width="2.5" />
+
+  <rect width="1000" height="1400" fill="url(#shade)" />
+  <rect width="1000" height="1400" filter="url(#grain)" opacity="0.09" />
+</svg>

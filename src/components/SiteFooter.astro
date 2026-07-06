@@ -1,0 +1,95 @@
+---
+// Shared footer for the non-demo pages. Carries the brand's name-wink so the
+// candor thesis (we name the tricks) lands even on a utility page.
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="sf-top">
+    <div class="sf-brand">
+      <a class="sf-mark" href="/">[ARTIFICE&nbsp;UI]</a>
+      <p class="sf-tag">Websites with a voice, not a template.</p>
+    </div>
+    <nav class="sf-links" aria-label="Footer">
+      <a href="/vibes">The vibes</a>
+      <a href="/services">Services</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </div>
+  <div class="sf-base">
+    <p class="sf-def">
+      <span>Artifice</span> -- clever, cunning trickery. We took the name so
+      we'd be the one to point it out first.
+    </p>
+    <p class="sf-copy">© {year} Artifice UI · placeholder logo, real work</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    padding: clamp(3rem, 8vh, 5rem) 6vw 2.5rem;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .sf-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(244, 241, 234, 0.16);
+  }
+  .sf-mark {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--paper);
+  }
+  .sf-tag {
+    margin-top: 0.5rem;
+    font-family: var(--font-quiet);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: rgba(244, 241, 234, 0.75);
+  }
+  .sf-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: flex-start;
+  }
+  .sf-links a {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: rgba(244, 241, 234, 0.75);
+    transition: color 0.2s ease;
+  }
+  .sf-links a:hover {
+    color: var(--paper);
+  }
+  .sf-base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.6rem;
+  }
+  .sf-def {
+    max-width: 52ch;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: rgba(244, 241, 234, 0.5);
+  }
+  .sf-def span {
+    color: var(--paper);
+  }
+  .sf-copy {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: rgba(244, 241, 234, 0.4);
+  }
+</style>

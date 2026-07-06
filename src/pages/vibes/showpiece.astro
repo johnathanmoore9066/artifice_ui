@@ -1,0 +1,985 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpecTag from '../../components/SpecTag.astro';
+import Hud from '../../components/Hud.astro';
+import NextVibe from '../../components/NextVibe.astro';
+---
+
+<BaseLayout
+  title="The Showpiece -- [ARTIFICE UI]"
+  description="Motion-first brand design that performs itself -- huge type, smooth scroll, parallax, kinetic text, a loud↔quiet dial -- and every feature stamped with an honest verdict."
+>
+  <script is:inline>document.documentElement.classList.add('has-js');</script>
+  <div class="preloader" data-preloader aria-hidden="true">
+    <span class="pre-num"><span data-pre-count>0</span><i>%</i></span>
+    <span class="pre-label" data-pre-label>loading the showpiece</span>
+    <button class="pre-skip" type="button" data-pre-skip>skip →</button>
+  </div>
+
+  <div class="grain is-on" data-grain aria-hidden="true"></div>
+
+  <div class="cursor" aria-hidden="true"></div>
+
+  <Hud category="Showpiece" />
+
+  <nav class="demo-nav">
+    <a class="demo-back" href="/vibes">← Vibes</a>
+    <div class="dial-control">
+      <span>quiet</span>
+      <input
+        id="dial"
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        value="1"
+        aria-label="Loud to quiet dial"
+      />
+      <span>loud</span>
+    </div>
+  </nav>
+
+  <main class="showpiece">
+    <!-- 1 · HUGE TYPE -->
+    <section class="feature hero" data-feature="Huge display type" data-verdict="essential">
+      <div class="hero-stack">
+        <span class="hero-loud" aria-hidden="true">HUGE</span>
+        <h1 class="hero-quiet">hush</h1>
+      </div>
+      <p class="hero-sub" data-reveal>
+        This is display type -- up to 22vw tall. It's the first thing you
+        noticed, and that's kind of the whole point. Drag the dial up top and
+        watch the same page go from agency-loud to luxury-quiet.
+      </p>
+      <SpecTag
+        feature="Huge display type"
+        verdict="essential"
+        note="If you've only got one thing to say, might as well say it big. Oversized type sets the hierarchy before anyone's even read a word."
+        tech="A single word at font-size: calc(var(--sp-display-vw) * 1vw), with two faces (Anton + Fraunces) cross-faded by the --dial variable."
+      />
+      <div class="scroll-hint">scroll ↓</div>
+    </section>
+
+    <!-- 1b · PRELOADER (the confession) -->
+    <section class="feature preloader-sec" data-feature="Preloader" data-verdict="manipulative">
+      <h2 class="lead">The wait you didn't need.</h2>
+      <p class="body" data-reveal>
+        This page opened with a loading screen counting up to 100%. Here's the
+        confession though -- nothing was actually loading. It was ready before
+        it even started counting; we made up the wait so the reveal would feel
+        earned. It's an old trick from the theatre, just ported over to the web.
+      </p>
+      <button class="replay-btn" type="button" data-pre-replay>Replay the intro ↺</button>
+      <SpecTag
+        feature="Preloader"
+        verdict="manipulative"
+        note="A loading screen covering real work is a courtesy. One that makes up the wait -- fake percentages, a spinner over a page that already rendered -- is just theatre, billed to the one account a visitor can't top up: their time. Ours is deliberately the fake kind, so you can actually feel the difference."
+        tech="A full-screen overlay counts 0→100 with GSAP while the finished page waits behind it, then fades. It's hidden completely when JavaScript is off -- no stuck screen -- and it doesn't run under prefers-reduced-motion."
+      />
+    </section>
+
+    <!-- 2 · SMOOTH SCROLL -->
+    <section class="feature" data-feature="Smooth scroll" data-verdict="situational">
+      <h2 class="lead">Feel that glide?</h2>
+      <p class="body" data-reveal>
+        The whole page is on rails here -- no abrupt jumps, momentum eases in
+        and out instead. That's Lenis smooth-scrolling, and it's honestly why
+        this already feels "expensive."
+      </p>
+      <SpecTag
+        feature="Smooth scroll"
+        verdict="situational"
+        note="Makes sense on a showpiece, where the scroll basically IS the experience. On a store or a docs site though, people just want to get somewhere -- there it's just latency."
+        tech="Lenis drives the scroll and feeds its position into GSAP's ticker so ScrollTrigger stays in sync."
+      />
+    </section>
+
+    <!-- 3 · SCROLL REVEAL -->
+    <section class="feature reveal-sec" data-feature="Scroll reveal" data-verdict="situational">
+      <div class="reveal-lines" data-reveal data-reveal-stagger>
+        <p>I waited</p>
+        <p>until you scrolled here</p>
+        <p>to appear.</p>
+      </div>
+      <SpecTag
+        feature="Scroll reveal"
+        verdict="situational"
+        note="Really just a pacing tool -- rewards scrolling, controls the rhythm. Overuse it though, and every section stutters and the whole page feels slow."
+        tech="GSAP ScrollTrigger fires a staggered y/opacity tween when each block hits 85% of the viewport."
+      />
+    </section>
+
+    <!-- 4+5 · IMAGE REVEAL → PARALLAX (one window: it wipes open, then the
+         scene inside and the word over it drift at different speeds) -->
+    <section class="feature cp-sec">
+      <figure class="cp-figure">
+        <div
+          class="cp-window"
+          data-clip
+          data-feature="Clip-path image reveal"
+          data-verdict="vanity"
+        >
+          <div class="cp-scene" data-parallax="0.16">
+            <img
+              src="/showpiece-window.svg"
+              alt="A muted tonal landscape -- receding dunes under a pale low sun."
+            />
+          </div>
+          <span class="cp-word" data-parallax="-0.12" aria-hidden="true">DEPTH</span>
+        </div>
+        <figcaption>↑ wiped open by a moving mask -- now the scene and the word drift apart</figcaption>
+      </figure>
+
+      <div class="cp-copy" data-feature="Parallax" data-verdict="vanity" data-reveal>
+        <h2 class="lead">Reveal, then depth.</h2>
+        <p class="body">
+          The window wiped open a second ago -- that's a clip-path reveal. Keep
+          scrolling and the scene inside drifts slower than the word laid over
+          it; your brain reads that speed gap as depth. Two tricks, one moment.
+        </p>
+        <SpecTag
+          feature="Clip-path image reveal"
+          verdict="vanity"
+          note="It's just an image that unveils itself instead of sitting there already loaded. Cheap, tasteful, pure decoration -- lovely on a hero, wasted on a spec sheet."
+          tech="The window animates from clip-path: inset(0 100% 0 0) to a full inset on scroll, wiping left-to-right."
+        />
+        <SpecTag
+          feature="Parallax"
+          verdict="vanity"
+          note="Gorgeous in a demo, but rarely load-bearing. It adds scroll-weight, and it can feel janky on weaker devices. Use it once for impact -- not everywhere."
+          tech="Two layers inside the window get scrubbed yPercent tweens with opposite signs, so the scene and the word slide past each other as you scroll."
+        />
+      </div>
+    </section>
+
+    <!-- 6 · HORIZONTAL SCROLL -->
+    <section
+      class="h-scroll"
+      data-feature="Horizontal scroll"
+      data-verdict="situational"
+    >
+      <div class="h-track">
+        <div class="h-panel h-intro">
+          <span class="h-num">→</span>
+          <h2 class="h-lead">Now we're going sideways.</h2>
+          <p>Keep scrolling down -- the page moves across instead.</p>
+        </div>
+        <div class="h-panel">
+          <span class="h-num">01</span>
+          <p>Your scroll wheel still goes down…</p>
+        </div>
+        <div class="h-panel">
+          <span class="h-num">02</span>
+          <p>…but the content travels left.</p>
+        </div>
+        <div class="h-panel">
+          <span class="h-num">03</span>
+          <p>Vertical input, horizontal output.</p>
+        </div>
+        <div class="h-panel h-spec">
+          <SpecTag
+            feature="Horizontal scroll"
+            verdict="situational"
+            note="Hard to beat for a guided, sequential story. But it hijacks the scroll direction -- disorients people, fights assistive tech. Powerful, and pretty easy to misuse."
+            tech="GSAP pins the section and translates the track by (scrollWidth − viewport) as you scroll, scrubbed to your position."
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · KINETIC TYPE -->
+    <section class="feature kinetic-sec" data-feature="Kinetic type" data-verdict="vanity">
+      <h2 class="kinetic" data-kinetic>letters that move</h2>
+      <SpecTag
+        feature="Kinetic type"
+        verdict="vanity"
+        note="Each letter animates in on its own. Delightful for one hero moment, exhausting if the whole site does it. It's a garnish, not a meal."
+        tech="The line is split into per-character spans, and the staggered rise is scrubbed to your scroll position -- so it plays while the text is on screen, not before it arrives."
+      />
+    </section>
+
+    <!-- 8 · MARQUEE -->
+    <section class="feature marquee-sec" data-feature="Marquee" data-verdict="vanity">
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span>ENDLESS · MARQUEE · SCROLLING · FOREVER · ENDLESS · MARQUEE · SCROLLING · FOREVER · </span>
+          <span>ENDLESS · MARQUEE · SCROLLING · FOREVER · ENDLESS · MARQUEE · SCROLLING · FOREVER · </span>
+        </div>
+      </div>
+      <SpecTag
+        feature="Marquee"
+        verdict="vanity"
+        note="Just an infinite loop of scrolling text. Reads as 'confident and editorial,' but it's decoration -- even its speed follows the dial."
+        tech="Two duplicated tracks translate -50% on a CSS keyframe; duration = calc((44 - 34 * var(--dial)) * 1s), so louder = faster."
+      />
+    </section>
+
+    <!-- 8b · FILM GRAIN -->
+    <section class="feature grain-sec" data-feature="Film grain" data-verdict="vanity">
+      <h2 class="lead">Expensive-looking noise.</h2>
+      <p class="body" data-reveal>
+        This whole page is wearing a film-grain texture -- a faint analog
+        shimmer that reads as "premium" and "considered." Really it's just a
+        looping noise layer doing an impression of 35mm. Toggle it off and
+        watch the page turn clinical.
+      </p>
+      <button class="grain-toggle" type="button" data-grain-toggle aria-pressed="true">Grain: on</button>
+      <SpecTag
+        feature="Film grain"
+        verdict="vanity"
+        note="A restless noise laid over everything so a flat digital page reads as filmic and hand-made. Genuinely warms things up -- and it's pure surface. Switch it off and nothing stops working, the page just looks like what it actually is. Basically the definition of a vanity layer: lovely, load-bearing on nothing."
+        tech="One fixed <div> with an SVG feTurbulence noise as its background, blended over the page at low opacity. A stepped keyframe jitters it for the flicker; it holds still under prefers-reduced-motion."
+      />
+    </section>
+
+    <!-- 9 · CUSTOM CURSOR -->
+    <section class="feature cursor-sec" data-feature="Custom cursor" data-verdict="vanity">
+      <h2 class="lead" data-cursor>hover me</h2>
+      <p class="body" data-reveal>
+        Your cursor got bigger, didn't it? A custom cursor just screams
+        "design studio."
+      </p>
+      <SpecTag
+        feature="Custom cursor"
+        verdict="vanity"
+        note="Designers love it -- most visitors don't even notice, and it can hurt accessibility and feel laggy. High risk, low reward. Deploy with care."
+        tech="A div follows the pointer via gsap.quickTo, scaling up on interactive elements. Disabled on touch (pointer: coarse)."
+      />
+    </section>
+
+    <!-- OUTRO -->
+    <section class="outro" data-hud-hide>
+      <p class="outro-kicker">That's the Showpiece.</p>
+      <h2 class="outro-line">
+        Loud or quiet -- <em>same engine</em>, different dial.
+      </h2>
+      <div class="outro-actions">
+        <a class="btn ghost" href="/vibes">← Back to the vibes</a>
+        <a class="btn solid" href="/">Get this for my brand →</a>
+      </div>
+      <NextVibe href="/vibes/product" name="The Product Site" />
+    </section>
+  </main>
+
+  <script>
+    import Lenis from 'lenis';
+    import gsap from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- Preloader (⚠ manipulative): a fake percentage over an already-loaded
+    //     page. Hidden entirely without JS; skipped under reduced motion. It's
+    //     decorative (aria-hidden), so screen readers go straight to content. ---
+    const preloader = document.querySelector<HTMLElement>('[data-preloader]');
+    if (preloader) {
+      const countEl = preloader.querySelector<HTMLElement>('[data-pre-count]');
+      const labelEl = preloader.querySelector<HTMLElement>('[data-pre-label]');
+      const skipBtn = preloader.querySelector<HTMLButtonElement>('[data-pre-skip]');
+
+      const finish = () => {
+        preloader.classList.add('is-done');
+        preloader.setAttribute('inert', '');
+      };
+      const run = () => {
+        preloader.classList.remove('is-done');
+        preloader.removeAttribute('inert');
+        if (reduce) {
+          if (countEl) countEl.textContent = '100';
+          finish();
+          return;
+        }
+        const obj = { v: 0 };
+        gsap.to(obj, {
+          v: 100,
+          duration: 1.5,
+          ease: 'power2.inOut',
+          onUpdate: () => {
+            if (countEl) countEl.textContent = String(Math.round(obj.v));
+          },
+          onComplete: () => {
+            if (labelEl) labelEl.textContent = '…nothing was actually loading.';
+            gsap.delayedCall(0.7, finish);
+          },
+        });
+      };
+      skipBtn?.addEventListener('click', finish);
+      run();
+      document.querySelector('[data-pre-replay]')?.addEventListener('click', () => {
+        if (labelEl) labelEl.textContent = 'loading the showpiece';
+        if (countEl) countEl.textContent = '0';
+        run();
+      });
+    }
+
+    // --- Lenis smooth scroll (feeds GSAP) ---
+    if (!reduce) {
+      const lenis = new Lenis({ lerp: 0.1 });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    if (!reduce) {
+      // --- Scroll reveals ---
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        const targets =
+          el.hasAttribute('data-reveal-stagger') && el.children.length
+            ? Array.from(el.children)
+            : [el];
+        gsap.from(targets, {
+          scrollTrigger: { trigger: el, start: 'top 85%' },
+          yPercent: 40,
+          opacity: 0,
+          duration: 0.9,
+          stagger: 0.09,
+          ease: 'power3.out',
+        });
+      });
+
+      // --- Parallax layers ---
+      gsap.utils.toArray<HTMLElement>('[data-parallax]').forEach((el) => {
+        const speed = parseFloat(el.dataset.parallax ?? '0.3');
+        gsap.to(el, {
+          yPercent: -speed * 100,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el.closest('section') ?? el,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+      });
+
+      // --- Kinetic type: split into per-character spans, then SCRUB the rise
+      //     to scroll. The old on-enter tween fired at 'top 80%' and was over
+      //     in 0.8s -- in this tall, vertically-centred section the letters had
+      //     finished before the line reached a readable spot, so the motion was
+      //     never actually seen. Scrubbing plays it out as the line travels up
+      //     the viewport instead. ---
+      gsap.utils.toArray<HTMLElement>('[data-kinetic]').forEach((el) => {
+        const text = el.textContent ?? '';
+        el.textContent = '';
+        const frag = document.createDocumentFragment();
+        for (const ch of text) {
+          const span = document.createElement('span');
+          span.className = 'kin-ch';
+          span.textContent = ch === ' ' ? ' ' : ch;
+          frag.appendChild(span);
+        }
+        el.appendChild(frag);
+        gsap.from(el.querySelectorAll('.kin-ch'), {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            end: 'top 42%',
+            scrub: 0.6,
+          },
+          yPercent: 120,
+          opacity: 0,
+          rotateZ: 8,
+          ease: 'back.out(1.7)',
+          stagger: 0.06,
+        });
+      });
+
+      // --- Clip-path image reveal ---
+      gsap.utils.toArray<HTMLElement>('[data-clip]').forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: 'top 78%' },
+          clipPath: 'inset(0 100% 0 0)',
+          duration: 1.3,
+          ease: 'power4.inOut',
+        });
+      });
+
+      // --- Horizontal scroll (pinned) ---
+      const hSection = document.querySelector<HTMLElement>('.h-scroll');
+      const hTrack = hSection?.querySelector<HTMLElement>('.h-track');
+      if (hSection && hTrack) {
+        const distance = () => hTrack.scrollWidth - window.innerWidth;
+        gsap.to(hTrack, {
+          x: () => -distance(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hSection,
+            start: 'top top',
+            end: () => '+=' + distance(),
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+            // This pin adds a spacer that pushes everything below it (kinetic
+            // type, marquee, grain, cursor) further down the page. Refresh it
+            // BEFORE those triggers so they measure their real post-pin
+            // positions -- otherwise their scroll animations fire early, off
+            // screen. (Their `gsap.from`s are created before this in code, so
+            // without a higher priority they'd refresh first, using stale
+            // positions.)
+            refreshPriority: 1,
+          },
+        });
+      }
+    } else {
+      // Reduced motion: let the horizontal section stack and scroll normally.
+      document.querySelector('.h-scroll')?.classList.add('h-static');
+    }
+
+    // --- Custom cursor (desktop only) ---
+    if (window.matchMedia('(pointer: fine)').matches) {
+      const cursor = document.querySelector<HTMLElement>('.cursor');
+      if (cursor) {
+        document.body.classList.add('has-cursor');
+        gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+        const xTo = gsap.quickTo(cursor, 'x', { duration: 0.4, ease: 'power3' });
+        const yTo = gsap.quickTo(cursor, 'y', { duration: 0.4, ease: 'power3' });
+        window.addEventListener('mousemove', (e) => {
+          xTo(e.clientX);
+          yTo(e.clientY);
+        });
+        document
+          .querySelectorAll('a, button, input, [data-cursor]')
+          .forEach((el) => {
+            el.addEventListener('mouseenter', () =>
+              cursor.classList.add('is-big'),
+            );
+            el.addEventListener('mouseleave', () =>
+              cursor.classList.remove('is-big'),
+            );
+          });
+      }
+    }
+
+    // --- Film grain toggle (vanity) ---
+    const grain = document.querySelector<HTMLElement>('[data-grain]');
+    const grainToggle = document.querySelector<HTMLButtonElement>('[data-grain-toggle]');
+    if (grain && grainToggle) {
+      grainToggle.addEventListener('click', () => {
+        const on = grain.classList.toggle('is-on');
+        grainToggle.setAttribute('aria-pressed', String(on));
+        grainToggle.textContent = on ? 'Grain: on' : 'Grain: off';
+      });
+    }
+
+    // --- The dial ---
+    const dial = document.querySelector<HTMLInputElement>('#dial');
+    if (dial) {
+      const apply = () =>
+        document.documentElement.style.setProperty('--dial', dial.value);
+      dial.addEventListener('input', apply);
+      apply();
+    }
+  </script>
+
+  <style>
+    .showpiece {
+      overflow-x: clip;
+    }
+
+    /* --- preloader (⚠ manipulative). Hidden without JS via .has-js gate. --- */
+    .preloader {
+      display: none;
+    }
+    :global(html.has-js) .preloader {
+      display: flex;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      background: var(--ink);
+      color: var(--paper);
+      transition: opacity 0.6s ease;
+    }
+    .preloader.is-done {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .pre-num {
+      font-family: var(--font-loud);
+      font-size: clamp(4rem, 20vw, 13rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .pre-num i {
+      font-style: normal;
+      opacity: 0.4;
+    }
+    .pre-label {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .pre-skip {
+      position: absolute;
+      right: 1.6rem;
+      bottom: 1.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: rgba(244, 241, 234, 0.7);
+      background: none;
+      border: 1px solid rgba(244, 241, 234, 0.3);
+      border-radius: 4px;
+      padding: 0.5rem 0.9rem;
+      cursor: pointer;
+    }
+    .replay-btn {
+      align-self: flex-start;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--ink);
+      background: none;
+      border: 1px solid var(--ink);
+      border-radius: 4px;
+      padding: 0.6rem 1.1rem;
+      cursor: pointer;
+    }
+
+    /* --- film grain (vanity) --- */
+    .grain {
+      position: fixed;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      z-index: 55;
+      pointer-events: none;
+      opacity: 0;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      transition: opacity 0.4s ease;
+    }
+    .grain.is-on {
+      opacity: 0.16;
+      animation: grain-jitter 0.5s steps(3) infinite;
+    }
+    @keyframes grain-jitter {
+      0% {
+        transform: translate(0, 0);
+      }
+      33% {
+        transform: translate(-4%, 3%);
+      }
+      66% {
+        transform: translate(3%, -3%);
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+    .grain-toggle {
+      align-self: flex-start;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--ink);
+      background: none;
+      border: 1px solid var(--ink);
+      border-radius: 4px;
+      padding: 0.6rem 1.1rem;
+      cursor: pointer;
+    }
+    .grain-toggle[aria-pressed='false'] {
+      opacity: 0.6;
+    }
+
+    /* --- top nav + dial --- */
+    .demo-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.4rem;
+      mix-blend-mode: difference;
+      color: #fff;
+      pointer-events: none;
+    }
+    .demo-nav a,
+    .demo-nav .dial-control {
+      pointer-events: auto;
+    }
+    .demo-back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-decoration: none;
+    }
+    .dial-control {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .dial-control input {
+      width: 140px;
+      accent-color: #fff;
+      cursor: pointer;
+    }
+
+    /* --- feature section base --- */
+    .feature {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1.4rem;
+      padding: var(--sp-space) 8vw;
+    }
+    .lead {
+      font-family: var(--font-loud);
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: var(--sp-track);
+    }
+    .body {
+      max-width: 44ch;
+      font-size: 1.15rem;
+      color: var(--ink-soft);
+    }
+
+    /* --- 1 · hero --- */
+    .hero {
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+    }
+    .hero-stack {
+      display: grid;
+      place-items: center;
+    }
+    .hero-stack h1,
+    .hero-stack .hero-loud {
+      grid-area: 1 / 1;
+      font-size: calc(var(--sp-display-vw) * 1vw);
+      line-height: 0.85;
+      letter-spacing: var(--sp-track);
+    }
+    .hero-loud {
+      font-family: var(--font-loud);
+      text-transform: uppercase;
+      color: var(--ink);
+      opacity: var(--dial);
+    }
+    .hero-quiet {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--sp-accent);
+      opacity: calc(1 - var(--dial));
+    }
+    .hero-sub {
+      max-width: 40ch;
+      color: var(--ink-soft);
+      font-size: 1.1rem;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      animation: bob 1.8s ease-in-out infinite;
+    }
+    @keyframes bob {
+      50% {
+        transform: translateY(6px);
+      }
+    }
+
+    /* --- 3 · reveal --- */
+    .reveal-lines p {
+      font-family: var(--font-loud);
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      text-transform: uppercase;
+      line-height: 1.02;
+      letter-spacing: var(--sp-track);
+    }
+
+    /* --- 4+5 · image reveal → parallax (the shared window) --- */
+    .cp-sec {
+      align-items: center;
+      gap: 2.4rem;
+    }
+    .cp-figure {
+      width: min(78vw, 900px);
+      margin: 0 auto;
+    }
+    .cp-window {
+      position: relative;
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.5);
+      clip-path: inset(0 0 0 0);
+      container-type: inline-size;
+    }
+    /* the scene sits taller than the window so it can drift without gapping */
+    .cp-scene {
+      position: absolute;
+      inset: -30% 0;
+      will-change: transform;
+    }
+    .cp-scene img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cp-word {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-loud);
+      font-size: 22cqi;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: rgba(244, 241, 234, 0.92);
+      mix-blend-mode: difference;
+      will-change: transform;
+      pointer-events: none;
+      user-select: none;
+    }
+    .cp-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.4rem;
+      width: 100%;
+    }
+
+    /* --- 5 · kinetic --- */
+    .kinetic {
+      font-family: var(--font-loud);
+      font-size: clamp(2.6rem, 9vw, 7rem);
+      text-transform: uppercase;
+      letter-spacing: var(--sp-track);
+    }
+    .kinetic :global(.kin-ch) {
+      display: inline-block;
+      will-change: transform;
+    }
+
+    /* --- 6 · marquee --- */
+    .marquee-sec {
+      justify-content: center;
+      gap: 2rem;
+    }
+    .marquee {
+      width: 100vw;
+      margin-left: -8vw;
+      overflow: hidden;
+      border-block: 1px solid var(--ink);
+      padding: 0.4rem 0;
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: scroll-x calc((44 - 34 * var(--dial)) * 1s) linear infinite;
+    }
+    .marquee-track span {
+      font-family: var(--font-loud);
+      font-size: clamp(2rem, 5vw, 4rem);
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding-right: 0.3em;
+    }
+    @keyframes scroll-x {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .cp-figure figcaption {
+      margin-top: 0.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    /* --- 6 · horizontal scroll --- */
+    .h-scroll {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .h-track {
+      display: flex;
+      align-items: center;
+      gap: 4vw;
+      height: 100%;
+      padding: 0 8vw;
+      will-change: transform;
+    }
+    .h-panel {
+      flex: 0 0 auto;
+      width: min(70vw, 560px);
+      height: 62vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+      padding: 2.5rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+    .h-panel p {
+      font-size: 1.4rem;
+      color: var(--ink-soft);
+    }
+    .h-intro {
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+    }
+    .h-intro p {
+      color: rgba(244, 241, 234, 0.7);
+    }
+    .h-lead {
+      font-family: var(--font-loud);
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: var(--sp-track);
+    }
+    .h-num {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--sp-accent);
+    }
+    .h-spec {
+      background: none;
+      border: none;
+      padding: 0;
+      width: min(90vw, 380px);
+      height: auto;
+    }
+    /* This panel is only a spec tag — drop it entirely when narration is off. */
+    :global(html[data-specs-off]) .h-spec {
+      display: none;
+    }
+    .h-scroll.h-static {
+      height: auto;
+      overflow: visible;
+      display: block;
+    }
+    .h-static .h-track {
+      flex-direction: column;
+      height: auto;
+      padding: var(--sp-space) 8vw;
+      transform: none !important;
+      gap: 1.5rem;
+    }
+    .h-static .h-panel {
+      width: 100%;
+      height: auto;
+    }
+
+    /* --- outro --- */
+    .outro {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.6rem;
+      padding: 10vh 8vw;
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .outro-kicker {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+    .outro-line {
+      font-family: var(--font-loud);
+      font-size: clamp(2.4rem, 7vw, 6rem);
+      text-transform: uppercase;
+      line-height: 0.98;
+    }
+    .outro-line em {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      text-transform: none;
+      font-weight: 400;
+      color: var(--sp-accent);
+    }
+    .outro-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.85rem 1.4rem;
+      border-radius: 4px;
+    }
+    .btn.solid {
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .btn.ghost {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: var(--paper);
+    }
+
+    /* --- custom cursor --- */
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--sp-accent);
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0;
+      mix-blend-mode: difference;
+      transition:
+        width 0.25s ease,
+        height 0.25s ease;
+    }
+    :global(body.has-cursor) .cursor {
+      opacity: 1;
+    }
+    :global(body.has-cursor) {
+      cursor: none;
+    }
+    .cursor.is-big {
+      width: 64px;
+      height: 64px;
+    }
+
+    @media (max-width: 720px) {
+      .dial-control input {
+        width: 90px;
+      }
+      .feature {
+        min-height: 88vh;
+      }
+    }
+  </style>
+</BaseLayout>

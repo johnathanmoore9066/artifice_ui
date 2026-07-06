@@ -1,0 +1,1606 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpecTag from '../../components/SpecTag.astro';
+import Hud from '../../components/Hud.astro';
+import NextVibe from '../../components/NextVibe.astro';
+
+const modes = [
+  { id: 'corporate', label: 'Corporate' },
+  { id: 'saas', label: 'SaaS' },
+  { id: 'conversion', label: 'Conversion' },
+];
+
+const stats = [
+  { count: 10000, decimals: 0, suffix: '+', label: 'Teams onboarded' },
+  { count: 99.98, decimals: 2, suffix: '%', label: 'Uptime, last 12 mo' },
+  { count: 4.9, decimals: 1, suffix: '/5', label: 'Average rating' },
+  { count: 42, decimals: 0, suffix: 'M', label: 'Requests / day' },
+];
+
+const bento = [
+  { size: 'lg', title: 'Build from scratch', body: 'Design and development from zero -- brand, front end, and the systems behind it.' },
+  { size: 'sm', title: 'Database management', body: 'Schema design, migrations, and ongoing care.' },
+  { size: 'sm', title: 'Rebrand & refactor', body: 'Bring your codebase; leave with a modern one.' },
+  { size: 'md', title: 'Analytics built in', body: 'Know what works from day one.' },
+  { size: 'md', title: 'Secure by default', body: 'Best-practice auth, backups, and access control.' },
+];
+
+const logos = ['NORTHWIND', 'ACME', 'GLOBEX', 'INITECH', 'UMBRA', 'VANDELAY'];
+
+const tiers = [
+  { name: 'Starter', monthly: 19, features: ['1 project', 'Community support', 'Basic analytics'], cta: 'Choose Starter' },
+  { name: 'Growth', monthly: 49, featured: true, features: ['Unlimited projects', 'Priority support', 'Advanced analytics', 'SSO'], cta: 'Choose Growth' },
+  { name: 'Enterprise', monthly: null, features: ['Everything in Growth', 'Dedicated manager', 'Custom contracts', 'SAML + SCIM'], cta: 'Contact sales' },
+];
+
+const faqs = [
+  { q: 'Can I import my existing codebase?', a: 'Yes -- bring us your current site and we\'ll rebrand or refactor it onto a modern stack.' },
+  { q: 'Do you manage the database too?', a: 'We design the schema, run the migrations, and keep managing it after, if you want us to.' },
+  { q: 'How long does a build take?', a: 'A focused marketing site is usually 2-4 weeks -- product work scales up from there.' },
+  { q: 'What happens after launch?', a: 'We offer ongoing management, or we hand off clean, documented code -- whichever you\'d rather.' },
+];
+
+const testimonials = [
+  { quote: 'They shipped a site that finally looks like us — and conversions climbed 38%.', name: 'A. Rivera', role: 'CMO, Northwind' },
+  { quote: 'The rebrand took a weekend. I still don’t fully understand how.', name: 'J. Okafor', role: 'Founder, Umbra' },
+  { quote: 'Database migration with zero downtime. Genuinely impressive work.', name: 'M. Lindqvist', role: 'CTO, Globex' },
+];
+
+// Feature comparison — note how the "us" column wins every row. That's the
+// whole trick, and the spec tag says so out loud.
+const compareRows = [
+  { feature: 'SSO & SAML', us: true, a: true, b: false },
+  { feature: '99.99% uptime SLA', us: true, a: false, b: false },
+  { feature: '24/7 human support', us: true, a: true, b: false },
+  { feature: 'Unlimited seats', us: true, a: false, b: true },
+  { feature: 'Transparent pricing', us: true, a: false, b: false },
+];
+---
+
+<BaseLayout
+  title="The Product Site -- [ARTIFICE UI]"
+  description="Corporate, SaaS, or conversion from one set of components -- stat counters, pricing toggle, FAQ, bento grid -- plus the dark patterns (countdowns, fake social proof) we flag by name."
+>
+  <Hud category="Product Site" collapsed />
+
+  <nav class="demo-nav">
+    <a class="demo-back" href="/vibes">← Vibes</a>
+    <div class="mode-switch" role="group" aria-label="Arrangement mode">
+      {
+        modes.map((m, i) => (
+          <button
+            type="button"
+            class="mode-btn"
+            data-mode-btn={m.id}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            {m.label}
+          </button>
+        ))
+      }
+    </div>
+  </nav>
+
+  <main class="product" data-mode="corporate">
+    <!-- HERO + MESH GRADIENT -->
+    <section class="p-hero" data-feature="Mesh gradient" data-verdict="vanity">
+      <div class="hero-mesh" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="hero-inner">
+        <p class="p-eyebrow" data-hero="eyebrow"></p>
+        <h1 class="hero-title" data-hero="title"></h1>
+        <p class="hero-sub" data-hero="sub"></p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#pricing" data-hero="cta"></a>
+          <a class="btn ghost" href="#pricing">See pricing</a>
+        </div>
+        <p class="mode-hint">Same components, three personalities -- switch modes up top ↑</p>
+      </div>
+      <div class="hero-spec">
+        <SpecTag
+          feature="Mesh gradient"
+          verdict="vanity"
+          note="That soft, drifting glow is basically the 2020s SaaS default sky. It's pure mood -- looks current today, and it'll probably read as dated in a couple of years. Fashion, not function."
+          tech="Three blurred, colored blobs drift on CSS keyframes; their colors are swapped per mode via custom properties."
+        />
+      </div>
+    </section>
+
+    <!-- LOGO CLOUD -->
+    <section class="p-section logos-sec" data-feature="Logo cloud" data-verdict="situational">
+      <p class="section-kicker" data-reveal>Trusted by teams at</p>
+      <ul class="logo-cloud" data-reveal>
+        {logos.map((l) => <li>{l}</li>)}
+      </ul>
+      <SpecTag
+        feature="Logo cloud"
+        verdict="situational"
+        note="'Trusted by' walls borrow credibility by association -- but only if the logos are real and people actually recognize them. A row of names nobody knows does nothing."
+        tech="A flex row of muted wordmarks. Real builds swap in licensed SVG logos."
+      />
+    </section>
+
+    <!-- STAT COUNTERS -->
+    <section class="p-section stats-sec" data-feature="Stat counters" data-verdict="situational">
+      <div class="stats-grid">
+        {
+          stats.map((s) => (
+            <div class="stat" data-reveal>
+              <span
+                class="stat-num"
+                data-count={s.count}
+                data-decimals={s.decimals}
+                data-suffix={s.suffix}
+              >
+                0
+              </span>
+              <span class="stat-label">{s.label}</span>
+            </div>
+          ))
+        }
+      </div>
+      <SpecTag
+        feature="Stat counters"
+        verdict="situational"
+        note="Numbers ticking up read as momentum and scale -- persuasive for a B2B buyer. On a corner bakery though, they're pretty meaningless. Context is everything here."
+        tech="Each figure tweens from 0 to its target with GSAP when it scrolls into view, formatted with the right decimals."
+      />
+    </section>
+
+    <!-- BENTO GRID -->
+    <section class="p-section bento-sec" data-feature="Bento grid" data-verdict="situational">
+      <header class="section-head" data-reveal>
+        <p class="section-kicker">What we do</p>
+        <h2>Everything to launch and keep it running.</h2>
+      </header>
+      <div class="bento">
+        {
+          bento.map((b) => (
+            <article class={`bento-card b-${b.size}`} data-reveal>
+              <h3>{b.title}</h3>
+              <p>{b.body}</p>
+            </article>
+          ))
+        }
+      </div>
+      <SpecTag
+        feature="Bento grid"
+        verdict="situational"
+        note="Uneven boxes of different sizes, all telling one story. Great for showing a range of features at a glance -- overuse it though, and it just becomes a cluttered quilt."
+        tech="CSS grid with cards spanning different column/row counts."
+      />
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="p-section testi-sec" data-feature="Testimonial carousel" data-verdict="situational">
+      <div class="testi" data-reveal>
+        <div class="testi-track" data-testi-track>
+          {
+            testimonials.map((t, i) => (
+              <figure class="testi-item" data-testi-item data-active={i === 0 ? 'true' : 'false'}>
+                <blockquote>“{t.quote}”</blockquote>
+                <figcaption>
+                  <strong>{t.name}</strong> · {t.role}
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+        <div class="testi-dots" data-testi-dots>
+          {testimonials.map((_, i) => (
+            <button type="button" class="testi-dot" data-testi-dot={i} aria-label={`Testimonial ${i + 1}`} />
+          ))}
+        </div>
+      </div>
+      <SpecTag
+        feature="Testimonial carousel"
+        verdict="situational"
+        note="A third-party voice beats anything you could say about yourself. But auto-rotating carousels hide most of the proof -- honestly, a simple static grid of quotes often converts better anyway."
+        tech="Quotes cross-fade on a timer; dots let you jump. Pauses when you interact."
+      />
+    </section>
+
+    <!-- COMPARISON TABLE -->
+    <section class="p-section compare-sec" data-feature="Comparison table" data-verdict="situational">
+      <header class="section-head" data-reveal>
+        <p class="section-kicker">How we stack up</p>
+        <h2>The chart where we win every row.</h2>
+      </header>
+      <div class="compare-wrap" data-reveal>
+        <table class="compare">
+          <thead>
+            <tr>
+              <th scope="col" class="c-feature"><span class="sr-only">Feature</span></th>
+              <th scope="col" class="c-us">This product</th>
+              <th scope="col">Competitor A</th>
+              <th scope="col">Competitor B</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              compareRows.map((r) => (
+                <tr>
+                  <th scope="row">{r.feature}</th>
+                  <td class="c-us">{r.us ? '✓' : '—'}</td>
+                  <td class={r.a ? 'yes' : 'no'}>{r.a ? '✓' : '—'}</td>
+                  <td class={r.b ? 'yes' : 'no'}>{r.b ? '✓' : '—'}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <SpecTag
+        feature="Comparison table"
+        verdict="situational"
+        note="Probably the most rigged chart in marketing -- we built it, so of course we win every row. Notice the competitor columns are vaguely named too, and conveniently missing checks. It persuades precisely because it looks objective. Fair enough when the comparison's real and the rivals are actually named; a strawman the second it isn't."
+        tech="A plain HTML table with our column highlighted and the feature rows chosen to flatter us. The honesty is in admitting the selection bias, not in the markup."
+      />
+    </section>
+
+    <!-- PRICING + TOGGLE -->
+    <section class="p-section pricing-sec" id="pricing" data-feature="Pricing toggle" data-verdict="essential">
+      <header class="section-head" data-reveal>
+        <p class="section-kicker">Pricing</p>
+        <h2>Simple plans that scale with you.</h2>
+        <div class="billing-toggle">
+          <span>Monthly</span>
+          <button type="button" class="switch" data-billing role="switch" aria-checked="false" aria-label="Toggle annual billing"><span class="knob"></span></button>
+          <span>Annual <em class="save-badge">save 20%</em></span>
+        </div>
+      </header>
+      <div class="tiers">
+        {
+          tiers.map((t) => (
+            <article class={`tier${t.featured ? ' is-featured' : ''}`} data-reveal>
+              {t.featured && <span class="tier-flag">Most popular</span>}
+              <h3>{t.name}</h3>
+              <p class="tier-price">
+                {t.monthly === null ? (
+                  <span class="price-custom">Custom</span>
+                ) : (
+                  <>
+                    <span class="price-amount" data-monthly={t.monthly}>${t.monthly}</span>
+                    <span class="price-per" data-per>/mo</span>
+                  </>
+                )}
+              </p>
+              <ul class="tier-features">
+                {t.features.map((f) => <li>{f}</li>)}
+              </ul>
+              <a class="btn primary tier-cta" href="#">{t.cta}</a>
+            </article>
+          ))
+        }
+      </div>
+      <SpecTag
+        feature="Pricing toggle"
+        verdict="essential"
+        note="The monthly/annual switch is genuinely useful -- it lets buyers self-select, and nudges them toward annual with a real discount. If you're selling a subscription, you basically need this."
+        tech="A toggle rewrites each tier's amount and period; annual applies a 20% discount to the monthly rate."
+      />
+    </section>
+
+    <!-- FAQ ACCORDION -->
+    <section class="p-section faq-sec" data-feature="FAQ accordion" data-verdict="essential">
+      <header class="section-head" data-reveal>
+        <p class="section-kicker">Questions</p>
+        <h2>Answers, folded up.</h2>
+      </header>
+      <div class="faq-list" data-reveal>
+        {
+          faqs.map((f) => (
+            <details class="faq">
+              <summary>{f.q}<span class="faq-mark" aria-hidden="true" /></summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+      <SpecTag
+        feature="FAQ accordion"
+        verdict="essential"
+        note="Objection-handling on demand, basically. It answers the real questions blocking a purchase without cluttering the page -- and it's genuinely accessible when it's built on native elements."
+        tech="Native <details>/<summary> -- keyboard-accessible and zero JavaScript."
+      />
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="p-section countdown-sec" data-feature="Countdown timer" data-verdict="manipulative">
+      <div class="countdown" data-reveal>
+        <p class="countdown-label">Offer ends in</p>
+        <div class="countdown-clock" data-countdown>
+          <span data-cd="h">00</span><i>:</i><span data-cd="m">00</span><i>:</i><span data-cd="s">00</span>
+        </div>
+        <a class="btn primary" href="#pricing">Claim the discount</a>
+      </div>
+      <SpecTag
+        feature="Countdown timer"
+        verdict="manipulative"
+        note="Real deadlines create honest urgency. But most countdowns just reset the moment they hit zero -- that's a dark pattern, and buyers increasingly see right through it. Use a true deadline, or don't use one at all."
+        tech="A live ticking clock. Ours honestly just counts down from three hours for the demo -- no fake reset."
+      />
+    </section>
+
+    <!-- SOCIAL-PROOF TOASTS -->
+    <section class="p-section proof-sec" data-feature="Social-proof popups" data-verdict="manipulative">
+      <header class="section-head" data-reveal>
+        <p class="section-kicker">Live activity</p>
+        <h2>"Someone just bought this."</h2>
+      </header>
+      <div class="proof-demo" data-reveal>
+        <div class="proof-toast is-inline">
+          <span class="proof-dot" aria-hidden="true"></span>
+          <p class="proof-text" data-proof-text>Dana from Berlin just started a trial</p>
+        </div>
+        <p class="proof-hint">
+          This one's caged for study. Switch to <strong>Conversion</strong> mode
+          and a free-roaming one starts popping up in the corner of your
+          screen -- they travel in packs with countdown timers.
+        </p>
+      </div>
+      <SpecTag
+        feature="Social-proof popups"
+        verdict="manipulative"
+        note="Those 'Ana from Austin just upgraded' toasts genuinely lift conversions -- real-time proof is persuasive. But most of them are just a plugin cycling invented names on a timer, not an actual feed of real sales. If the activity's real, it's marketing. If it's invented, it's fraud with a nice slide-in animation."
+        tech="A toast cycling through a hardcoded list on an interval -- which is exactly how most of these work in production. That's the point. The corner version only runs in Conversion mode."
+      />
+    </section>
+
+    <!-- the free-roaming specimen (Conversion mode only) -->
+    <div class="proof-toast is-corner" data-proof-corner aria-hidden="true">
+      <span class="proof-dot" aria-hidden="true"></span>
+      <p class="proof-text">Someone in Austin upgraded to Growth</p>
+    </div>
+
+    <!-- STICKY CTA BAR -->
+    <section class="p-section sticky-sec" data-feature="Sticky CTA bar" data-verdict="situational">
+      <header class="section-head" data-reveal>
+        <p class="section-kicker">Always in reach</p>
+        <h2>The bar that followed you here.</h2>
+      </header>
+      <p class="sticky-body" data-reveal>
+        Since the hero scrolled off screen, a slim call-to-action has been riding
+        the bottom of your window. Scroll to the top and it goes away; scroll
+        back down and it returns. Switch to <strong>Conversion</strong> mode and
+        watch it get pushier -- same component, just more elbows.
+      </p>
+      <SpecTag
+        feature="Sticky CTA bar"
+        verdict="situational"
+        note="A standing offer that shadows you down the page. Genuinely helpful when the CTA is the whole point -- saves people a scroll back up to act. It tips into nagging once it's oversized, undismissable, or covering content. Ours gets pushier in Conversion mode -- that's basically the dial between 'helpful' and 'pester.'"
+        tech="An IntersectionObserver watches the hero; once it leaves the viewport the bar slides up. Its copy is rewritten per mode, and it remembers a dismissal for the session."
+      />
+    </section>
+
+    <!-- the bar itself (fixed; appears once the hero scrolls away) -->
+    <div class="sticky-cta" data-sticky-cta aria-hidden="true">
+      <span class="sc-msg" data-sc-msg>Ready when you are.</span>
+      <a class="btn primary sc-btn" href="#pricing" data-sc-btn>See pricing</a>
+      <button class="sc-close" type="button" data-sc-close aria-label="Dismiss">×</button>
+    </div>
+
+    <!-- EXIT-INTENT -->
+    <section class="p-section exit-sec" data-feature="Exit-intent popup" data-verdict="manipulative">
+      <header class="section-head" data-reveal>
+        <p class="section-kicker">On the way out</p>
+        <h2>The popup that begs you to stay.</h2>
+      </header>
+      <div class="exit-demo" data-reveal>
+        <p>
+          Slide your cursor up past the top of the window, like you're reaching
+          for the tab bar to leave. Something's going to lunge to stop you. On a
+          phone, since that gesture doesn't exist, just tap below instead.
+        </p>
+        <button class="btn primary" type="button" data-exit-trigger>Simulate leaving →</button>
+      </div>
+      <SpecTag
+        feature="Exit-intent popup"
+        verdict="manipulative"
+        note="The modal that ambushes you right as you reach to close the tab. It rescues a few percent of leaving visitors and irritates the rest. Only honest when what it's offering is real -- an actual discount, a saved cart. A fake 'wait!' with nothing behind it just teaches people to distrust the next one."
+        tech="A mouseout listener watches the cursor cross the top edge of the viewport (clientY ≤ 0, no related target) and fires once per visit. It can't work on touch, so this demo adds a manual trigger."
+      />
+    </section>
+
+    <!-- exit-intent modal (fires on real exit-intent, or the button above) -->
+    <div class="exit-modal" data-exit-modal aria-hidden="true" inert>
+      <div class="exit-overlay" data-exit-close></div>
+      <div class="exit-card" role="dialog" aria-modal="true" aria-labelledby="exit-title">
+        <p class="exit-eyebrow">⚠ you triggered an exit-intent popup</p>
+        <h3 id="exit-title">Wait -- before you go.</h3>
+        <p>
+          Did that stop you, even for half a second? That hesitation is basically
+          the whole mechanism. We caught your cursor heading for the exit and
+          threw a wall in front of it. It works -- which is exactly why it spends
+          trust you don't get back. Use it once, for something that actually
+          matters, or not at all.
+        </p>
+        <div class="exit-actions">
+          <button class="btn primary" type="button" data-exit-close>Fair enough -- let me go</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTRO -->
+    <section class="p-outro" data-hud-hide>
+      <p class="outro-kicker">That's the Product Site.</p>
+      <h2 class="outro-line">Corporate, SaaS, or conversion -- <em>same components</em>, three personalities.</h2>
+      <div class="outro-actions">
+        <a class="btn ghost" href="/vibes">← Back to the vibes</a>
+        <a class="btn solid" href="/">Get this for my brand →</a>
+      </div>
+      <NextVibe href="/vibes/storefront" name="The Storefront" />
+    </section>
+  </main>
+
+  <script>
+    import gsap from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const product = document.querySelector<HTMLElement>('.product')!;
+
+    // --- Mode swap: re-skin (CSS) + re-voice (hero copy) ---
+    const copy: Record<string, Record<string, string>> = {
+      corporate: {
+        eyebrow: 'SOC 2 Type II · ISO 27001',
+        title: 'Infrastructure your board can trust.',
+        sub: 'A measured, compliant platform with the reliability enterprise buyers demand — and the documentation their procurement team will ask for.',
+        cta: 'Request a demo',
+      },
+      saas: {
+        eyebrow: 'New · AI-assisted workflows',
+        title: 'Ship product faster.',
+        sub: 'The all-in-one workspace your team will actually enjoy. Set up in minutes, scale without rewrites, integrate with everything.',
+        cta: 'Start free trial',
+      },
+      conversion: {
+        eyebrow: '⚡ 48-hour flash offer',
+        title: 'Double your signups in 30 days.',
+        sub: 'The proven system 12,000+ founders use to turn cold visitors into paying customers — guaranteed, or your money back.',
+        cta: 'Get 50% off now',
+      },
+    };
+
+    const heroEls = {
+      eyebrow: document.querySelector<HTMLElement>('[data-hero="eyebrow"]')!,
+      title: document.querySelector<HTMLElement>('[data-hero="title"]')!,
+      sub: document.querySelector<HTMLElement>('[data-hero="sub"]')!,
+      cta: document.querySelector<HTMLElement>('[data-hero="cta"]')!,
+    };
+    const modeBtns = document.querySelectorAll<HTMLButtonElement>('[data-mode-btn]');
+
+    function setMode(mode: string) {
+      product.dataset.mode = mode;
+      const c = copy[mode];
+      heroEls.eyebrow.textContent = c.eyebrow;
+      heroEls.title.textContent = c.title;
+      heroEls.sub.textContent = c.sub;
+      heroEls.cta.textContent = c.cta;
+      modeBtns.forEach((b) =>
+        b.setAttribute('aria-pressed', String(b.dataset.modeBtn === mode)),
+      );
+      ScrollTrigger.refresh();
+    }
+    modeBtns.forEach((b) =>
+      b.addEventListener('click', () => setMode(b.dataset.modeBtn!)),
+    );
+    setMode('corporate');
+
+    // --- Scroll reveals ---
+    if (!reduce) {
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: 'top 88%' },
+          y: 28,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+        });
+      });
+    }
+
+    // --- Stat counters ---
+    gsap.utils.toArray<HTMLElement>('[data-count]').forEach((el) => {
+      const target = parseFloat(el.dataset.count ?? '0');
+      const decimals = parseInt(el.dataset.decimals ?? '0', 10);
+      const suffix = el.dataset.suffix ?? '';
+      const render = (v: number) =>
+        (decimals ? v.toFixed(decimals) : Math.round(v).toLocaleString()) +
+        suffix;
+      if (reduce) {
+        el.textContent = render(target);
+        return;
+      }
+      const obj = { v: 0 };
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        once: true,
+        onEnter: () =>
+          gsap.to(obj, {
+            v: target,
+            duration: 1.6,
+            ease: 'power2.out',
+            onUpdate: () => (el.textContent = render(obj.v)),
+          }),
+      });
+    });
+
+    // --- Pricing toggle ---
+    const billing = document.querySelector<HTMLButtonElement>('[data-billing]');
+    if (billing) {
+      billing.addEventListener('click', () => {
+        const annual = billing.getAttribute('aria-checked') !== 'true';
+        billing.setAttribute('aria-checked', String(annual));
+        product.dataset.billing = annual ? 'annual' : 'monthly';
+        document
+          .querySelectorAll<HTMLElement>('.price-amount')
+          .forEach((el) => {
+            const monthly = parseFloat(el.dataset.monthly ?? '0');
+            const value = annual ? Math.round(monthly * 0.8) : monthly;
+            el.textContent = `$${value}`;
+          });
+        document
+          .querySelectorAll<HTMLElement>('[data-per]')
+          .forEach((el) => (el.textContent = annual ? '/mo billed annually' : '/mo'));
+      });
+    }
+
+    // --- Testimonial carousel ---
+    const items = document.querySelectorAll<HTMLElement>('[data-testi-item]');
+    const dots = document.querySelectorAll<HTMLButtonElement>('[data-testi-dot]');
+    if (items.length) {
+      let idx = 0;
+      let timer = 0;
+      const show = (n: number) => {
+        idx = (n + items.length) % items.length;
+        items.forEach((it, i) =>
+          it.setAttribute('data-active', String(i === idx)),
+        );
+        dots.forEach((d, i) =>
+          d.setAttribute('data-active', String(i === idx)),
+        );
+      };
+      const play = () => {
+        clearInterval(timer);
+        timer = window.setInterval(() => show(idx + 1), 4200);
+      };
+      dots.forEach((d) =>
+        d.addEventListener('click', () => {
+          show(parseInt(d.dataset.testiDot ?? '0', 10));
+          play();
+        }),
+      );
+      show(0);
+      if (!reduce) play();
+    }
+
+    // --- Countdown ---
+    const cd = document.querySelector('[data-countdown]');
+    if (cd) {
+      const end = Date.now() + 3 * 60 * 60 * 1000;
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const parts = {
+        h: cd.querySelector('[data-cd="h"]')!,
+        m: cd.querySelector('[data-cd="m"]')!,
+        s: cd.querySelector('[data-cd="s"]')!,
+      };
+      const tick = () => {
+        const left = Math.max(0, end - Date.now());
+        const s = Math.floor(left / 1000);
+        parts.h.textContent = pad(Math.floor(s / 3600));
+        parts.m.textContent = pad(Math.floor((s % 3600) / 60));
+        parts.s.textContent = pad(s % 60);
+      };
+      tick();
+      window.setInterval(tick, 1000);
+    }
+
+    // --- Social-proof toasts: the inline specimen always cycles; the corner
+    //     one only roams in Conversion mode. The list is hardcoded — which is
+    //     exactly how the real ones work, and exactly the problem. ---
+    const proofMsgs = [
+      'Dana from Berlin just started a trial',
+      'Someone in Austin upgraded to Growth',
+      'Priya from London just booked a demo',
+      'A team in Tokyo added 14 seats',
+      'Marcus from Toronto claimed the discount',
+    ];
+    const proofInline = document.querySelector<HTMLElement>('[data-proof-text]');
+    const proofCorner = document.querySelector<HTMLElement>('[data-proof-corner]');
+    if (proofInline && proofCorner) {
+      const cornerText = proofCorner.querySelector<HTMLElement>('.proof-text')!;
+      let pi = 0;
+      let hideTimer = 0;
+      window.setInterval(() => {
+        pi = (pi + 1) % proofMsgs.length;
+        proofInline.textContent = proofMsgs[pi];
+        if (product.dataset.mode === 'conversion') {
+          cornerText.textContent = proofMsgs[pi];
+          proofCorner.classList.add('is-visible');
+          proofCorner.setAttribute('aria-hidden', 'false');
+          window.clearTimeout(hideTimer);
+          hideTimer = window.setTimeout(() => {
+            proofCorner.classList.remove('is-visible');
+            proofCorner.setAttribute('aria-hidden', 'true');
+          }, 3800);
+        }
+      }, 6000);
+    }
+
+    // --- Exit-intent popup (⚠ manipulative). Fires once when the cursor leaves
+    //     the top of the viewport; a button covers touch, where it can't fire. ---
+    const exitModal = document.querySelector<HTMLElement>('[data-exit-modal]');
+    if (exitModal) {
+      let exitFired = false;
+      let lastFocus: HTMLElement | null = null;
+      // The overlay div also carries [data-exit-close]; focus the real button.
+      const firstBtn = exitModal.querySelector<HTMLButtonElement>('button[data-exit-close]');
+
+      const openExit = () => {
+        lastFocus = document.activeElement as HTMLElement;
+        exitModal.classList.add('is-open');
+        exitModal.setAttribute('aria-hidden', 'false');
+        exitModal.removeAttribute('inert');
+        document.body.style.overflow = 'hidden';
+        firstBtn?.focus();
+      };
+      const closeExit = () => {
+        exitModal.classList.remove('is-open');
+        exitModal.setAttribute('aria-hidden', 'true');
+        exitModal.setAttribute('inert', '');
+        document.body.style.overflow = '';
+        lastFocus?.focus();
+      };
+
+      document.addEventListener('mouseout', (e) => {
+        if (exitFired || e.relatedTarget !== null || e.clientY > 0) return;
+        exitFired = true;
+        openExit();
+      });
+      document
+        .querySelector('[data-exit-trigger]')
+        ?.addEventListener('click', () => {
+          exitFired = true;
+          openExit();
+        });
+      exitModal
+        .querySelectorAll('[data-exit-close]')
+        .forEach((el) => el.addEventListener('click', closeExit));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && exitModal.classList.contains('is-open')) closeExit();
+      });
+    }
+
+    // --- Sticky CTA bar (situational). Appears once the hero scrolls away;
+    //     copy sharpens in Conversion mode; dismissal sticks for the session. ---
+    const stickyBar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+    const heroEl = document.querySelector<HTMLElement>('.p-hero');
+    if (stickyBar && heroEl) {
+      const scMsg = stickyBar.querySelector<HTMLElement>('[data-sc-msg]')!;
+      const scBtn = stickyBar.querySelector<HTMLElement>('[data-sc-btn]')!;
+      const scCopy: Record<string, { msg: string; btn: string }> = {
+        corporate: { msg: 'Questions for procurement?', btn: 'Book a call' },
+        saas: { msg: 'Set up in minutes.', btn: 'Start free trial' },
+        conversion: { msg: '⚡ 50% off ends soon —', btn: 'Claim it now' },
+      };
+      let dismissed = sessionStorage.getItem('artifice-sticky-dismissed') === '1';
+      let heroOut = false;
+      const syncSticky = () => {
+        const c = scCopy[product.dataset.mode ?? 'corporate'] ?? scCopy.corporate;
+        scMsg.textContent = c.msg;
+        scBtn.textContent = c.btn;
+        stickyBar.classList.toggle('is-pushy', product.dataset.mode === 'conversion');
+        const show = heroOut && !dismissed;
+        stickyBar.classList.toggle('is-visible', show);
+        stickyBar.setAttribute('aria-hidden', String(!show));
+      };
+      new IntersectionObserver(
+        (entries) => {
+          heroOut = !entries[0].isIntersecting;
+          syncSticky();
+        },
+        { threshold: 0 },
+      ).observe(heroEl);
+      stickyBar
+        .querySelector('[data-sc-close]')
+        ?.addEventListener('click', () => {
+          dismissed = true;
+          sessionStorage.setItem('artifice-sticky-dismissed', '1');
+          syncSticky();
+        });
+      modeBtns.forEach((b) => b.addEventListener('click', syncSticky));
+      syncSticky();
+    }
+  </script>
+
+  <style>
+    /* ---------- mode palettes ---------- */
+    .product {
+      --pd-bg: #fff;
+      --pd-surface: #f4f7fb;
+      --pd-card: #ffffff;
+      --pd-ink: #16202e;
+      --pd-muted: #5b6b7f;
+      --pd-accent: #1f5fbf;
+      --pd-line: rgba(16, 32, 46, 0.12);
+      --pd-radius: 4px;
+      --pd-head: var(--font-quiet);
+      --pd-mesh1: #2f6fd0;
+      --pd-mesh2: #7aa7e6;
+      --pd-mesh3: #cfe0f7;
+      background: var(--pd-bg);
+      color: var(--pd-ink);
+      transition:
+        background 0.5s ease,
+        color 0.5s ease;
+    }
+    .product[data-mode='saas'] {
+      --pd-bg: #0d0b1a;
+      --pd-surface: #171331;
+      --pd-card: #181435;
+      --pd-ink: #f2f0ff;
+      --pd-muted: #a9a2d6;
+      --pd-accent: #7c6bff;
+      --pd-line: rgba(255, 255, 255, 0.12);
+      --pd-radius: 16px;
+      --pd-head: var(--font-body);
+      --pd-mesh1: #7c6bff;
+      --pd-mesh2: #ff6bd6;
+      --pd-mesh3: #3bd0ff;
+    }
+    .product[data-mode='conversion'] {
+      --pd-bg: #fffdf7;
+      --pd-surface: #fff3e6;
+      --pd-card: #ffffff;
+      --pd-ink: #1a1206;
+      --pd-muted: #7a5a3a;
+      --pd-accent: #e8483b;
+      --pd-line: rgba(26, 18, 6, 0.14);
+      --pd-radius: 10px;
+      --pd-head: var(--font-loud);
+      --pd-mesh1: #ff7a3b;
+      --pd-mesh2: #ffd23b;
+      --pd-mesh3: #ff5a5a;
+    }
+
+    /* ---------- nav + mode switch ---------- */
+    .demo-nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 60;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 1.4rem;
+    }
+    .demo-back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: var(--pd-ink);
+      background: color-mix(in srgb, var(--pd-bg) 78%, transparent);
+      padding: 0.4rem 0.7rem;
+      border-radius: 6px;
+      backdrop-filter: blur(6px);
+    }
+    .mode-switch {
+      display: flex;
+      gap: 0.2rem;
+      padding: 0.25rem;
+      background: color-mix(in srgb, var(--pd-ink) 10%, transparent);
+      border: 1px solid var(--pd-line);
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+    .mode-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--pd-ink);
+      cursor: pointer;
+      transition:
+        background 0.25s ease,
+        color 0.25s ease;
+    }
+    .mode-btn[aria-pressed='true'] {
+      background: var(--pd-accent);
+      color: #fff;
+    }
+
+    /* ---------- shared section frame ---------- */
+    .p-section {
+      position: relative;
+      padding: clamp(3.5rem, 9vh, 7rem) 8vw;
+      max-width: 1180px;
+      margin-inline: auto;
+    }
+    .p-section + .p-section {
+      border-top: 1px solid var(--pd-line);
+    }
+    .section-head {
+      margin-bottom: 2.4rem;
+    }
+    .section-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pd-accent);
+      margin-bottom: 0.6rem;
+    }
+    .section-head h2 {
+      font-family: var(--pd-head);
+      font-size: clamp(1.8rem, 4vw, 2.9rem);
+      line-height: 1.05;
+      max-width: 20ch;
+    }
+    .product[data-mode='conversion'] .section-head h2,
+    .product[data-mode='conversion'] .hero-title {
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+
+    /* buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.8rem 1.3rem;
+      border-radius: var(--pd-radius);
+      transition:
+        transform 0.2s ease,
+        background 0.3s ease;
+    }
+    .btn.primary {
+      background: var(--pd-accent);
+      color: #fff;
+    }
+    .btn.ghost {
+      border: 1px solid var(--pd-line);
+      color: var(--pd-ink);
+    }
+    .btn.solid {
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* spec tags on dark saas bg keep their own light styling; nudge spacing */
+    .hero-spec,
+    .p-section :global(.spec-tag) {
+      margin-top: 2rem;
+    }
+
+    /* ---------- hero + mesh ---------- */
+    .p-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 8vw 4rem;
+      overflow: clip;
+    }
+    .hero-mesh {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .hero-mesh span {
+      position: absolute;
+      width: 44vw;
+      height: 44vw;
+      border-radius: 50%;
+      filter: blur(56px);
+      opacity: 0.6;
+      will-change: transform;
+    }
+    .hero-mesh span:nth-child(1) {
+      background: var(--pd-mesh1);
+      top: -12%;
+      left: -6%;
+      animation: drift-a 15s ease-in-out infinite alternate;
+    }
+    .hero-mesh span:nth-child(2) {
+      background: var(--pd-mesh2);
+      top: 6%;
+      right: -10%;
+      animation: drift-b 18s ease-in-out infinite alternate;
+    }
+    .hero-mesh span:nth-child(3) {
+      background: var(--pd-mesh3);
+      bottom: -18%;
+      left: 30%;
+      animation: drift-c 20s ease-in-out infinite alternate;
+    }
+    @keyframes drift-a {
+      to {
+        transform: translate(12%, 16%) scale(1.15);
+      }
+    }
+    @keyframes drift-b {
+      to {
+        transform: translate(-14%, 10%) scale(1.1);
+      }
+    }
+    @keyframes drift-c {
+      to {
+        transform: translate(8%, -12%) scale(1.2);
+      }
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+    }
+    .p-eyebrow {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      color: var(--pd-accent);
+      background: color-mix(in srgb, var(--pd-accent) 14%, transparent);
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      font-family: var(--pd-head);
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      line-height: 1;
+      letter-spacing: -0.015em;
+      margin-bottom: 1.3rem;
+    }
+    .hero-sub {
+      font-size: 1.2rem;
+      color: var(--pd-muted);
+      max-width: 52ch;
+      margin-bottom: 2rem;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+    .mode-hint {
+      margin-top: 2.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--pd-muted);
+    }
+
+    /* ---------- logo cloud ---------- */
+    .logos-sec {
+      text-align: center;
+    }
+    .logo-cloud {
+      list-style: none;
+      padding: 1.4rem 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2.4rem;
+    }
+    .logo-cloud li {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 1.3rem;
+      letter-spacing: 0.02em;
+      color: var(--pd-muted);
+      opacity: 0.7;
+    }
+    .logos-sec .section-kicker {
+      color: var(--pd-muted);
+    }
+
+    /* ---------- stats ---------- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+    }
+    .stat {
+      padding: 1.6rem;
+      background: var(--pd-surface);
+      border: 1px solid var(--pd-line);
+      border-radius: var(--pd-radius);
+    }
+    .stat-num {
+      display: block;
+      font-family: var(--pd-head);
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      line-height: 1;
+      color: var(--pd-accent);
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--pd-muted);
+    }
+
+    /* ---------- bento ---------- */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .bento-card {
+      background: var(--pd-card);
+      border: 1px solid var(--pd-line);
+      border-radius: var(--pd-radius);
+      padding: 1.6rem;
+      grid-column: span 2;
+    }
+    .bento-card.b-lg {
+      grid-column: span 2;
+      grid-row: span 2;
+      background: var(--pd-accent);
+      color: #fff;
+    }
+    .bento-card.b-md {
+      grid-column: span 2;
+    }
+    .bento-card.b-sm {
+      grid-column: span 2;
+    }
+    .bento-card h3 {
+      font-family: var(--pd-head);
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    .bento-card p {
+      color: var(--pd-muted);
+      font-size: 0.95rem;
+    }
+    .bento-card.b-lg p {
+      color: rgba(255, 255, 255, 0.85);
+    }
+    @media (min-width: 860px) {
+      .bento-card.b-sm {
+        grid-column: span 1;
+      }
+      .bento-card.b-md {
+        grid-column: span 2;
+      }
+    }
+
+    /* ---------- testimonials ---------- */
+    .testi {
+      max-width: 760px;
+      margin-inline: auto;
+      text-align: center;
+    }
+    .testi-track {
+      position: relative;
+      min-height: 9rem;
+    }
+    .testi-item {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+      pointer-events: none;
+    }
+    .testi-item[data-active='true'] {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    .testi-item blockquote {
+      font-family: var(--pd-head);
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+    .testi-item figcaption {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--pd-muted);
+    }
+    .testi-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.4rem;
+    }
+    .testi-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: none;
+      background: var(--pd-line);
+      cursor: pointer;
+    }
+    .testi-dot[data-active='true'] {
+      background: var(--pd-accent);
+    }
+
+    /* ---------- pricing ---------- */
+    .billing-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-top: 1.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+    .switch {
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid var(--pd-line);
+      background: var(--pd-surface);
+      position: relative;
+      cursor: pointer;
+      padding: 0;
+    }
+    .switch .knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--pd-accent);
+      transition: transform 0.25s ease;
+    }
+    .switch[aria-checked='true'] .knob {
+      transform: translateX(20px);
+    }
+    .save-badge {
+      font-style: normal;
+      color: var(--pd-accent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .product[data-billing='annual'] .save-badge {
+      opacity: 1;
+    }
+    .tiers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.2rem;
+    }
+    .tier {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1.8rem;
+      background: var(--pd-card);
+      border: 1px solid var(--pd-line);
+      border-radius: var(--pd-radius);
+    }
+    .tier.is-featured {
+      border-color: var(--pd-accent);
+      box-shadow: 0 0 0 1px var(--pd-accent);
+      position: relative;
+    }
+    .tier-flag {
+      position: absolute;
+      top: -0.75rem;
+      left: 1.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--pd-accent);
+      color: #fff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+    }
+    .tier h3 {
+      font-family: var(--pd-head);
+      font-size: 1.3rem;
+    }
+    .tier-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.3rem;
+    }
+    .price-amount,
+    .price-custom {
+      font-family: var(--pd-head);
+      font-size: 2.4rem;
+      color: var(--pd-ink);
+    }
+    .price-per {
+      font-size: 0.85rem;
+      color: var(--pd-muted);
+    }
+    .tier-features {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.92rem;
+      color: var(--pd-muted);
+    }
+    .tier-features li::before {
+      content: '✓ ';
+      color: var(--pd-accent);
+    }
+    .tier-cta {
+      margin-top: auto;
+      justify-content: center;
+    }
+    .tier:not(.is-featured) .tier-cta {
+      background: transparent;
+      color: var(--pd-accent);
+      border: 1px solid var(--pd-accent);
+    }
+
+    /* ---------- faq ---------- */
+    .faq-list {
+      max-width: 760px;
+    }
+    .faq {
+      border-top: 1px solid var(--pd-line);
+    }
+    .faq:last-child {
+      border-bottom: 1px solid var(--pd-line);
+    }
+    .faq summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 1.2rem 0;
+      font-family: var(--pd-head);
+      font-size: 1.15rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .faq summary::-webkit-details-marker {
+      display: none;
+    }
+    .faq-mark {
+      position: relative;
+      width: 14px;
+      height: 14px;
+      flex: none;
+    }
+    .faq-mark::before,
+    .faq-mark::after {
+      content: '';
+      position: absolute;
+      background: var(--pd-accent);
+    }
+    .faq-mark::before {
+      inset: 6px 0;
+      height: 2px;
+    }
+    .faq-mark::after {
+      inset: 0 6px;
+      width: 2px;
+      transition: transform 0.25s ease;
+    }
+    .faq[open] .faq-mark::after {
+      transform: scaleY(0);
+    }
+    .faq p {
+      padding: 0 0 1.3rem;
+      color: var(--pd-muted);
+      max-width: 62ch;
+    }
+
+    /* ---------- countdown ---------- */
+    .countdown-sec {
+      text-align: center;
+    }
+    .countdown {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 2.4rem 3rem;
+      background: var(--pd-surface);
+      border: 1px solid var(--pd-line);
+      border-radius: var(--pd-radius);
+    }
+    .countdown-label {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.8rem;
+      color: var(--pd-muted);
+    }
+    .countdown-clock {
+      font-family: var(--pd-head);
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      line-height: 1;
+      color: var(--pd-accent);
+      display: flex;
+      align-items: baseline;
+      gap: 0.3rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .countdown-clock i {
+      opacity: 0.4;
+      font-style: normal;
+    }
+
+    /* ---------- social-proof toasts ---------- */
+    .proof-demo {
+      display: grid;
+      gap: 1.1rem;
+      justify-items: start;
+    }
+    .proof-toast {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.8rem 1.15rem;
+      background: var(--pd-card);
+      border: 1px solid var(--pd-line);
+      border-radius: 999px;
+      box-shadow: 0 14px 34px -16px rgba(0, 0, 0, 0.35);
+    }
+    .proof-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--v-essential);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--v-essential) 25%, transparent);
+      flex: none;
+    }
+    .proof-text {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--pd-ink);
+      margin: 0;
+      white-space: nowrap;
+    }
+    .proof-hint {
+      font-size: 0.98rem;
+      color: var(--pd-muted);
+      max-width: 48ch;
+    }
+    .proof-toast.is-corner {
+      position: fixed;
+      left: 1.1rem;
+      bottom: 1.1rem;
+      z-index: 65;
+      transform: translateY(220%);
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.1, 1);
+    }
+    .proof-toast.is-corner.is-visible {
+      transform: none;
+    }
+    @media (max-width: 720px) {
+      /* keep clear of the mobile HUD strip */
+      .proof-toast.is-corner {
+        bottom: 4.4rem;
+      }
+      .proof-text {
+        white-space: normal;
+      }
+    }
+
+    /* ---------- comparison table ---------- */
+    .compare-wrap {
+      overflow-x: auto;
+    }
+    .compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      min-width: 460px;
+    }
+    .compare th,
+    .compare td {
+      padding: 0.85rem 1rem;
+      text-align: center;
+      border-bottom: 1px solid var(--pd-line);
+    }
+    .compare thead th {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--pd-muted);
+      font-weight: 500;
+    }
+    .compare tbody th[scope='row'] {
+      text-align: left;
+      font-family: var(--pd-head);
+      font-weight: 500;
+      color: var(--pd-ink);
+    }
+    .compare .c-us {
+      background: color-mix(in srgb, var(--pd-accent) 9%, transparent);
+    }
+    .compare thead .c-us {
+      color: var(--pd-accent);
+      border-bottom: 2px solid var(--pd-accent);
+    }
+    .compare td.c-us {
+      color: var(--pd-accent);
+      font-weight: 700;
+    }
+    .compare td.yes {
+      color: var(--pd-ink);
+    }
+    .compare td.no {
+      color: var(--pd-muted);
+      opacity: 0.5;
+    }
+
+    /* ---------- sticky CTA bar ---------- */
+    .sticky-body {
+      max-width: 52ch;
+      font-size: 1.05rem;
+      color: var(--pd-muted);
+    }
+    .sticky-body strong {
+      color: var(--pd-ink);
+    }
+    .sticky-cta {
+      position: fixed;
+      left: 50%;
+      bottom: 1.1rem;
+      transform: translate(-50%, 200%);
+      z-index: 58;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.6rem 0.7rem 0.6rem 1.3rem;
+      background: var(--pd-card);
+      border: 1px solid var(--pd-line);
+      border-radius: 999px;
+      box-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.5);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.1, 1);
+      max-width: calc(100vw - 2rem);
+    }
+    .sticky-cta.is-visible {
+      transform: translate(-50%, 0);
+    }
+    .sc-msg {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--pd-ink);
+      white-space: nowrap;
+    }
+    .sticky-cta.is-pushy {
+      border-color: var(--pd-accent);
+      box-shadow:
+        0 0 0 1px var(--pd-accent),
+        0 18px 50px -20px rgba(0, 0, 0, 0.5);
+    }
+    .sc-close {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      line-height: 1;
+      color: var(--pd-muted);
+      cursor: pointer;
+      padding: 0 0.3rem;
+    }
+    @media (max-width: 560px) {
+      .sc-msg {
+        display: none;
+      }
+    }
+
+    /* ---------- exit-intent ---------- */
+    .exit-demo {
+      display: grid;
+      gap: 1.1rem;
+      justify-items: start;
+      max-width: 52ch;
+    }
+    .exit-demo p {
+      color: var(--pd-muted);
+      font-size: 1.05rem;
+    }
+    .exit-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .exit-modal.is-open {
+      display: flex;
+    }
+    .exit-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 8, 14, 0.55);
+      backdrop-filter: blur(2px);
+    }
+    .exit-card {
+      position: relative;
+      z-index: 1;
+      max-width: 440px;
+      padding: 2rem;
+      background: var(--pd-card);
+      color: var(--pd-ink);
+      border: 1px solid var(--pd-line);
+      border-radius: var(--pd-radius);
+      box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6);
+      animation: exit-pop 0.3s ease;
+    }
+    @keyframes exit-pop {
+      from {
+        transform: translateY(12px) scale(0.98);
+        opacity: 0;
+      }
+    }
+    .exit-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--v-manipulative);
+      margin-bottom: 0.7rem;
+    }
+    .exit-card h3 {
+      font-family: var(--pd-head);
+      font-size: 1.7rem;
+      margin-bottom: 0.8rem;
+    }
+    .exit-card p {
+      color: var(--pd-muted);
+      line-height: 1.6;
+      margin-bottom: 1.4rem;
+    }
+    .exit-actions {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    /* ---------- outro ---------- */
+    .p-outro {
+      text-align: left;
+      padding: 12vh 8vw;
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .outro-kicker {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+    .outro-line {
+      font-family: var(--font-loud);
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      text-transform: uppercase;
+      line-height: 1;
+      max-width: 18ch;
+      margin-bottom: 2rem;
+    }
+    .outro-line em {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      text-transform: none;
+      color: #ff6b5a;
+    }
+    .outro-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  </style>
+</BaseLayout>

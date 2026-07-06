@@ -1,0 +1,889 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SpecTag from '../components/SpecTag.astro';
+import NextVibe from '../components/NextVibe.astro';
+
+// The five engines, as the hero will speak them and the strip will wear them.
+const voices = [
+  { id: 'showpiece', name: 'the Showpiece' },
+  { id: 'product', name: 'the Product Site' },
+  { id: 'storefront', name: 'the Storefront' },
+  { id: 'statement', name: 'the Statement' },
+  { id: 'editorial', name: 'the Editorial' },
+];
+
+const tiles = [
+  { slug: 'showpiece', name: 'The Showpiece', mech: 'loud ↔ quiet dial' },
+  { slug: 'product', name: 'The Product Site', mech: 'three personalities' },
+  { slug: 'storefront', name: 'The Storefront', mech: 'a cart that works' },
+  { slug: 'statement', name: 'The Statement', mech: 'four skins, one skeleton' },
+  { slug: 'editorial', name: 'The Editorial', mech: 'just… reading' },
+];
+
+// One template, sold three times. Identical skeleton (same markup below),
+// only the palette / logo font / accent change per "industry edition" --
+// which is exactly what a template store does.
+const templates = [
+  { skin: 'bakery', logo: 'Rise & Co.', edition: 'Bakery edition' },
+  { skin: 'legal', logo: 'Hale & Stone', edition: 'Law-firm edition' },
+  { skin: 'gym', logo: 'FORGE', edition: 'Gym edition' },
+];
+
+const say = [
+  {
+    id: 'point',
+    label: 'Point us at it',
+    title: 'Tell us the goal, we make the calls.',
+    body: 'Tell us what the site is for and who it needs to win over. We pick the vibe, make the design calls, and explain each one in plain English -- same as the demos do. Takes the least of your time, but trusts our judgement the most.',
+  },
+  {
+    id: 'collab',
+    label: 'Collaborate',
+    title: 'You pick the vibe, we design around it.',
+    body: 'Something in the demos probably stuck with you. We build in that direction and loop you in at the moments that actually matter -- type, palette, motion, tone. You steer the feel, we argue over the details. Most projects end up here.',
+    default: true,
+  },
+  {
+    id: 'hands',
+    label: 'Hands on the dials',
+    title: 'You’re in the room for every call.',
+    body: 'Typography, easing curves, the verdict-level tradeoffs -- you want an actual say in all of it. It’s the slowest option, and the most involved, but honestly sometimes the most fun too. We’ll tell you when you’re overdesigning something. You don’t have to listen.',
+  },
+];
+
+const services = [
+  {
+    name: 'Build from scratch',
+    body: 'Brand, front end, and the systems behind it -- from a blank file all the way to a launched site that actually sounds like you.',
+  },
+  {
+    name: 'Rebrand & refactor',
+    body: 'Bring us the site you already have. We keep what works, modernise the stack underneath, and you end up with a brand that actually fits.',
+  },
+  {
+    name: 'Database management',
+    body: 'Schema design, migrations, and ongoing care for the part of the site nobody notices -- until it breaks.',
+  },
+];
+---
+
+<BaseLayout
+  title="Artifice UI — websites with a voice, not a template"
+  description="A web design & build studio that shows its work: five live demos of what a website can feel like, every feature stamped with an honest verdict."
+>
+  <main class="home">
+    <!-- ===================== HERO ===================== -->
+    <header class="hero">
+      <p class="eyebrow">[ARTIFICE UI] · web design &amp; build</p>
+      <h1 class="hero-line">
+        We build the web in whatever{' '}<span class="voice-stack" data-voice-stack>
+          {
+            voices.map((v, i) => (
+              <em
+                class:list={['voice', `v-${v.id}`, { 'is-on': i === 0 }]}
+                data-voice
+                aria-hidden={i === 0 ? undefined : 'true'}
+              >
+                voice
+              </em>
+            ))
+          }
+        </span>{' '}your brand speaks.
+      </h1>
+      <p class="voice-tag" aria-hidden="true">
+        ↑ that was <span data-voice-name>the Showpiece</span> talking
+      </p>
+      <p class="lede">
+        Most web services just hand you a template and call it a decision --
+        we'd rather you make the real ones. Below are five working demos of
+        what a site can actually <em>feel</em> like. Look through them and
+        tell us what sticks.
+      </p>
+      <div class="hero-actions">
+        <a class="btn solid" href="/vibes">Browse the vibes →</a>
+        <a class="btn ghost" href="#templates">Why not a template? ↓</a>
+      </div>
+      <div class="hero-spec">
+        <SpecTag
+          feature="Cycling hero text"
+          verdict="situational"
+          note="Rotating heroes usually water down the one line a visitor actually reads. This one's kind of the exception, since the rotation IS the pitch. If it wasn't earning that, we'd cut it -- and we'd tell you to cut yours too."
+          tech="Five copies of the word stacked in an inline grid, cross-faded on a timer, each wearing a different demo engine's design tokens. It stops cycling under prefers-reduced-motion."
+        />
+      </div>
+    </header>
+
+    <!-- ===================== TEMPLATES ===================== -->
+    <section class="section" id="templates">
+      <p class="kicker">The industry default</p>
+      <h2>This is a template.</h2>
+      <div class="tpl-row" aria-label="One template sold as three different sites">
+        {
+          templates.map((t) => (
+            <div class="tpl" data-skin={t.skin} aria-hidden="true">
+              <div class="tpl-bar">
+                <span class="tpl-logo">{t.logo}</span>
+                <span class="tpl-links" />
+              </div>
+              <div class="tpl-img" />
+              <div class="tpl-lines">
+                <span />
+                <span />
+                <span class="short" />
+              </div>
+              <span class="tpl-btn" />
+              <span class="tpl-tag">{t.edition}</span>
+            </div>
+          ))
+        }
+      </div>
+      <p class="tpl-caption">
+        one template, three "industries" -- same bones, new paint, each sold as
+        a bespoke site
+      </p>
+      <p class="body">
+        It's fine, honestly -- fast, cheap, and identical underneath to every
+        other business that bought the same theme. Most web services stop right
+        here and charge extra for the palette swap. We start after that part's
+        over.
+      </p>
+      <SpecTag
+        feature="Templates"
+        verdict="situational"
+        note="Honestly the right call when the budget's small and the need is pretty standard -- and if that's you, we'll just say so and point you to a decent one. But if your brand actually has something to say, a template can't really hold it. That's the part we take on."
+        tech="One layout skeleton -- literally the same markup three times -- with the palette, logo font, and accent swapped per skin via a CSS custom property. The bones never move. That's the whole 'custom' part."
+      />
+    </section>
+
+    <!-- ===================== THE VIBES ===================== -->
+    <section class="section" id="vibes">
+      <p class="kicker">The alternative</p>
+      <h2>Explore the real decisions -- by name.</h2>
+      <p class="body">
+        Five working demos, and each one actually <em>performs</em> its own
+        features in front of you -- the dial, the modes, the cart, the skins,
+        the reading system. Every feature gets an honest verdict too,
+        including the{' '}
+        <strong>⚠ manipulative</strong> ones. Find whichever one sounds like
+        you -- that's probably where we start talking.
+      </p>
+      <ul class="tile-row">
+        {
+          tiles.map((t) => (
+            <li class="tile" data-vibe={t.slug}>
+              <a href={`/vibes/${t.slug}`}>
+                <span class="tile-name">{t.name}</span>
+                <span class="tile-mech">{t.mech}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="tile-foot">
+        No idea where to start? <a href="/vibes">Start at the gallery →</a>
+      </p>
+    </section>
+
+    <!-- ===================== HOW MUCH SAY ===================== -->
+    <section class="section" id="say">
+      <p class="kicker">Working with us</p>
+      <h2>How much say do you want?</h2>
+      <p class="body">
+        Custom doesn't have to mean handing your brand to total strangers --
+        or micromanaging one instead. Just pick how involved you want to be,
+        and we'll build the process around that.
+      </p>
+      <div class="say-switch" role="group" aria-label="Level of involvement">
+        {
+          say.map((s) => (
+            <button
+              type="button"
+              class="say-btn"
+              data-say-btn={s.id}
+              aria-pressed={s.default ? 'true' : 'false'}
+            >
+              {s.label}
+            </button>
+          ))
+        }
+      </div>
+      <div class="say-panels">
+        {
+          say.map((s) => (
+            <div
+              class="say-panel"
+              data-say-panel={s.id}
+              data-active={s.default ? '' : undefined}
+            >
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="say-cost">
+        No pricing table yet -- we're new, and custom work doesn't really tier
+        neatly anyway. Cost follows how involved you are and how big the scope
+        gets. You'll get a real number after we actually talk, not from a
+        configurator.
+      </p>
+      <SpecTag
+        feature="Pricing table"
+        verdict="situational"
+        note="Makes sense when the product is repeatable -- a subscription, a template. Custom work priced off a chart is usually either padded or not true. Until the numbers are real, we'd rather show you the levers than a table."
+        tech="There isn't one. That's the demo."
+      />
+    </section>
+
+    <!-- ===================== SERVICES ===================== -->
+    <section class="section" id="services">
+      <p class="kicker">What we do</p>
+      <h2>Three ways in.</h2>
+      <div class="svc-row">
+        {
+          services.map((s) => (
+            <article class="svc">
+              <h3>{s.name}</h3>
+              <p>{s.body}</p>
+            </article>
+          ))
+        }
+      </div>
+      <p class="tile-foot" style="margin-top:1.4rem">
+        Every project is custom. <a href="/services">See how we work →</a>
+      </p>
+    </section>
+
+    <!-- ===================== OUTRO ===================== -->
+    <section class="outro">
+      <p class="outro-kicker">The meta-pitch</p>
+      <h2 class="outro-line">
+        The site you're on <em>is</em> the portfolio.
+      </h2>
+      <p class="outro-body">
+        Every demo here got built the same way we'd build yours -- and judged
+        with the same honesty too. We'll tell you which features your site
+        actually needs, and which ones we'd talk you out of.
+      </p>
+      <div class="outro-actions">
+        <a class="btn solid light" href="/contact">Start a conversation →</a>
+        <a class="btn ghost dark" href="/vibes">Browse the vibes</a>
+      </div>
+      <NextVibe
+        href="/vibes/showpiece"
+        name="The Showpiece"
+        kicker="Or just start the tour"
+      />
+      <p class="footnote">
+        <span class="fn-word">Artifice</span> -- clever, cunning trickery. We
+        took the name so we'd be the one to point it out first.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- The cycling voice: same word, five engines' tokens ---
+    const voiceEls = document.querySelectorAll<HTMLElement>('[data-voice]');
+    const voiceName = document.querySelector<HTMLElement>('[data-voice-name]');
+    const names = [
+      'the Showpiece',
+      'the Product Site',
+      'the Storefront',
+      'the Statement',
+      'the Editorial',
+    ];
+    if (voiceEls.length && voiceName && !reduce) {
+      let vi = 0;
+      window.setInterval(() => {
+        vi = (vi + 1) % voiceEls.length;
+        voiceEls.forEach((el, i) => {
+          el.classList.toggle('is-on', i === vi);
+          if (i === vi) el.removeAttribute('aria-hidden');
+          else el.setAttribute('aria-hidden', 'true');
+        });
+        voiceName.textContent = names[vi];
+      }, 2600);
+    }
+
+    // --- The involvement switch ---
+    const sayBtns = document.querySelectorAll<HTMLButtonElement>('[data-say-btn]');
+    const sayPanels = document.querySelectorAll<HTMLElement>('[data-say-panel]');
+    sayBtns.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        sayBtns.forEach((b) =>
+          b.setAttribute('aria-pressed', String(b === btn)),
+        );
+        sayPanels.forEach((p) =>
+          p.toggleAttribute('data-active', p.dataset.sayPanel === btn.dataset.sayBtn),
+        );
+      }),
+    );
+  </script>
+
+  <style>
+    :global(html) {
+      scroll-behavior: smooth;
+    }
+
+    .home {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 6vw;
+    }
+
+    /* ---------- hero ---------- */
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.1rem;
+      padding: 10vh 0 6vh;
+    }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .hero-line {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(2.2rem, 5.6vw, 4.4rem);
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      max-width: 18ch;
+    }
+
+    /* the stacked, cross-fading word — five engines, one word */
+    .voice-stack {
+      display: inline-grid;
+      align-items: baseline;
+      vertical-align: baseline;
+    }
+    .voice {
+      grid-area: 1 / 1;
+      opacity: 0;
+      transition: opacity 0.55s ease;
+      white-space: nowrap;
+    }
+    .voice.is-on {
+      opacity: 1;
+    }
+    .v-showpiece {
+      font-family: var(--font-loud);
+      font-style: normal;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+    .v-product {
+      font-family: var(--font-body);
+      font-style: normal;
+      font-weight: 600;
+      color: #1f5fbf;
+    }
+    .v-storefront {
+      font-family: var(--font-quiet);
+      font-style: normal;
+      font-weight: 600;
+      color: #2f6b4f;
+    }
+    .v-statement {
+      font-family: var(--font-mono);
+      font-style: normal;
+      text-transform: uppercase;
+      font-size: 0.82em;
+      color: #ff4fa3;
+      text-shadow: 3px 3px 0 #000;
+    }
+    .v-editorial {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      font-weight: 400;
+      color: #8a2b2b;
+    }
+    .voice-tag {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+    }
+    .voice-tag span {
+      color: var(--ink);
+    }
+
+    .lede {
+      max-width: 52ch;
+      font-size: 1.15rem;
+      color: var(--ink-soft);
+      margin-top: 0.6rem;
+    }
+    .lede em {
+      font-family: var(--font-quiet);
+      font-style: italic;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-top: 0.8rem;
+    }
+    .hero-spec {
+      margin-top: 2.2rem;
+    }
+
+    /* ---------- shared section frame ---------- */
+    .section {
+      padding: clamp(3.5rem, 10vh, 7rem) 0;
+      border-top: 1px solid var(--line);
+    }
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 0.7rem;
+    }
+    .section h2 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(1.9rem, 4.4vw, 3rem);
+      line-height: 1.05;
+      margin-bottom: 1.1rem;
+      max-width: 22ch;
+    }
+    .body {
+      max-width: 56ch;
+      font-size: 1.08rem;
+      color: var(--ink-soft);
+      margin-bottom: 1.6rem;
+    }
+    .body em {
+      font-family: var(--font-quiet);
+      font-style: italic;
+    }
+    .section :global(.spec-tag) {
+      margin-top: 1.8rem;
+    }
+
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      text-decoration: none;
+      padding: 0.85rem 1.4rem;
+      border-radius: 4px;
+      transition: transform 0.2s ease;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .btn.solid {
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .btn.solid.light {
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .btn.ghost {
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+    .btn.ghost.dark {
+      border-color: rgba(244, 241, 234, 0.4);
+      color: var(--paper);
+    }
+
+    /* ---------- templates ----------
+       The three cards share ONE skeleton (identical markup). Everything that
+       differs is a --tpl-* custom property swapped per [data-skin] below — the
+       point being that "different site" is really just a palette + a font. */
+    .tpl-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin: 1.8rem 0 0.7rem;
+      max-width: 760px;
+    }
+    .tpl {
+      /* skin defaults — overridden per [data-skin] */
+      --tpl-paper: #fff;
+      --tpl-ink: var(--ink);
+      --tpl-line: var(--line);
+      --tpl-accent: var(--ink-soft);
+      --tpl-logo-font: var(--font-mono);
+      --tpl-logo-case: none;
+
+      background: var(--tpl-paper);
+      border: 1px solid var(--tpl-line);
+      border-radius: 8px;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .tpl[data-skin='bakery'] {
+      --tpl-paper: #fbf4ec;
+      --tpl-ink: #5a3a28;
+      --tpl-line: #e6d4c3;
+      --tpl-accent: #c47a4a;
+      --tpl-logo-font: var(--font-quiet);
+    }
+    .tpl[data-skin='legal'] {
+      --tpl-paper: #f4f7fb;
+      --tpl-ink: #1c2b45;
+      --tpl-line: #cdd7e4;
+      --tpl-accent: #2f5487;
+      --tpl-logo-font: var(--font-quiet);
+    }
+    .tpl[data-skin='gym'] {
+      --tpl-paper: #17181b;
+      --tpl-ink: #f2f2f0;
+      --tpl-line: #34363b;
+      --tpl-accent: #b6e94a;
+      --tpl-logo-font: var(--font-loud);
+      --tpl-logo-case: uppercase;
+    }
+    .tpl-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .tpl-logo {
+      font-family: var(--tpl-logo-font);
+      font-size: 0.82rem;
+      line-height: 1.1;
+      letter-spacing: 0.01em;
+      text-transform: var(--tpl-logo-case);
+      color: var(--tpl-ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tpl-links {
+      flex: 0 0 34%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--tpl-line);
+    }
+    .tpl-img {
+      aspect-ratio: 16 / 9;
+      border-radius: 5px;
+      background:
+        linear-gradient(
+          to top right,
+          transparent calc(50% - 1px),
+          var(--tpl-line) calc(50% - 1px) calc(50% + 1px),
+          transparent calc(50% + 1px)
+        ),
+        linear-gradient(
+          to bottom right,
+          transparent calc(50% - 1px),
+          var(--tpl-line) calc(50% - 1px) calc(50% + 1px),
+          transparent calc(50% + 1px)
+        ),
+        color-mix(in srgb, var(--tpl-accent) 12%, var(--tpl-paper));
+    }
+    .tpl-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .tpl-lines span {
+      height: 7px;
+      border-radius: 4px;
+      background: var(--tpl-line);
+    }
+    .tpl-lines .short {
+      width: 55%;
+    }
+    .tpl-btn {
+      width: 38%;
+      height: 20px;
+      border-radius: 4px;
+      background: var(--tpl-accent);
+    }
+    .tpl-tag {
+      margin-top: 0.15rem;
+      padding-top: 0.55rem;
+      border-top: 1px dashed var(--tpl-line);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--tpl-accent);
+    }
+    .tpl-caption {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      margin-bottom: 1.6rem;
+      max-width: 52ch;
+    }
+
+    /* ---------- vibe tiles: each wears its destination ---------- */
+    .tile-row {
+      list-style: none;
+      padding: 0;
+      margin: 0.4rem 0 1.2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.9rem;
+    }
+    .tile a {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      height: 100%;
+      padding: 1.1rem 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      text-decoration: none;
+      transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease;
+    }
+    .tile a:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px -18px rgba(0, 0, 0, 0.35);
+    }
+    .tile-name {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 1.12rem;
+    }
+    .tile-mech {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-soft);
+    }
+    .tile[data-vibe='showpiece'] a {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+    .tile[data-vibe='showpiece'] .tile-name {
+      font-family: var(--font-loud);
+      font-weight: 400;
+      text-transform: uppercase;
+      color: var(--paper);
+      letter-spacing: 0.01em;
+    }
+    .tile[data-vibe='showpiece'] .tile-mech {
+      color: rgba(244, 241, 234, 0.65);
+    }
+    .tile[data-vibe='product'] a {
+      background:
+        radial-gradient(100% 80% at 90% 0%, rgba(47, 111, 208, 0.15), transparent 60%),
+        #fff;
+      border-color: rgba(31, 95, 191, 0.35);
+    }
+    .tile[data-vibe='product'] .tile-mech {
+      color: #1f5fbf;
+    }
+    .tile[data-vibe='storefront'] a {
+      background: #faf7ef;
+      border-top: 3px solid #2f6b4f;
+    }
+    .tile[data-vibe='storefront'] .tile-mech {
+      color: #2f6b4f;
+    }
+    .tile[data-vibe='statement'] a {
+      background: #fdeffb;
+      border: 2px solid #000;
+      border-radius: 0;
+      box-shadow: 4px 4px 0 #000;
+    }
+    .tile[data-vibe='statement'] .tile-name {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      font-size: 0.98rem;
+    }
+    .tile[data-vibe='statement'] .tile-mech {
+      color: #ff4fa3;
+    }
+    .tile[data-vibe='statement'] a:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0 #000;
+    }
+    .tile[data-vibe='editorial'] a {
+      background: var(--paper);
+    }
+    .tile[data-vibe='editorial'] .tile-name {
+      font-style: italic;
+      font-weight: 400;
+      color: #8a2b2b;
+    }
+    .tile-foot {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+    }
+    .tile-foot a {
+      color: var(--ink);
+    }
+
+    /* ---------- how much say ---------- */
+    .say-switch {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      padding: 0.28rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      margin-bottom: 1.4rem;
+    }
+    .say-btn {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+      padding: 0.5rem 0.95rem;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition:
+        background 0.25s ease,
+        color 0.25s ease;
+    }
+    .say-btn[aria-pressed='true'] {
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .say-panels {
+      max-width: 620px;
+    }
+    .say-panel {
+      display: none;
+    }
+    .say-panel[data-active] {
+      display: block;
+      animation: say-in 0.4s ease;
+    }
+    @keyframes say-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+    }
+    .say-panel h3 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 1.35rem;
+      margin-bottom: 0.5rem;
+    }
+    .say-panel p {
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+    .say-cost {
+      max-width: 56ch;
+      margin-top: 1.5rem;
+      padding: 0.9rem 1.1rem;
+      border-left: 3px solid var(--v-situational);
+      background: #fff;
+      border-radius: 0 6px 6px 0;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+
+    /* ---------- services ---------- */
+    .svc-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 0.6rem;
+    }
+    .svc {
+      padding: 1.5rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .svc h3 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .svc p {
+      color: var(--ink-soft);
+      font-size: 0.97rem;
+      line-height: 1.55;
+    }
+
+    /* ---------- outro ---------- */
+    .outro {
+      margin: 0 -6vw;
+      padding: 12vh 6vw;
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .outro-kicker {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+    .outro-line {
+      font-family: var(--font-loud);
+      font-size: clamp(2.2rem, 6.5vw, 5rem);
+      text-transform: uppercase;
+      line-height: 1;
+      max-width: 16ch;
+      margin-bottom: 1.4rem;
+    }
+    .outro-line em {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      text-transform: none;
+      font-weight: 400;
+      color: var(--sp-accent, #d0543f);
+    }
+    .outro-body {
+      max-width: 52ch;
+      font-size: 1.08rem;
+      color: rgba(244, 241, 234, 0.75);
+      margin-bottom: 2rem;
+    }
+    .outro-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footnote {
+      margin-top: 3.5rem;
+      max-width: 46ch;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.6;
+      color: rgba(244, 241, 234, 0.55);
+    }
+    .fn-word {
+      color: var(--paper);
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        min-height: 0;
+        padding-top: 14vh;
+      }
+      .v-statement {
+        text-shadow: 2px 2px 0 #000;
+      }
+    }
+  </style>
+</BaseLayout>

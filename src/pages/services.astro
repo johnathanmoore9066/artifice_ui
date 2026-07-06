@@ -1,0 +1,321 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SpecTag from '../components/SpecTag.astro';
+
+const services = [
+  {
+    id: 'build',
+    n: '01',
+    name: 'Build from scratch',
+    lead: 'A blank file to a launched site that sounds like you.',
+    body: 'Brand, front end, and the systems behind it. We start from the goal -- who the site actually has to convince, and of what -- pick a voice together with you, and build the whole thing. No theme, no template marketplace, no "we\'ll just tweak this one someone else already made."',
+    draws: 'Any of the five vibes',
+    drawsHref: '/vibes',
+    honest:
+      'The most expensive way in, and honestly not always the right one. If your need is small and pretty standard, we\'ll just say so and point you at a decent template instead of padding out a build.',
+  },
+  {
+    id: 'rebrand',
+    n: '02',
+    name: 'Rebrand & refactor',
+    lead: 'Keep what works. Change the voice. Modernise the stack.',
+    body: 'Bring us the site you already have. We keep the structure that\'s actually earning its keep, rebuild the parts that aren\'t, and re-skin the whole thing into a brand that finally fits -- same way the Statement demo turns one skeleton into four completely different personalities without touching the layout underneath.',
+    draws: 'The Statement -- the skin-swap, applied to your codebase',
+    drawsHref: '/vibes/statement',
+    honest:
+      'Situational by nature, basically -- sometimes a refactor\'s the smart call, and sometimes the old build\'s holding you back badly enough that starting from scratch is actually cheaper. We\'ll tell you which one you\'re really looking at.',
+  },
+  {
+    id: 'data',
+    n: '03',
+    name: 'Database management',
+    lead: 'Care for the part nobody sees until it breaks.',
+    body: 'Schema design, migrations, and ongoing management. This is the unglamorous, load-bearing work -- basically where "does it actually function" stops being just a slogan. The Storefront demo runs on real client-side state on purpose: the cart genuinely works. Your data layer will too.',
+    draws: 'The Storefront -- the one demo with real, working state',
+    drawsHref: '/vibes/storefront',
+    honest:
+      'Essential the moment your site holds real data -- orders, users, content. Overkill for a five-page brochure though. If a spreadsheet would honestly do the job, we\'ll just tell you to keep the spreadsheet.',
+  },
+];
+---
+
+<BaseLayout
+  title="Services -- Artifice UI"
+  description="Build from scratch, rebrand & refactor, or database management -- each one drawn from a demo you can go touch right now."
+>
+  <div class="page">
+    <SiteHeader current="services" />
+
+    <main class="services">
+      <!-- HERO -->
+      <header class="svc-hero">
+        <p class="kicker">What we do</p>
+        <h1>Three ways in. All of them custom.</h1>
+        <p class="lede">
+          Every service here points back to something you can go touch in the{' '}
+          <a href="/vibes">showroom</a>. We're not just describing capability --
+          we built a demo that actually proves it, then named the tradeoffs out
+          loud. Pick whichever door fits.
+        </p>
+      </header>
+
+      <!-- SERVICES -->
+      {
+        services.map((s) => (
+          <section class="svc-block" id={s.id}>
+            <div class="svc-index">
+              <span class="svc-n">{s.n}</span>
+            </div>
+            <div class="svc-main">
+              <h2>{s.name}</h2>
+              <p class="svc-lead">{s.lead}</p>
+              <p class="svc-body">{s.body}</p>
+              <a class="svc-draws" href={s.drawsHref}>
+                <span class="draws-label">Draws on</span>
+                <span class="draws-name">{s.draws} →</span>
+              </a>
+              <p class="svc-honest">
+                <span class="honest-mark">Honest take</span>
+                {s.honest}
+              </p>
+            </div>
+          </section>
+        ))
+      }
+
+      <!-- INVOLVEMENT RECAP -->
+      <section class="svc-say">
+        <p class="kicker">However you hire us</p>
+        <h2>You choose how much say you want.</h2>
+        <p class="say-body">
+          Custom doesn't have to mean handing your brand to total strangers --
+          or micromanaging one instead. Every service runs at whatever level of
+          involvement you pick: <strong>point us at it</strong>,
+          <strong>collaborate</strong>, or <strong>hands on the dials</strong>.
+          You set it on the way in, and we build the process around that.
+        </p>
+        <SpecTag
+          feature="Discovery call"
+          verdict="essential"
+          note="Probably the cheapest possible way to avoid building the wrong thing. Fifteen minutes to establish what the site's actually for beats a beautiful build aimed at the wrong goal. We won't quote a real number without it."
+          tech="No form magic -- just a short conversation, a shared understanding of scope, then a real proposal. Cost follows involvement and scope, not a configurator."
+        />
+      </section>
+
+      <!-- CTA -->
+      <section class="svc-cta">
+        <h2>Know which door is yours?</h2>
+        <p>Or want us to help you figure that out? Either works.</p>
+        <div class="cta-actions">
+          <a class="btn solid" href="/contact">Start a conversation →</a>
+          <a class="btn ghost" href="/vibes">Browse the vibes first</a>
+        </div>
+      </section>
+    </main>
+
+    <SiteFooter />
+  </div>
+
+  <style>
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .services {
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 6vw;
+    }
+
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 0.7rem;
+    }
+
+    /* hero */
+    .svc-hero {
+      padding: clamp(3.5rem, 10vh, 7rem) 0 clamp(2.5rem, 6vh, 4rem);
+    }
+    .svc-hero h1 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(2.2rem, 5.5vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.1rem;
+      max-width: 18ch;
+    }
+    .lede {
+      max-width: 56ch;
+      font-size: 1.15rem;
+      color: var(--ink-soft);
+    }
+    .lede a,
+    .say-body strong {
+      color: var(--ink);
+    }
+
+    /* service blocks */
+    .svc-block {
+      display: grid;
+      grid-template-columns: 4rem 1fr;
+      gap: 1.5rem;
+      padding: clamp(2.5rem, 6vh, 4rem) 0;
+      border-top: 1px solid var(--line);
+    }
+    .svc-n {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--ink-soft);
+    }
+    .svc-main h2 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      margin-bottom: 0.5rem;
+    }
+    .svc-lead {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .svc-body {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      max-width: 60ch;
+      margin-bottom: 1.4rem;
+    }
+    .svc-draws {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      text-decoration: none;
+      padding: 0.7rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+    .svc-draws:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.35);
+    }
+    .draws-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .draws-name {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 1.02rem;
+      color: var(--ink);
+    }
+    .svc-honest {
+      margin-top: 1.4rem;
+      padding-left: 0.9rem;
+      border-left: 3px solid var(--v-situational);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      max-width: 58ch;
+    }
+    .honest-mark {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--v-situational);
+      margin-bottom: 0.3rem;
+    }
+
+    /* involvement recap */
+    .svc-say {
+      padding: clamp(3rem, 7vh, 5rem) 0;
+      border-top: 1px solid var(--line);
+    }
+    .svc-say h2 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 1rem;
+      max-width: 20ch;
+    }
+    .say-body {
+      max-width: 58ch;
+      font-size: 1.08rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    .svc-say :global(.spec-tag) {
+      margin-top: 1.8rem;
+    }
+
+    /* cta */
+    .svc-cta {
+      padding: clamp(3rem, 8vh, 5rem) 0 clamp(3.5rem, 9vh, 6rem);
+      border-top: 1px solid var(--line);
+    }
+    .svc-cta h2 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      margin-bottom: 0.6rem;
+    }
+    .svc-cta p {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      margin-bottom: 1.6rem;
+    }
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      text-decoration: none;
+      padding: 0.85rem 1.4rem;
+      border-radius: 4px;
+      transition: transform 0.2s ease;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .btn.solid {
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .btn.ghost {
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+
+    @media (max-width: 560px) {
+      .svc-block {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .svc-index {
+        margin-bottom: -0.5rem;
+      }
+    }
+  </style>
+</BaseLayout>

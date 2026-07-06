@@ -1,0 +1,83 @@
+---
+// Persistent chrome for the non-demo pages (services, contact, 404).
+// The landing and the demos deliberately roll their own headers.
+interface Props {
+  current?: 'vibes' | 'services' | 'contact';
+}
+const { current } = Astro.props;
+
+const links = [
+  { href: '/vibes', label: 'Vibes', key: 'vibes' },
+  { href: '/services', label: 'Services', key: 'services' },
+  { href: '/contact', label: 'Contact', key: 'contact' },
+] as const;
+---
+
+<header class="site-header">
+  <a class="site-mark" href="/">[ARTIFICE&nbsp;UI]</a>
+  <nav class="site-nav" aria-label="Primary">
+    {
+      links.map((l) => (
+        <a
+          href={l.href}
+          aria-current={current === l.key ? 'page' : undefined}
+        >
+          {l.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 6vw;
+    background: color-mix(in srgb, var(--paper) 85%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-mark {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .site-nav {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .site-nav a {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: var(--ink-soft);
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+  .site-nav a:hover {
+    color: var(--ink);
+  }
+  .site-nav a[aria-current='page'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  @media (max-width: 520px) {
+    .site-nav a {
+      padding: 0.35rem 0.5rem;
+    }
+  }
+</style>

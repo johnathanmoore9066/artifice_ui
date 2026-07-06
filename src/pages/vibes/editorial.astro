@@ -1,0 +1,1103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpecTag from '../../components/SpecTag.astro';
+import Hud from '../../components/Hud.astro';
+import NextVibe from '../../components/NextVibe.astro';
+
+const tags = ['Design', 'Typography', 'The web'];
+
+// A real dotted-leader menu — the "restaurant content skin" of the same
+// reading system. Prices intentionally read as a menu, not a pricing table.
+const menu = [
+  { name: 'Heirloom tomato, burrata, basil oil', price: 16 },
+  { name: 'Hand-torn pappardelle, brown butter, sage', price: 24 },
+  { name: 'Whole roasted branzino, salsa verde', price: 34 },
+  { name: 'Olive oil cake, crème fraîche, honey', price: 12 },
+];
+
+// "Read next" — the retention engine of every publication.
+const readNext = [
+  { cat: 'Typography', title: 'The line that reads itself: measure, leading, and the myth of the perfect font', time: 6 },
+  { cat: 'Craft', title: 'Invisible interfaces: when the best design is the one you never notice', time: 9 },
+  { cat: 'The web', title: 'Against the fold: why “above the fold” stopped meaning what you think', time: 5 },
+];
+---
+
+<BaseLayout
+  title="The Editorial -- [ARTIFICE UI]"
+  description="A genuine reading system -- the demo is the article you're reading."
+>
+  <Hud category="Editorial" collapsed />
+
+  <!-- READING-PROGRESS BAR -->
+  <div class="progress" data-progress aria-hidden="true"><span></span></div>
+
+  <nav class="ed-nav">
+    <a class="ed-back" href="/vibes">← Vibes</a>
+    <div class="measure-switch" role="group" aria-label="Line length">
+      <span class="measure-label">Measure</span>
+      <button type="button" class="measure-btn" data-measure-btn="comfortable" aria-pressed="true">Comfortable</button>
+      <button type="button" class="measure-btn" data-measure-btn="wide" aria-pressed="false">Wide</button>
+    </div>
+  </nav>
+
+  <main class="editorial">
+    <article class="piece" data-piece data-measure="comfortable">
+      <!-- HEADER · BYLINE & READ-TIME -->
+      <header class="piece-head" data-feature="Byline & read-time" data-verdict="situational">
+        <ul class="chips">
+          {tags.map((t) => <li class="chip">{t}</li>)}
+        </ul>
+        <h1 class="piece-title">In praise of the invisible.</h1>
+        <p class="piece-dek">
+          The best reading design is the kind you never notice. This page is
+          the argument -- and the demonstration. Everything it's praising,
+          it's quietly doing to the words in front of you right now.
+        </p>
+        <div class="byline">
+          <span class="byline-author">By The Studio</span>
+          <span class="byline-dot" aria-hidden="true">·</span>
+          <span>July 2026</span>
+          <span class="byline-dot" aria-hidden="true">·</span>
+          <span data-readtime>7 min read</span>
+        </div>
+        <SpecTag
+          feature="Byline & read-time"
+          verdict="situational"
+          note="A name, a date, and an honest 'X min read' set expectations before the first sentence -- genuinely useful on long articles. On a two-line update though, it's just ceremony. The read-time only earns trust if it's actually real."
+          tech="The read-time is computed at load from the article's actual word count (≈220 wpm), not typed in by hand."
+        />
+      </header>
+
+      <!-- DROP CAP -->
+      <section class="ed-sec" data-feature="Drop cap" data-verdict="vanity">
+        <p class="lead-para">
+          <span class="dropcap">T</span>here's a particular kind of craft that
+          only succeeds by disappearing -- a door hinge, a well-cut paragraph,
+          the gap between two songs on an album. You notice the absence when
+          it's done badly, and notice basically nothing when it's done well.
+          Reading on the web is kind of in that same family. When the type,
+          the spacing, and the line length are right, you forget they're even
+          there and just hear the writer's voice. When they're wrong, you feel
+          vaguely tired and blame the article instead.
+        </p>
+        <p>
+          So let's do the unusual thing here and point at the machinery while
+          it's still running. That fancy capital letter up top is a drop cap --
+          three lines tall, a little flourish borrowed from illuminated
+          manuscripts and kept alive since then by fashion magazines. It
+          basically signals "a considered piece starts here." It's also, if
+          we're being honest, pure decoration.
+        </p>
+        <SpecTag
+          feature="Drop cap"
+          verdict="vanity"
+          note="Very Condé Nast, basically. It says 'settle in' and adds a note of craft -- but it carries zero actual information, and it can trip up screen readers if it's built carelessly. Charming, entirely optional, and the first thing to cut if it starts fighting the layout."
+          tech="The first letter is scaled up and floated with initial-letter (and a float fallback) so the following lines wrap around it. The word still reads as one word to assistive tech."
+        />
+      </section>
+
+      <!-- 65-CHAR MEASURE -->
+      <section class="ed-sec" data-feature="65-char measure" data-verdict="essential">
+        <h2>The measure of comfort</h2>
+        <p>
+          Notice how far your eye travels from the end of one line to the
+          start of the next? Not far, really. This column is capped at
+          roughly sixty-five characters -- the "measure" typographers have
+          basically converged on over centuries of setting body text. Too
+          wide, and your eye loses its place on the return sweep; too narrow,
+          and the rhythm turns to hiccups. Sixty to seventy-five characters is
+          the comfortable band, and honestly it's doing more for your reading
+          experience than any font choice on this page.
+        </p>
+        <p>
+          Don't just take my word for it though. Use the <strong>Measure</strong> toggle
+          up top and switch this article over to <em>Wide</em>. The words
+          don't change -- the effort does. Long lines feel authoritative in a
+          mockup and pretty punishing in practice -- which is exactly why this
+          is the one reading feature we're calling non-negotiable.
+        </p>
+        <SpecTag
+          feature="65-char measure"
+          verdict="essential"
+          note="Real, measurable readability -- and invisible when it's right. Constraining line length is probably the single highest-leverage typographic decision on a text-heavy page. Get this wrong, and nothing else you do is going to rescue the reading experience."
+          tech="The article column is capped with max-width in ch units, so the limit tracks the font's own character width. The toggle just swaps 65ch for a deliberately-too-wide 92ch."
+        />
+      </section>
+
+      <!-- PULL QUOTE -->
+      <section class="ed-sec" data-feature="Pull quote" data-verdict="situational">
+        <p>
+          A wall of text, however well measured, still needs somewhere for the
+          eye to rest. Editors have a tool for that -- they reach into the
+          prose, pull out a sentence that earns a second look, and set it big
+          in the margin of your attention.
+        </p>
+        <blockquote class="pullquote">
+          The best typography is the kind you never notice -- until it's gone.
+        </blockquote>
+        <p>
+          That's a pull quote. Used once, it creates a beat and pulls a
+          skimming reader back in. Used every third paragraph though, it chops
+          the argument into confetti and basically signals the writing
+          couldn't hold attention on its own. Like most good seasoning, the
+          dose is kind of the whole story.
+        </p>
+        <SpecTag
+          feature="Pull quote"
+          verdict="situational"
+          note="A genuine pacing device that breaks up the grey slab and rewards scanners. Overuse it though, and it fragments the read and undercuts the very prose it's quoting. One per long piece -- almost never on a short one."
+          tech="A styled blockquote lifted from the body copy -- larger, in the display face, with generous space around it. The quote is duplicated in the text so it never replaces content, only re-emphasizes it."
+        />
+      </section>
+
+      <!-- READING-PROGRESS BAR -->
+      <section class="ed-sec" data-feature="Reading-progress bar" data-verdict="situational">
+        <h2>How much is left</h2>
+        <p>
+          Glance at the top of the window. That thin line's been filling as
+          you scroll -- a reading-progress bar, quietly answering the question
+          every long page brings up: how much more of this is there? On a
+          feature like this one, it's a small kindness, honestly. It turns an
+          intimidating scroll into a finite, walkable distance.
+        </p>
+        <p>
+          On a landing page with three short sections though, the same bar is
+          just theatre -- it implies an epic where there's really just a
+          pamphlet, and it fills so fast it basically reads as a bug. The
+          feature isn't good or bad on its own; it's appropriate or absurd,
+          and only the length of the page decides which one.
+        </p>
+        <SpecTag
+          feature="Reading-progress bar"
+          verdict="situational"
+          note="Reassuring on genuine long-reads, kind of silly on short pages. Its entire value is basically proportional to how much text sits below the fold. If a reader can already see the end, the bar's just decoration doing an anxious impression of usefulness."
+          tech="A fixed bar whose width tracks scroll position over the document's scrollable height, updated on a passive scroll listener."
+        />
+      </section>
+
+      <!-- RESTAURANT CONTENT SKIN · DOTTED-LEADER MENU -->
+      <section class="ed-sec menu-sec" data-feature="Menu (content skin)" data-verdict="situational">
+        <h2>The same words, dressed for dinner</h2>
+        <p>
+          Here's the quiet secret of a reading system though -- it's not only
+          for essays. Strip the byline, swap the prose for dishes, add a price
+          and a row of dots, and the exact same typographic discipline turns
+          into a restaurant menu. Same measure, same scale, same restraint --
+          just a different content skin over the same one engine.
+        </p>
+        <div class="menu">
+          <p class="menu-head">Dinner · this evening</p>
+          {menu.map((m) => (
+            <p class="menu-row">
+              <span class="menu-name">{m.name}</span>
+              <span class="menu-dots" aria-hidden="true"></span>
+              <span class="menu-price">{m.price}</span>
+            </p>
+          ))}
+        </div>
+        <p>
+          The dotted leaders aren't typed out by hand -- they're generated, so
+          they stretch to fill whatever space each dish name leaves behind.
+          And since a menu exists to sell a table, a reservation bar's slid in
+          at the bottom of your screen. Useful here -- would be a nuisance if
+          it shadowed you through a 3,000-word essay instead.
+        </p>
+        <SpecTag
+          feature="Menu & sticky reservation"
+          verdict="situational"
+          note="Dotted-leader menus and a persistent 'Reserve' bar convert beautifully for hospitality -- the whole page basically exists to book a table. Bolt the same sticky CTA onto a reading page though, and it just becomes a thumb-blocking pest. Right tool, right context."
+          tech="Leaders are a flex row with a repeating-radial-gradient filler between name and price; the reservation bar is revealed by an IntersectionObserver watching this section."
+        />
+      </section>
+
+      <!-- INLINE NEWSLETTER -->
+      <section class="ed-sec" data-feature="Inline newsletter" data-verdict="situational">
+        <h2>The interruption you forgive</h2>
+        <p>
+          Somewhere around here, a good magazine usually asks for your email.
+          Placed at the point where you've read enough to know whether you
+          actually like the writing, the ask is fair -- it converts far better
+          than a pop-up that fires before you've read a single sentence, and
+          it annoys a lot less too.
+        </p>
+        <form class="newsletter" data-newsletter>
+          <div class="newsletter-copy">
+            <p class="newsletter-kicker">Keep reading</p>
+            <p class="newsletter-line">One considered essay in your inbox, occasionally.</p>
+          </div>
+          <div class="newsletter-field">
+            <input type="email" required placeholder="you@example.com" aria-label="Email address" />
+            <button type="submit">Subscribe</button>
+          </div>
+          <p class="newsletter-thanks" data-newsletter-thanks hidden>
+            Thanks -- you're on the list. (Not really -- this is a demo.)
+          </p>
+        </form>
+        <SpecTag
+          feature="Inline newsletter"
+          verdict="situational"
+          note="The obligatory interrupt, just done with manners. Mid-article placement respects the reader and still converts; the modal that ambushes you on arrival does neither. Necessary for a publication -- pure friction on a page that isn't even trying to build an audience."
+          tech="A native form inline in the flow -- no overlay, no scroll-lock. Submission is intercepted for the demo and swapped for an inline confirmation."
+        />
+      </section>
+
+      <!-- METERED PAYWALL -->
+      <section
+        class="ed-sec paywall-sec"
+        data-feature="Metered paywall"
+        data-verdict="manipulative"
+        data-paywall
+      >
+        <h2>Where the wall goes up</h2>
+        <div class="paywall-content" data-paywall-content>
+          <p>
+            Here's the part a metered paywall would take hostage. Read it
+            while you still can. There's nothing structurally different about
+            these sentences -- no premium ink, no secret paper. They're the
+            exact same words as the ones above, set in the same type, and in a
+            second a gradient and a price are going to pretend otherwise.
+          </p>
+          <p>
+            That's basically the quiet dishonesty of the soft paywall -- it
+            dresses up a business decision as if it were a property of the
+            writing. The blur says "valuable." The counter says "you've had
+            your free taste." Neither one's actually a fact about the
+            sentences. Both are a fact about the ledger instead.
+          </p>
+        </div>
+        <div class="paywall-gate" data-paywall-gate>
+          <div class="gate-card">
+            <svg class="gate-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <rect x="4" y="10" width="16" height="11" rx="2" />
+              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+            </svg>
+            <p class="gate-eyebrow">⚠ Metered paywall</p>
+            <h3>The rest is for subscribers.</h3>
+            <p class="gate-lede">
+              You've used your free articles this month. But notice what
+              actually happened here -- nothing. The words are right there,
+              just below this panel -- we just laid a gradient and a price
+              over top of them.
+            </p>
+            <div class="gate-actions">
+              <button class="gate-unlock" type="button" data-paywall-unlock>Unlock it -- it's a demo</button>
+              <span class="gate-price">or subscribe · $8/mo</span>
+            </div>
+            <p class="gate-fine">
+              The honest version admits the article never actually moved. The
+              dishonest one just calls this scarcity.
+            </p>
+          </div>
+        </div>
+        <SpecTag
+          feature="Metered paywall"
+          verdict="manipulative"
+          note="Read a little, then hit a wall. It's the model that funds real journalism -- and also the same mechanism that gates a recipe behind a gradient. The device itself isn't the crime; whether there's actually anything worth paying for behind it is. It's built to read as scarcity when the content's right there the whole time, which is exactly why it's on the flagged list."
+          tech="The lower paragraphs are real and fully present in the page -- JavaScript clips them with a fading CSS mask and raises a full-height gate over them as you scroll in. Turn JavaScript off and the wall is gone: the words never left. 'Unlock' removes one class."
+        />
+      </section>
+
+      <!-- CLOSE -->
+      <section class="ed-sec">
+        <p class="closing">
+          None of this is loud. That's kind of the point. The Showpiece
+          shouts, the Storefront sells, the Statement performs -- the
+          Editorial just gets out of the way and lets you read. The craft's
+          real precisely because you weren't supposed to notice it. Now that
+          you have though, try switching the measure back to
+          <em>Comfortable</em>, and feel the page relax a little.
+        </p>
+      </section>
+
+      <!-- READ NEXT -->
+      <section class="ed-sec rn-sec" data-feature="Read next" data-verdict="essential">
+        <h2>Read next</h2>
+        <div class="rn-grid">
+          {
+            readNext.map((a) => (
+              <a class="rn-card" href="#" data-demolink>
+                <span class="rn-cat">{a.cat}</span>
+                <span class="rn-title">{a.title}</span>
+                <span class="rn-meta">{a.time} min read</span>
+              </a>
+            ))
+          }
+        </div>
+        <SpecTag
+          feature="Read next"
+          verdict="essential"
+          note="Probably the most valuable module on any publication that isn't a paywall -- basically the reason you're still here twenty minutes later. Done well, it's a genuine service: more of what you came for, offered right when you're most open to it. Done cynically though, it's just an endless-scroll trap. The line is whether the picks are actually relevant, or just sticky. Essential for anyone whose business is attention."
+          tech="A small grid of related pieces at the article's natural stopping point, where a satisfied reader is most likely to take a next one. Real builds populate it by shared tag or by what you haven't read yet."
+        />
+      </section>
+    </article>
+
+    <!-- STICKY RESERVATION CTA (restaurant skin) -->
+    <div class="reserve-bar" data-reserve aria-hidden="true" inert>
+      <span class="reserve-text">Table for two tonight?</span>
+      <button type="button" class="reserve-btn" data-reserve-btn>Reserve →</button>
+    </div>
+
+    <!-- OUTRO -->
+    <section class="ed-outro" data-hud-hide>
+      <p class="outro-kicker">That's the Editorial.</p>
+      <h2 class="outro-line">The vibe that <em>disappears</em> on purpose.</h2>
+      <div class="outro-actions">
+        <a class="btn ghost" href="/vibes">← Back to the vibes</a>
+        <a class="btn solid" href="/">Get this for my brand →</a>
+      </div>
+      <NextVibe
+        href="/vibes/showpiece"
+        name="The Showpiece"
+        kicker="That's all five -- start the loop again"
+      />
+    </section>
+  </main>
+
+  <script>
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- Reading-progress bar ---
+    const bar = document.querySelector<HTMLElement>('[data-progress] span');
+    if (bar) {
+      const update = () => {
+        const el = document.documentElement;
+        const max = el.scrollHeight - el.clientHeight;
+        bar.style.transform = `scaleX(${max > 0 ? el.scrollTop / max : 0})`;
+      };
+      document.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    }
+
+    // --- Measure toggle (65ch <-> wide) ---
+    const piece = document.querySelector<HTMLElement>('[data-piece]');
+    const measureBtns =
+      document.querySelectorAll<HTMLButtonElement>('[data-measure-btn]');
+    if (piece) {
+      measureBtns.forEach((btn) =>
+        btn.addEventListener('click', () => {
+          const mode = btn.dataset.measureBtn ?? 'comfortable';
+          piece.dataset.measure = mode;
+          measureBtns.forEach((b) =>
+            b.setAttribute('aria-pressed', String(b === btn)),
+          );
+        }),
+      );
+    }
+
+    /**
+     * Estimate reading time from the article's word count.
+     * @param el - The article element to measure.
+     * @param wpm - Average reading speed in words per minute.
+     * @returns Whole minutes, minimum 1.
+     */
+    function readingMinutes(el: HTMLElement, wpm = 220): number {
+      const words = (el.textContent ?? '').trim().split(/\s+/).length;
+      return Math.max(1, Math.round(words / wpm));
+    }
+
+    // --- Honest read-time from actual content ---
+    const readEl = document.querySelector<HTMLElement>('[data-readtime]');
+    if (piece && readEl) {
+      readEl.textContent = `${readingMinutes(piece)} min read`;
+    }
+
+    // --- Sticky reservation bar: reveal while the menu is on screen ---
+    const reserve = document.querySelector<HTMLElement>('[data-reserve]');
+    const menuSec = document.querySelector<HTMLElement>('.menu-sec');
+    if (reserve && menuSec) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            reserve.classList.toggle('is-visible', entry.isIntersecting);
+            reserve.setAttribute('aria-hidden', String(!entry.isIntersecting));
+            reserve.toggleAttribute('inert', !entry.isIntersecting);
+          }
+        },
+        { threshold: 0.15 },
+      );
+      io.observe(menuSec);
+      reserve
+        .querySelector('[data-reserve-btn]')
+        ?.addEventListener('click', () => {
+          reserve.classList.remove('is-visible');
+          reserve.setAttribute('aria-hidden', 'true');
+          reserve.setAttribute('inert', '');
+        });
+    }
+
+    // --- Inline newsletter: intercept submit, confirm inline ---
+    const form = document.querySelector<HTMLFormElement>('[data-newsletter]');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const field = form.querySelector<HTMLElement>('.newsletter-field');
+        const thanks = form.querySelector<HTMLElement>(
+          '[data-newsletter-thanks]',
+        );
+        if (field) field.hidden = true;
+        if (thanks) thanks.hidden = false;
+      });
+    }
+
+    // --- Metered paywall (⚠ manipulative). Progressive enhancement: the words
+    //     are always in the page; JS lays the wall over them and can lift it. ---
+    const paywall = document.querySelector<HTMLElement>('[data-paywall]');
+    if (paywall) {
+      paywall.classList.add('is-locked');
+
+      // Raising the wall pins a full-screen gate and locks page scroll — like a
+      // real paywall, nothing else is reachable until you interact with it.
+      const raise = () => {
+        paywall.classList.add('is-revealed');
+        document.body.style.overflow = 'hidden';
+      };
+      paywall
+        .querySelector('[data-paywall-unlock]')
+        ?.addEventListener('click', () => {
+          paywall.classList.remove('is-locked');
+          document.body.style.overflow = '';
+        });
+
+      // The wall rises as the gated content scrolls into view (the gate itself is
+      // fixed, so we watch the content instead). Instant if reduced-motion.
+      const trigger = paywall.querySelector<HTMLElement>('[data-paywall-content]');
+      if (trigger && !reduce && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              raise();
+              io.disconnect();
+            }
+          },
+          { threshold: 0.2 },
+        );
+        io.observe(trigger);
+      } else {
+        raise();
+      }
+    }
+
+    // Demo-only "read next" links shouldn't navigate anywhere.
+    document.querySelectorAll('[data-demolink]').forEach((a) =>
+      a.addEventListener('click', (e) => e.preventDefault()),
+    );
+
+    // --- Optional, gentle: fade section headings in (skipped if reduced) ---
+    if (!reduce && 'IntersectionObserver' in window) {
+      const reveals = document.querySelectorAll<HTMLElement>('.ed-sec > h2');
+      const io = new IntersectionObserver(
+        (entries, obs) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add('is-in');
+            obs.unobserve(entry.target);
+          }
+        },
+        { threshold: 0.6 },
+      );
+      reveals.forEach((h) => {
+        h.classList.add('reveal-h');
+        io.observe(h);
+      });
+    }
+  </script>
+
+  <style>
+    /* ============================================================
+       THE EDITORIAL — a genuine reading system.
+       Restrained, typographic, calm. The demo is the article.
+       ============================================================ */
+    .editorial {
+      --ed-accent: #8a2b2b; /* library burgundy */
+      --measure: 65ch;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    /* reading-progress bar */
+    .progress {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 3px;
+      z-index: 70;
+      background: color-mix(in srgb, var(--ink) 10%, transparent);
+    }
+    .progress span {
+      display: block;
+      height: 100%;
+      background: var(--ed-accent);
+      transform-origin: left;
+      transform: scaleX(0);
+    }
+
+    /* top nav + measure switch */
+    .ed-nav {
+      position: fixed;
+      inset: 3px 0 auto 0;
+      z-index: 60;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 1.4rem;
+      background: color-mix(in srgb, var(--paper) 82%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .ed-back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .measure-switch {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .measure-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-right: 0.3rem;
+    }
+    .measure-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+    .measure-btn[aria-pressed='true'] {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    /* article column — the star of the show */
+    .piece {
+      max-width: var(--measure);
+      margin: 0 auto;
+      padding: clamp(6rem, 14vh, 9rem) 1.5rem 4rem;
+      transition: max-width 0.5s cubic-bezier(0.4, 0, 0.1, 1);
+    }
+    .piece[data-measure='wide'] {
+      --measure: 92ch;
+    }
+
+    /* header */
+    .chips {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0;
+      margin-bottom: 1.4rem;
+    }
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ed-accent);
+      border: 1px solid color-mix(in srgb, var(--ed-accent) 40%, var(--line));
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+    }
+    .piece-title {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(2.6rem, 7vw, 4.6rem);
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.1rem;
+    }
+    /* .piece .piece-dek (0,2,0) intentionally out-specifies .piece p (0,1,1)
+       so the standfirst keeps its larger italic size. */
+    .piece .piece-dek {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+      line-height: 1.45;
+      color: var(--ink-soft);
+      margin-bottom: 1.6rem;
+    }
+    .byline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      padding-bottom: 1.6rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .byline-author {
+      color: var(--ink);
+    }
+    .byline-dot {
+      opacity: 0.5;
+    }
+
+    /* body copy */
+    .ed-sec {
+      margin-top: 2.2rem;
+    }
+    .ed-sec h2 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(1.6rem, 3.2vw, 2.1rem);
+      line-height: 1.15;
+      margin: 2.4rem 0 1rem;
+    }
+    .piece p {
+      font-family: var(--font-quiet);
+      font-size: 1.19rem;
+      line-height: 1.7;
+      margin-bottom: 1.3rem;
+    }
+    .piece p strong {
+      font-weight: 600;
+    }
+    .piece p em {
+      font-style: italic;
+    }
+    .piece a {
+      color: var(--ed-accent);
+    }
+
+    /* drop cap */
+    .dropcap {
+      float: left;
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 3.6em;
+      line-height: 0.72;
+      padding: 0.08em 0.1em 0 0;
+      color: var(--ed-accent);
+      -webkit-initial-letter: 3;
+      initial-letter: 3;
+    }
+    /* Browsers that support initial-letter don't need the float sizing. */
+    @supports (initial-letter: 3) or (-webkit-initial-letter: 3) {
+      .dropcap {
+        float: none;
+        font-size: inherit;
+        line-height: inherit;
+        padding: 0;
+      }
+    }
+
+    /* pull quote */
+    .pullquote {
+      margin: 2rem 0;
+      padding: 0.2rem 0 0.2rem 1.4rem;
+      border-left: 3px solid var(--ed-accent);
+      font-family: var(--font-quiet);
+      font-style: italic;
+      font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    /* dotted-leader menu (restaurant content skin) */
+    .menu {
+      margin: 1.8rem 0;
+      padding: 1.8rem;
+      background: color-mix(in srgb, var(--ed-accent) 5%, var(--paper));
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    .menu-head {
+      font-family: var(--font-mono) !important;
+      font-size: 0.75rem !important;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ed-accent);
+      margin-bottom: 1.1rem !important;
+      line-height: 1.4 !important;
+    }
+    .menu-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      font-size: 1.1rem !important;
+      line-height: 1.5 !important;
+      margin-bottom: 0.7rem !important;
+    }
+    .menu-name {
+      font-family: var(--font-quiet);
+    }
+    .menu-dots {
+      flex: 1;
+      align-self: flex-end;
+      height: 1px;
+      margin-bottom: 0.28rem;
+      background-image: radial-gradient(
+        circle,
+        var(--ink-soft) 0.5px,
+        transparent 0.5px
+      );
+      background-size: 6px 2px;
+      background-repeat: repeat-x;
+      opacity: 0.7;
+    }
+    .menu-price {
+      font-family: var(--font-mono);
+      color: var(--ink);
+    }
+    .menu-price::before {
+      content: '$';
+      opacity: 0.55;
+    }
+
+    /* inline newsletter */
+    .newsletter {
+      margin: 2rem 0;
+      padding: 1.6rem;
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 8px;
+    }
+    .newsletter-kicker {
+      font-family: var(--font-mono) !important;
+      font-size: 0.72rem !important;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 0.3rem !important;
+      line-height: 1.3 !important;
+    }
+    .newsletter-line {
+      font-family: var(--font-quiet) !important;
+      font-size: 1.15rem !important;
+      margin-bottom: 1.1rem !important;
+      line-height: 1.4 !important;
+    }
+    .newsletter-field {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .newsletter-field input {
+      flex: 1 1 220px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--paper);
+    }
+    .newsletter-field input::placeholder {
+      color: rgba(244, 241, 234, 0.5);
+    }
+    .newsletter-field button {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      padding: 0.75rem 1.3rem;
+      border: none;
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .newsletter-thanks {
+      font-family: var(--font-mono) !important;
+      font-size: 0.9rem !important;
+      margin-bottom: 0 !important;
+      line-height: 1.5 !important;
+    }
+
+    .closing {
+      color: var(--ink-soft);
+    }
+
+    /* metered paywall (⚠ manipulative) — a full-height wall that rises in */
+    .paywall-content {
+      max-height: 100rem;
+      transition: max-height 0.7s ease;
+    }
+    .paywall-sec.is-locked .paywall-content {
+      max-height: 8rem;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, #000 20%, transparent);
+      mask-image: linear-gradient(to bottom, #000 20%, transparent);
+    }
+    .paywall-gate {
+      display: none;
+    }
+    .paywall-sec.is-locked .paywall-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 3rem 1.2rem;
+      background: var(--paper);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(60px);
+      transition:
+        opacity 0.6s ease,
+        transform 0.8s cubic-bezier(0.4, 0, 0.1, 1),
+        visibility 0.6s ease;
+    }
+    .paywall-sec.is-locked.is-revealed .paywall-gate {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+    .gate-card {
+      max-width: 38rem;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.6rem 2.2rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 40px 90px -50px rgba(0, 0, 0, 0.55);
+      text-align: center;
+    }
+    .gate-lock {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 1.1rem;
+      color: var(--ed-accent);
+    }
+    .gate-eyebrow {
+      font-family: var(--font-mono) !important;
+      font-size: 0.74rem !important;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--v-manipulative);
+      margin-bottom: 0.7rem !important;
+      line-height: 1.4 !important;
+    }
+    .gate-card h3 {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      margin: 0 0 0.8rem;
+    }
+    .gate-lede {
+      font-family: var(--font-quiet) !important;
+      font-size: 1.08rem !important;
+      color: var(--ink-soft);
+      margin: 0 auto 1.6rem !important;
+      line-height: 1.6 !important;
+      max-width: 40ch;
+    }
+    .gate-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.9rem;
+    }
+    .gate-unlock {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      padding: 0.85rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--ink);
+      color: var(--paper);
+      cursor: pointer;
+    }
+    .gate-price {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+    }
+    .gate-fine {
+      font-family: var(--font-mono) !important;
+      font-size: 0.72rem !important;
+      color: var(--ink-soft);
+      opacity: 0.7;
+      margin: 1.4rem auto 0 !important;
+      max-width: 42ch;
+      line-height: 1.5 !important;
+    }
+
+    /* read next (essential) */
+    .rn-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+      margin: 1.4rem 0 0;
+    }
+    @media (min-width: 620px) {
+      .rn-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .rn-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1.1rem 1.2rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      text-decoration: none;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+    }
+    .rn-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 34px -22px rgba(0, 0, 0, 0.4);
+      border-color: color-mix(in srgb, var(--ed-accent) 40%, var(--line));
+    }
+    .rn-cat {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ed-accent);
+    }
+    .rn-title {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: 1.08rem;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+    .rn-meta {
+      margin-top: auto;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-soft);
+    }
+
+    /* spec tags sit a little apart from the prose */
+    .ed-sec :global(.spec-tag),
+    .piece-head :global(.spec-tag) {
+      margin-top: 1.6rem;
+    }
+
+    /* gentle heading reveal */
+    .reveal-h {
+      opacity: 0;
+      transform: translateY(10px);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+    .reveal-h.is-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* sticky reservation bar */
+    .reserve-bar {
+      position: fixed;
+      left: 50%;
+      bottom: 1.2rem;
+      transform: translate(-50%, 160%);
+      z-index: 55;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.7rem 0.8rem 0.7rem 1.3rem;
+      background: var(--ed-accent);
+      color: #fff;
+      border-radius: 999px;
+      box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.5);
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.1, 1);
+    }
+    .reserve-bar.is-visible {
+      transform: translate(-50%, 0);
+    }
+    .reserve-text {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      font-size: 0.98rem;
+    }
+    .reserve-btn {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ed-accent);
+      cursor: pointer;
+    }
+
+    /* outro (site chrome) */
+    .ed-outro {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 12vh 8vw;
+      margin-top: 3rem;
+    }
+    .outro-kicker {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+    .outro-line {
+      font-family: var(--font-loud);
+      font-size: clamp(2.2rem, 7vw, 5.5rem);
+      text-transform: uppercase;
+      line-height: 1;
+      max-width: 18ch;
+      margin-bottom: 2rem;
+    }
+    .outro-line em {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      text-transform: none;
+      color: #e39b9b;
+    }
+    .outro-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.85rem 1.4rem;
+      border-radius: 4px;
+    }
+    .btn.solid {
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .btn.ghost {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: var(--paper);
+    }
+
+    @media (max-width: 720px) {
+      .measure-label {
+        display: none;
+      }
+      .reserve-text {
+        display: none;
+      }
+    }
+  </style>
+</BaseLayout>

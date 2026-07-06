@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+
+// Self-hosted fonts (Fontsource) — replaces the render-blocking third-party
+// Google Fonts request. Only the weights/styles the site actually uses; each
+// file lazy-loads its subsets by unicode-range.
+import '@fontsource/anton/400.css';
+import '@fontsource/fraunces/400.css';
+import '@fontsource/fraunces/600.css';
+import '@fontsource/fraunces/400-italic.css';
+import '@fontsource/fraunces/600-italic.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'A self-demonstrating showroom of website vibes, by [ARTIFICE UI].',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#f4f1ea" />
+
+    <!-- Open Graph / Twitter (text; per-vibe OG images are Phase 4 remaining) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Artifice UI" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

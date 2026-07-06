@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SpecTag from '../components/SpecTag.astro';
+---
+
+<BaseLayout
+  title="404 -- Artifice UI"
+  description="You found a page that isn't here. Here's what to do about it."
+>
+  <div class="page">
+    <SiteHeader />
+
+    <main class="nf">
+      <p class="nf-code" aria-hidden="true">404</p>
+      <h1 class="nf-title">This page doesn't exist.</h1>
+      <p class="nf-body">
+        A dead end's got your whole attention -- which is exactly why it
+        shouldn't waste it. Most sites just drop you here with a shrug and a
+        broken layout. A 404's a small design decision like any other though,
+        so we treated it like one: no shrug, just the two doors most likely to
+        be the one you actually wanted.
+      </p>
+      <div class="nf-actions">
+        <a class="btn solid" href="/">← Back home</a>
+        <a class="btn ghost" href="/vibes">Browse the vibes</a>
+      </div>
+      <SpecTag
+        feature="The 404 page"
+        verdict="situational"
+        note="Never seen on purpose, so it's easy to neglect -- but the moment someone actually lands here, a good one turns a mistake into a soft landing, and a bad one just loses a visitor. Worth ten minutes; not worth an illustration budget."
+        tech="Astro serves this src/pages/404.astro for any unmatched route. It reuses the same header, footer, and verdict system as every other page -- because consistency is basically the whole point of a design system."
+      />
+    </main>
+
+    <SiteFooter />
+  </div>
+
+  <style>
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .nf {
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      padding: clamp(3.5rem, 12vh, 8rem) 6vw clamp(3rem, 8vh, 5rem);
+    }
+    .nf-code {
+      font-family: var(--font-loud);
+      font-size: clamp(6rem, 24vw, 16rem);
+      line-height: 0.85;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      opacity: 0.12;
+      margin-bottom: -0.5rem;
+    }
+    .nf-title {
+      font-family: var(--font-quiet);
+      font-weight: 600;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.05;
+      margin-bottom: 1.1rem;
+    }
+    .nf-body {
+      font-size: 1.12rem;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      max-width: 54ch;
+      margin-bottom: 1.8rem;
+    }
+    .nf-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+    .nf :global(.spec-tag) {
+      margin-top: 2.4rem;
+    }
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      text-decoration: none;
+      padding: 0.85rem 1.4rem;
+      border-radius: 4px;
+      transition: transform 0.2s ease;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .btn.solid {
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .btn.ghost {
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+  </style>
+</BaseLayout>

@@ -1,0 +1,1359 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpecTag from '../../components/SpecTag.astro';
+import Hud from '../../components/Hud.astro';
+import NextVibe from '../../components/NextVibe.astro';
+
+// The skin-switch options. Each id maps to a [data-skin] token block below.
+const skins = [
+  { id: 'playful', label: 'Playful' },
+  { id: 'brutalist', label: 'Brutalist' },
+  { id: 'web3', label: 'Web3' },
+  { id: 'retro', label: 'Y2K' },
+];
+
+// Deterministic particle field for the web3 skin — index-derived so it's
+// stable across SSR/hydration (no Math.random in the render pass).
+const particles = Array.from({ length: 14 }, (_, i) => ({
+  left: (i * 61 + 7) % 100,
+  delay: (i % 7) * 0.55,
+  dur: 5 + (i % 5),
+  size: 3 + (i % 3),
+}));
+---
+
+<BaseLayout
+  title="The Statement -- [ARTIFICE UI]"
+  description="One HTML skeleton, four skins -- playful, brutalist, web3, Y2K. Proof that a 'vibe' is just a stylesheet, not really an engineering problem."
+>
+  <Hud category="Statement" collapsed />
+
+  <main class="statement" data-skin="playful" data-stmt>
+    <nav class="demo-nav">
+      <a class="demo-back" href="/vibes">← Vibes</a>
+      <div class="skin-switch" role="group" aria-label="Skin">
+        {
+          skins.map((s, i) => (
+            <button
+              type="button"
+              class="skin-btn"
+              data-skin-btn={s.id}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+            >
+              {s.label}
+            </button>
+          ))
+        }
+      </div>
+    </nav>
+
+    <!-- 1 · THE LIVE SKELETON (the skin-swap itself) -->
+    <section
+      class="stage-sec"
+      data-feature="The skin-swap"
+      data-verdict="essential"
+    >
+      <div class="stage" data-stage>
+        <!-- signature backdrops — each shows only under its own skin -->
+        <div class="fx fx-blobs" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="fx fx-tron" aria-hidden="true"></div>
+        <div class="fx fx-particles" aria-hidden="true">
+          {particles.map((p) => (
+            <span
+              style={`left:${p.left}%;width:${p.size}px;height:${p.size}px;animation-delay:${p.delay}s;animation-duration:${p.dur}s;`}
+            />
+          ))}
+        </div>
+        <div class="fx fx-scan" aria-hidden="true"></div>
+
+        <div class="stage-inner">
+          <p class="s-tag" data-copy="tag">★ new + delightful</p>
+          <h1 class="s-title" data-copy="title">Say hello
+with a bounce.</h1>
+          <p class="s-sub" data-copy="sub">
+            Rounded corners, spring-loaded motion, and a confetti cannon on every
+            tap. Serotonin, shipped as a design system.
+          </p>
+          <div class="s-actions">
+            <button class="s-btn" type="button" data-copy="btn">Tap for confetti</button>
+            <a class="s-link" href="#" data-copy="link">or just say hi →</a>
+          </div>
+          <div class="s-cards">
+            <article class="s-card"><span data-copy="c0">Springy</span></article>
+            <article class="s-card"><span data-copy="c1">Squishy</span></article>
+            <article class="s-card"><span data-copy="c2">Confetti</span></article>
+          </div>
+        </div>
+
+        <div class="stage-foot">
+          <div class="s-marquee" aria-hidden="true">
+            <span>★ WELCOME TO MY HOMEPAGE ★ SIGN MY GUESTBOOK ★ 56K WARNING ★&nbsp;</span>
+            <span>★ WELCOME TO MY HOMEPAGE ★ SIGN MY GUESTBOOK ★ 56K WARNING ★&nbsp;</span>
+          </div>
+          <p class="s-foot" data-copy="foot">made with love + way too much serotonin</p>
+          <p class="s-counter">visitors <span data-counter data-count="88213">086000</span></p>
+        </div>
+      </div>
+
+      <p class="stage-hint">
+        Same markup, same layout -- only the stylesheet changed. Hit the skins
+        up top ↑, or just scroll -- the page dresses itself to match each
+        section below.
+      </p>
+
+      <SpecTag
+        feature="The skin-swap"
+        verdict="essential"
+        note="Most 'vibes' aren't actually different machines -- they're one layout wearing a different stylesheet. Swap a set of theme tokens, and this exact markup turns from a toy into a terminal into a spaceship. That's not really a trick; it's basically how a design system is supposed to be built."
+        tech="One HTML skeleton. Each skin is a block of CSS custom properties (color, radius, font, shadow, border-width) on a [data-skin] attribute -- the toggle just changes the attribute, and scrolling into each signature section flips the same attribute for you. Zero layout code is duplicated."
+      />
+    </section>
+
+    <!-- 2 · PLAYFUL -->
+    <section
+      class="sig-sec"
+      data-feature="Playful: spring & confetti"
+      data-verdict="vanity"
+    >
+      <div class="sig" data-skin="playful">
+        <div class="fx fx-blobs" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="sig-stage">
+          <p class="s-tag">★ wobble on hover</p>
+          <p class="s-title sig-h">Delight, on tap.</p>
+          <div class="s-cards">
+            <article class="s-card"><span>Boing</span></article>
+            <article class="s-card"><span>Squish</span></article>
+            <article class="s-card"><span>Pop</span></article>
+          </div>
+          <button class="s-btn" type="button">Throw confetti</button>
+        </div>
+      </div>
+      <div class="sig-copy" data-reveal>
+        <h2>Playful</h2>
+        <p>
+          Spring easing, morphing blobs, wobble-on-hover, confetti. Probably the
+          friendliest skin in the set -- and the easiest one to overdo.
+        </p>
+        <SpecTag
+          feature="Confetti & spring"
+          verdict="vanity"
+          note="Confetti is basically a dopamine hit -- delightful the first time, noise every time after that. Springy motion and wobble sell a warm brand, but the celebration should stay rare -- save it for a real win (a finished signup), not every single click."
+          tech="Spring feel is an easing curve; the burst spawns short-lived DOM particles animated with GSAP, and it's skipped entirely under prefers-reduced-motion."
+        />
+      </div>
+    </section>
+
+    <!-- 3 · BRUTALIST -->
+    <section
+      class="sig-sec reverse"
+      data-feature="Brutalist: raw HTML"
+      data-verdict="situational"
+    >
+      <div class="sig" data-skin="brutalist">
+        <div class="sig-stage">
+          <p class="s-tag">HELLO WORLD</p>
+          <p class="s-title sig-h">RAW HTML ENERGY</p>
+          <p class="sig-line">
+            Unstyled, on purpose. Here is <a href="#" class="s-link">a real 1995 link</a>.
+          </p>
+          <button class="s-btn" type="button">[ CLICK ]</button>
+        </div>
+      </div>
+      <div class="sig-copy" data-reveal>
+        <h2>Brutalist</h2>
+        <p>
+          System mono, 3px borders, zero radius, snap hovers, and links that
+          look like they did back in Netscape. It refuses to be pretty on
+          purpose.
+        </p>
+        <SpecTag
+          feature="Brutalist raw HTML"
+          verdict="situational"
+          note="Hard borders, mono type, and 1995-blue links read as honest and memorable -- perfect for a gallery, a zine, or a dev tool with some attitude. On a mainstream storefront though, the same look just reads as broken, and pushes normal users away. Deploy it on purpose, for an audience that actually gets the joke."
+          tech="Pure CSS: 3px solid borders, hard offset box-shadows with no blur, and transition: none for a deliberately un-animated, snappy hover."
+        />
+      </div>
+    </section>
+
+    <!-- 4 · WEB3 / FUTURISTIC -->
+    <section
+      class="sig-sec"
+      data-feature="Web3: aurora, grid & glitch"
+      data-verdict="vanity"
+    >
+      <div class="sig" data-skin="web3">
+        <div class="fx fx-blobs" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="fx fx-tron" aria-hidden="true"></div>
+        <div class="fx fx-particles" aria-hidden="true">
+          {particles.map((p) => (
+            <span
+              style={`left:${p.left}%;width:${p.size}px;height:${p.size}px;animation-delay:${p.delay}s;animation-duration:${p.dur}s;`}
+            />
+          ))}
+        </div>
+        <div class="sig-stage">
+          <p class="s-tag">◆ 0x…c0ffee</p>
+          <p class="s-title sig-h glitch" data-text="CONNECT.">CONNECT.</p>
+          <button class="s-btn glow" type="button">Connect Wallet</button>
+        </div>
+      </div>
+      <div class="sig-copy" data-reveal>
+        <h2>Web3 / Futuristic</h2>
+        <p>
+          Dark canvas, aurora haze, a Tron floor, drifting particles, glitching
+          type, and a button that really wants your wallet.
+        </p>
+        <SpecTag
+          feature="Aurora, Tron grid & glow"
+          verdict="vanity"
+          note="Neon glow signals 'the future' -- but glow isn't trust. This look launders credibility for projects that often haven't actually earned it, and users have learned to read heavy glow as a yellow flag. Gorgeous, and increasingly kind of a liability."
+          tech="The grid is a perspective-transformed repeating-gradient scrolling toward you; the glow is layered box- and text-shadow; particles are a few CSS-animated dots; the glitch is two clipped pseudo-copies of the text. All motion is gated behind reduced-motion."
+        />
+      </div>
+    </section>
+
+    <!-- 5 · RETRO / Y2K -->
+    <section
+      class="sig-sec reverse"
+      data-feature="Retro: chrome, CRT & counter"
+      data-verdict="vanity"
+    >
+      <div class="sig" data-skin="retro">
+        <div class="fx fx-scan" aria-hidden="true"></div>
+        <div class="sig-stage">
+          <p class="s-tag">✧ best viewed in 800×600</p>
+          <p class="s-title sig-h chrome">WELCOME!</p>
+          <div class="s-marquee" aria-hidden="true">
+            <span>★ SIGN MY GUESTBOOK ★ 56K WARNING ★ UNDER CONSTRUCTION ★&nbsp;</span>
+            <span>★ SIGN MY GUESTBOOK ★ 56K WARNING ★ UNDER CONSTRUCTION ★&nbsp;</span>
+          </div>
+          <p class="s-counter big">
+            Visitors: <span data-counter data-count="13794">011000</span>
+          </p>
+          <button class="s-btn" type="button">ENTER SITE »</button>
+        </div>
+      </div>
+      <div class="sig-copy" data-reveal>
+        <h2>Retro / Y2K</h2>
+        <p>
+          Chrome gradients, CRT scanlines, a marquee that will not quit, and a
+          visitor counter that's definitely real. Nostalgia, bottled.
+        </p>
+        <SpecTag
+          feature="Chrome, CRT & counter"
+          verdict="vanity"
+          note="Chrome text, scanlines, a marquee, and a hit counter are pure nostalgia -- a great limited-run gag, or a music/art microsite. As a lasting brand though, it dates in months and fights readability (scanlines over body text are basically eye strain). Fun, with a famously short shelf life."
+          tech="Chrome type is a metallic gradient clipped to the glyphs; scanlines are a repeating-linear-gradient overlay; the counter ticks up once when it scrolls into view -- honestly, from where the markup starts."
+        />
+      </div>
+    </section>
+
+    <!-- BONUS · 3D TILT -->
+    <section class="extra-sec" data-feature="3D tilt" data-verdict="vanity">
+      <div class="extra-inner">
+        <h2>Fake depth, real hover.</h2>
+        <p>
+          Move your cursor across this card. It leans toward you like it's
+          floating a few millimetres off the page -- but there's no depth there
+          really, just a perspective transform reading your mouse and tilting
+          to match. Convincing, and completely cosmetic.
+        </p>
+        <div class="tilt-stage">
+          <div class="tilt-card" data-tilt><span>tilt me</span></div>
+        </div>
+        <SpecTag
+          feature="3D tilt"
+          verdict="vanity"
+          note="The card that leans toward your cursor sells 'premium' and 'interactive' in one gesture -- and it's basically a parlour trick, easy to overdo into seasickness. One tasteful hero element is charming. A whole grid tilting at once is a headache. Depth's the costume here, not the feature."
+          tech="pointermove maps the cursor's position inside the card to a small rotateX / rotateY under CSS perspective, recentred on leave. Skipped on touch and under prefers-reduced-motion."
+        />
+      </div>
+    </section>
+
+    <!-- BONUS · KONAMI -->
+    <section class="extra-sec" data-feature="Konami code" data-verdict="vanity">
+      <div class="extra-inner">
+        <h2>There's a code hidden in here.</h2>
+        <p>
+          The oldest easter egg on the web:
+          <kbd>↑</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd
+          ><kbd>←</kbd><kbd>→</kbd><kbd>B</kbd><kbd>A</kbd>. Type it now -- or
+          just tap the pad below. Something ridiculous is about to happen, and
+          absolutely nothing about the product's going to improve.
+        </p>
+        <div class="konami-pad" data-konami-pad aria-label="Konami code pad">
+          <button type="button" data-k="ArrowUp">↑</button>
+          <button type="button" data-k="ArrowUp">↑</button>
+          <button type="button" data-k="ArrowDown">↓</button>
+          <button type="button" data-k="ArrowDown">↓</button>
+          <button type="button" data-k="ArrowLeft">←</button>
+          <button type="button" data-k="ArrowRight">→</button>
+          <button type="button" data-k="ArrowLeft">←</button>
+          <button type="button" data-k="ArrowRight">→</button>
+          <button type="button" data-k="b">B</button>
+          <button type="button" data-k="a">A</button>
+        </div>
+        <SpecTag
+          feature="Konami code"
+          verdict="vanity"
+          note="A secret handshake for the people who already know to look for it. It builds zero trust, converts no one, and delights nobody who isn't already delighted to be here -- which is kind of the point. Pure joy, pure vanity, and worth it precisely because it costs so little to hide."
+          tech="A keydown listener matches the last ten keys against the sequence; a hit fires the same confetti burst as the playful skin. The on-screen pad feeds the same matcher so touch users get in too."
+        />
+      </div>
+    </section>
+
+    <!-- OUTRO -->
+    <section class="st-outro" data-hud-hide>
+      <p class="outro-kicker">That's the Statement.</p>
+      <h2 class="outro-line">
+        Same skeleton -- the <em>vibe</em> is just a stylesheet.
+      </h2>
+      <div class="outro-actions">
+        <a class="btn ghost" href="/vibes">← Back to the vibes</a>
+        <a class="btn solid" href="/">Get this for my brand →</a>
+      </div>
+      <NextVibe href="/vibes/editorial" name="The Editorial" />
+    </section>
+  </main>
+
+  <script>
+    import gsap from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const statement = document.querySelector<HTMLElement>('[data-stmt]')!;
+    const stage = document.querySelector<HTMLElement>('[data-stage]')!;
+    const skinBtns =
+      document.querySelectorAll<HTMLButtonElement>('[data-skin-btn]');
+
+    /**
+     * Per-skin copy for the live skeleton. Only the text (and the [data-skin]
+     * attribute) changes between skins — the markup and layout are identical.
+     */
+    const copy: Record<string, Record<string, string>> = {
+      playful: {
+        tag: '★ new + delightful',
+        title: 'Say hello\nwith a bounce.',
+        sub: 'Rounded corners, spring-loaded motion, and a confetti cannon on every tap. Serotonin, shipped as a design system.',
+        btn: 'Tap for confetti',
+        link: 'or just say hi →',
+        c0: 'Springy',
+        c1: 'Squishy',
+        c2: 'Confetti',
+        foot: 'made with love + way too much serotonin',
+      },
+      brutalist: {
+        tag: 'NO STYLE = STYLE',
+        title: 'THIS IS\nBRUTALISM.',
+        sub: 'System mono. 3px borders. Zero radius. Links that look like 1995 because they are. It refuses to be pretty — that is the entire point.',
+        btn: '[ SUBMIT ]',
+        link: 'read the manifesto',
+        c0: 'CONCRETE',
+        c1: 'MONO',
+        c2: 'NO RADIUS',
+        foot: 'NO COOKIES. NO FRAMEWORKS. NO MERCY.',
+      },
+      web3: {
+        tag: '◆ on-chain · gasless',
+        title: 'Enter\nthe grid.',
+        sub: 'Aurora haze, a Tron floor, drifting particles, and a button that really wants your wallet. Looks like the future; trusts like a stranger in a dark alley.',
+        btn: 'Connect Wallet',
+        link: 'read the whitepaper →',
+        c0: 'Decentralized',
+        c1: 'Immutable',
+        c2: 'Vaporware?',
+        foot: 'not financial advice · gm · wagmi',
+      },
+      retro: {
+        tag: '✧ best viewed in 800×600',
+        title: 'Welcome\nto the Y2K.',
+        sub: 'Chrome gradients, CRT scanlines, a marquee that will not quit, and a visitor counter that is definitely real. Nostalgia with a famously short shelf life.',
+        btn: 'ENTER SITE »',
+        link: 'sign my guestbook',
+        c0: 'GuestBook',
+        c1: 'Webring',
+        c2: 'Under Constr.',
+        foot: '© 1999 · best viewed in Netscape Navigator',
+      },
+    };
+
+    /**
+     * Swap the live skeleton to a skin: flip the [data-skin] attribute, rewrite
+     * the copy, and sync the toggle's pressed state.
+     * @param skin - One of playful | brutalist | web3 | retro.
+     * @param fromScroll - True when the scroll-sync triggers below drive the
+     *   swap. Scroll-driven swaps skip ScrollTrigger.refresh() (never refresh
+     *   from inside a trigger callback) and skip the confetti reward (it's for
+     *   CHOOSING playful, not for scrolling past it).
+     */
+    function setSkin(skin: string, fromScroll = false): void {
+      const c = copy[skin];
+      if (!c) throw new Error(`Unknown skin "${skin}" — no copy defined.`);
+      if (statement.dataset.skin === skin) return; // already wearing it
+      statement.dataset.skin = skin;
+      for (const key in c) {
+        const el = stage.querySelector<HTMLElement>(`[data-copy="${key}"]`);
+        if (el) el.textContent = c[key];
+      }
+      skinBtns.forEach((b) =>
+        b.setAttribute('aria-pressed', String(b.dataset.skinBtn === skin)),
+      );
+      if (!fromScroll) {
+        // Copy/font swaps can nudge heights a little; keep triggered anims
+        // honest after a manual swap. (Safe here: clicks never run inside a
+        // ScrollTrigger callback.)
+        ScrollTrigger.refresh();
+        // A little reward when you land on Playful.
+        if (skin === 'playful') {
+          const active = statement.querySelector<HTMLElement>(
+            '[data-skin-btn="playful"]',
+          );
+          if (active) burstFrom(active);
+        }
+      }
+    }
+
+    skinBtns.forEach((b) =>
+      b.addEventListener('click', () => setSkin(b.dataset.skinBtn!)),
+    );
+
+    // --- Scroll-synced skin: each signature section dresses the whole page to
+    //     match what it's showing off, and the toggle up top follows along. A
+    //     manual click still wins until the next section boundary re-syncs.
+    //     Created even under prefers-reduced-motion: this is a discrete state
+    //     change, not motion (the global reduced-motion CSS makes it instant),
+    //     and skipping it would reintroduce the page-vs-panel contrast clash. ---
+    document.querySelectorAll<HTMLElement>('.sig-sec').forEach((section) => {
+      const skin =
+        section.querySelector<HTMLElement>('.sig[data-skin]')?.dataset.skin;
+      if (!skin) return;
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top 55%',
+        end: 'bottom 55%',
+        onEnter: () => setSkin(skin, true),
+        onEnterBack: () => setSkin(skin, true),
+      });
+    });
+
+    /**
+     * Fire a confetti burst centered on an element's bounding box.
+     * @param el - The element to burst from.
+     */
+    function burstFrom(el: Element): void {
+      const r = el.getBoundingClientRect();
+      confettiBurst(r.left + r.width / 2, r.top + r.height / 2);
+    }
+
+    /**
+     * Spawn a one-shot confetti burst at viewport coordinates. Particles are
+     * fully inline-styled and animated with GSAP, then removed on completion.
+     * No-op under prefers-reduced-motion.
+     * @param x - Viewport x in pixels.
+     * @param y - Viewport y in pixels.
+     */
+    function confettiBurst(x: number, y: number): void {
+      if (reduce) return;
+      const colors = ['#ff4fa3', '#8a5cff', '#ffd23b', '#3bd0ff', '#4be08a'];
+      for (let i = 0; i < 84; i++) {
+        const p = document.createElement('span');
+        p.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:8px;height:13px;background:${colors[i % colors.length]};border-radius:2px;pointer-events:none;z-index:90;will-change:transform;`;
+        document.body.appendChild(p);
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 110 + Math.random() * 240;
+        gsap.to(p, {
+          x: Math.cos(angle) * dist,
+          y: Math.sin(angle) * dist + 260,
+          rotation: Math.random() * 720 - 360,
+          opacity: 0,
+          duration: 1 + Math.random() * 0.9,
+          ease: 'power3.out',
+          onComplete: () => p.remove(),
+        });
+      }
+    }
+
+    // Any button rendered in a "playful" skin context throws confetti; the rest
+    // are demo-only and simply swallow their click.
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('.s-btn');
+      if (!btn) return;
+      e.preventDefault();
+      const skin = btn.closest<HTMLElement>('[data-skin]')?.dataset.skin;
+      if (skin === 'playful') burstFrom(btn);
+    });
+
+    // Demo-only links shouldn't navigate to "#".
+    document.querySelectorAll('.s-link').forEach((a) =>
+      a.addEventListener('click', (e) => e.preventDefault()),
+    );
+
+    // --- Visitor counters: tick up once when scrolled into view ---
+    const pad = (n: number) => String(n).padStart(6, '0');
+    gsap.utils.toArray<HTMLElement>('[data-counter]').forEach((el) => {
+      const target = parseInt(el.dataset.count ?? '0', 10);
+      if (reduce) {
+        el.textContent = pad(target);
+        return;
+      }
+      const obj = { v: Math.max(0, target - 2200) };
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 92%',
+        once: true,
+        onEnter: () =>
+          gsap.to(obj, {
+            v: target,
+            duration: 2,
+            ease: 'power2.out',
+            onUpdate: () => (el.textContent = pad(Math.round(obj.v))),
+          }),
+      });
+    });
+
+    // --- Scroll reveals (copy columns + outro) ---
+    if (!reduce) {
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: 'top 88%' },
+          y: 28,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+        });
+      });
+    }
+
+    // --- 3D tilt (vanity): lean the card toward the pointer. Desktop only. ---
+    if (!reduce && window.matchMedia('(pointer: fine)').matches) {
+      const MAX = 12;
+      document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
+        card.addEventListener('pointermove', (e) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = `perspective(600px) rotateY(${px * MAX}deg) rotateX(${-py * MAX}deg)`;
+        });
+        card.addEventListener('pointerleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+
+    // --- Konami code (vanity): the sequence throws a confetti storm ---
+    const KONAMI = [
+      'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+      'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a',
+    ];
+    let konamiBuf: string[] = [];
+    const konamiStorm = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      for (let i = 0; i < 6; i++) {
+        window.setTimeout(
+          () => confettiBurst(Math.random() * w, Math.random() * h * 0.6),
+          i * 140,
+        );
+      }
+    };
+    const konamiPush = (key: string) => {
+      konamiBuf.push(key.length === 1 ? key.toLowerCase() : key);
+      if (konamiBuf.length > KONAMI.length) konamiBuf.shift();
+      if (
+        konamiBuf.length === KONAMI.length &&
+        KONAMI.every((k, i) => konamiBuf[i] === k)
+      ) {
+        konamiBuf = [];
+        konamiStorm();
+      }
+    };
+    window.addEventListener('keydown', (e) => konamiPush(e.key));
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-konami-pad] button')
+      .forEach((b) => b.addEventListener('click', () => konamiPush(b.dataset.k ?? '')));
+    // No initial setSkin call: the SSR markup already ships the playful skin,
+    // copy, and pressed state. (Calling it used to confetti-bomb first paint.)
+  </script>
+
+  <style>
+    /* ============================================================
+       THE STATEMENT — one skeleton, four skins.
+       Every skin is just a block of custom properties on [data-skin].
+       The same tokens drive the live stage (toggle) and each locked
+       signature panel, so no skin styling is written twice.
+       ============================================================ */
+
+    /* ---------- skin token sets ---------- */
+    [data-skin] {
+      --st-bg: #fdeffb;
+      --st-panel: #ffffff;
+      --st-ink: #2a1633;
+      --st-muted: #8a6b95;
+      --st-accent: #ff4fa3;
+      --st-accent2: #8a5cff;
+      --st-line: #f3cfe6;
+      --st-btn-ink: #ffffff;
+      --st-radius: 22px;
+      --st-bw: 1px;
+      --st-head: var(--font-body);
+      --st-body: var(--font-body);
+      --st-shadow: 0 20px 44px -20px rgba(255, 79, 163, 0.55);
+    }
+    [data-skin='brutalist'] {
+      --st-bg: #ffffff;
+      --st-panel: #ffffff;
+      --st-ink: #000000;
+      --st-muted: #2b2b2b;
+      --st-accent: #1a1aff;
+      --st-accent2: #ec1c24;
+      --st-line: #000000;
+      --st-btn-ink: #ffffff;
+      --st-radius: 0px;
+      --st-bw: 3px;
+      --st-head: var(--font-mono);
+      --st-body: var(--font-mono);
+      --st-shadow: 6px 6px 0 #000000;
+    }
+    [data-skin='web3'] {
+      --st-bg: #05060d;
+      --st-panel: rgba(18, 22, 44, 0.55);
+      --st-ink: #eafcff;
+      --st-muted: #8ea3cf;
+      --st-accent: #23e5ff;
+      --st-accent2: #b14cff;
+      --st-line: rgba(120, 180, 255, 0.24);
+      --st-btn-ink: #04121a;
+      --st-radius: 14px;
+      --st-bw: 1px;
+      --st-head: var(--font-loud);
+      --st-body: var(--font-body);
+      --st-shadow: 0 0 44px rgba(35, 229, 255, 0.32);
+    }
+    [data-skin='retro'] {
+      --st-bg: #12123a;
+      --st-panel: #1b1b57;
+      --st-ink: #e8ecff;
+      --st-muted: #9aa0e0;
+      --st-accent: #ff5cc8;
+      --st-accent2: #57e0ff;
+      --st-line: #4a4aa0;
+      --st-btn-ink: #10113a;
+      --st-radius: 4px;
+      --st-bw: 2px;
+      --st-head: var(--font-loud);
+      --st-body: var(--font-body);
+      --st-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.14);
+    }
+
+    .statement {
+      position: relative;
+      min-height: 100vh;
+      background: var(--st-bg);
+      color: var(--st-ink);
+      font-family: var(--st-body);
+      transition:
+        background-color 0.55s ease,
+        color 0.55s ease;
+    }
+
+    /* ---------- top nav + skin switch ---------- */
+    .demo-nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 60;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.4rem;
+    }
+    .demo-back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: var(--st-ink);
+      background: color-mix(in srgb, var(--st-bg) 80%, transparent);
+      padding: 0.4rem 0.7rem;
+      border-radius: 6px;
+      border: 1px solid var(--st-line);
+      backdrop-filter: blur(6px);
+    }
+    .skin-switch {
+      display: flex;
+      gap: 0.2rem;
+      padding: 0.25rem;
+      background: color-mix(in srgb, var(--st-bg) 82%, transparent);
+      border: 1px solid var(--st-line);
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+    .skin-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.7rem;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--st-ink);
+      cursor: pointer;
+      transition:
+        background 0.25s ease,
+        color 0.25s ease;
+    }
+    .skin-btn[aria-pressed='true'] {
+      background: var(--st-accent);
+      color: var(--st-btn-ink);
+    }
+
+    /* ---------- section frames ---------- */
+    .stage-sec {
+      max-width: 1120px;
+      margin-inline: auto;
+      padding: clamp(5rem, 12vh, 8rem) 6vw 3rem;
+    }
+    .sig-sec {
+      max-width: 1120px;
+      margin-inline: auto;
+      padding: clamp(2.5rem, 7vh, 4.5rem) 6vw;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: clamp(1.5rem, 5vw, 4rem);
+      align-items: center;
+    }
+    .sig-sec.reverse .sig {
+      order: 2;
+    }
+
+    /* ---------- the reusable skeleton (stage + sig share it) ---------- */
+    .stage,
+    .sig {
+      position: relative;
+      overflow: hidden;
+      background: var(--st-panel);
+      color: var(--st-ink);
+      font-family: var(--st-body);
+      border: var(--st-bw) solid var(--st-line);
+      border-radius: var(--st-radius);
+      box-shadow: var(--st-shadow);
+      transition:
+        background-color 0.55s ease,
+        color 0.55s ease,
+        border-color 0.55s ease,
+        border-radius 0.55s ease,
+        box-shadow 0.55s ease;
+    }
+    .stage-inner,
+    .sig-stage {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.1rem;
+      padding: clamp(1.8rem, 5vw, 3.2rem);
+    }
+    .stage-inner {
+      min-height: 62vh;
+      justify-content: center;
+    }
+
+    .s-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--st-accent);
+      border: 1px solid var(--st-line);
+      border-radius: 999px;
+      padding: 0.3rem 0.7rem;
+    }
+    [data-skin='brutalist'] .s-tag {
+      border-radius: 0;
+      background: #000;
+      color: #fff;
+    }
+    .s-title {
+      font-family: var(--st-head);
+      font-weight: 600;
+      font-size: clamp(2.2rem, 6vw, 4.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      white-space: pre-line;
+    }
+    [data-skin='brutalist'] .s-title,
+    [data-skin='web3'] .s-title,
+    [data-skin='retro'] .s-title {
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+    }
+    [data-skin='web3'] .s-title {
+      text-shadow: 0 0 22px color-mix(in srgb, var(--st-accent) 70%, transparent);
+    }
+    .s-sub {
+      font-family: var(--st-body);
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: var(--st-muted);
+      max-width: 46ch;
+    }
+    .sig-line {
+      font-family: var(--st-body);
+      color: var(--st-muted);
+    }
+
+    .s-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+    }
+    .s-btn {
+      font-family: var(--st-head);
+      font-size: 1rem;
+      padding: 0.85rem 1.5rem;
+      border: var(--st-bw) solid transparent;
+      border-radius: var(--st-radius);
+      background: var(--st-accent);
+      color: var(--st-btn-ink);
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.3s ease;
+    }
+    .s-link {
+      font-family: var(--st-body);
+      color: var(--st-muted);
+      text-decoration: none;
+    }
+
+    /* per-skin button + link personalities */
+    [data-skin='playful'] .s-btn:hover,
+    [data-skin='playful'] .s-card:hover {
+      animation: wobble 0.5s ease;
+    }
+    [data-skin='brutalist'] .s-btn {
+      border-color: #000;
+      box-shadow: 5px 5px 0 #000;
+      transition: none;
+      text-transform: uppercase;
+    }
+    [data-skin='brutalist'] .s-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0 #000;
+    }
+    [data-skin='brutalist'] .s-link {
+      color: #1a1aff;
+      text-decoration: underline;
+    }
+    [data-skin='web3'] .s-btn,
+    .s-btn.glow {
+      box-shadow:
+        0 0 20px var(--st-accent),
+        inset 0 0 14px color-mix(in srgb, var(--st-accent) 35%, transparent);
+      animation: glowpulse 2.2s ease-in-out infinite;
+    }
+    [data-skin='web3'] .s-link {
+      color: var(--st-accent);
+    }
+    [data-skin='retro'] .s-btn {
+      background: linear-gradient(#fff, #b8c0d6 46%, #7c85a0 54%, #eef2ff);
+      color: #10113a;
+      border-color: #fff;
+      text-transform: uppercase;
+    }
+
+    /* ---------- skeleton cards ---------- */
+    .s-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      width: 100%;
+    }
+    .s-card {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 1.3rem 0.6rem;
+      font-family: var(--st-head);
+      font-size: 1rem;
+      background: color-mix(in srgb, var(--st-accent) 9%, var(--st-panel));
+      color: var(--st-ink);
+      border: var(--st-bw) solid var(--st-line);
+      border-radius: calc(var(--st-radius) * 0.7);
+      transition:
+        transform 0.2s ease,
+        background 0.3s ease;
+    }
+    [data-skin='web3'] .s-card {
+      background: color-mix(in srgb, var(--st-accent) 8%, transparent);
+      backdrop-filter: blur(3px);
+    }
+
+    /* ---------- stage foot (marquee + counter, retro only) ---------- */
+    .stage-foot {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem 1rem;
+      padding: 0 clamp(1.8rem, 5vw, 3.2rem) clamp(1.8rem, 5vw, 3.2rem);
+    }
+    .s-foot {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--st-muted);
+    }
+    /* Retro-only stage elements hide via visibility (NOT display) so the
+       stage's height is identical under every skin — the scroll-synced skin
+       swaps must never shift the page under the reader. */
+    .s-counter {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--st-muted);
+      display: inline-block;
+      visibility: hidden;
+    }
+    .s-counter span {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.12em;
+      background: #05060d;
+      color: #4be08a;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+    }
+    [data-skin='retro'] .s-counter {
+      visibility: visible;
+    }
+
+    /* ---------- signature copy columns ---------- */
+    .sig-copy h2 {
+      font-family: var(--font-quiet);
+      font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+      margin-bottom: 0.7rem;
+    }
+    .sig-copy > p {
+      /* --st-muted, not the cream-site --ink-soft: this column sits OUTSIDE
+         the locked panel, so it must read against the page-level skin — which
+         the scroll-sync keeps matched to the section being read. */
+      color: var(--st-muted);
+      font-size: 1.05rem;
+      max-width: 44ch;
+      margin-bottom: 1.4rem;
+    }
+    .sig-copy :global(.spec-tag) {
+      margin-top: 0;
+    }
+    .sig-h {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+    }
+    .sig-stage {
+      min-height: 46vh;
+      justify-content: center;
+    }
+
+    /* ============================================================
+       SIGNATURE EFFECTS — each shows only under its own skin.
+       ============================================================ */
+    .fx {
+      position: absolute;
+      inset: 0;
+      display: none;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    [data-skin='playful'] .fx-blobs,
+    [data-skin='web3'] .fx-blobs,
+    [data-skin='web3'] .fx-tron,
+    [data-skin='web3'] .fx-particles,
+    [data-skin='retro'] .fx-scan {
+      display: block;
+    }
+
+    /* morphing blobs (playful = candy, web3 = aurora) */
+    .fx-blobs span {
+      position: absolute;
+      width: 42%;
+      aspect-ratio: 1;
+      filter: blur(56px);
+      opacity: 0.55;
+      border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+      animation: morph 13s ease-in-out infinite alternate;
+    }
+    .fx-blobs span:nth-child(1) {
+      top: -8%;
+      left: -6%;
+      background: var(--st-accent);
+    }
+    .fx-blobs span:nth-child(2) {
+      bottom: -12%;
+      right: -8%;
+      background: var(--st-accent2);
+      animation-delay: -4s;
+    }
+    .fx-blobs span:nth-child(3) {
+      top: 30%;
+      left: 40%;
+      background: color-mix(in srgb, var(--st-accent) 50%, var(--st-accent2));
+      animation-delay: -8s;
+    }
+    [data-skin='web3'] .fx-blobs span {
+      opacity: 0.4;
+      filter: blur(70px);
+    }
+
+    /* tron grid floor (web3) */
+    .fx-tron {
+      top: auto;
+      height: 52%;
+      background-image:
+        linear-gradient(to right, var(--st-accent) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--st-accent) 1px, transparent 1px);
+      background-size: 42px 42px;
+      transform: perspective(340px) rotateX(74deg);
+      transform-origin: bottom center;
+      opacity: 0.26;
+      -webkit-mask-image: linear-gradient(to top, #000 8%, transparent 82%);
+      mask-image: linear-gradient(to top, #000 8%, transparent 82%);
+      animation: tron 5.5s linear infinite;
+    }
+
+    /* rising particles (web3) */
+    .fx-particles span {
+      position: absolute;
+      bottom: -12px;
+      border-radius: 50%;
+      background: var(--st-accent);
+      box-shadow: 0 0 8px var(--st-accent);
+      animation-name: rise;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    /* CRT scanlines + flicker (retro) */
+    .fx-scan {
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.32) 0 1px,
+        transparent 1px 3px
+      );
+      animation: flicker 4s steps(2) infinite;
+    }
+    .fx-scan::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse at center,
+        transparent 55%,
+        rgba(0, 0, 0, 0.35) 100%
+      );
+    }
+
+    /* chrome gradient text (retro) */
+    .chrome {
+      background: linear-gradient(
+        #ffffff 0%,
+        #c8d0e4 42%,
+        #6b7490 52%,
+        #aeb8d4 60%,
+        #ffffff 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    /* glitch text (web3) */
+    .glitch {
+      position: relative;
+    }
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      background: var(--st-panel);
+    }
+    .glitch::before {
+      color: var(--st-accent);
+      clip-path: inset(0 0 62% 0);
+      animation: glitch-a 2.4s infinite linear alternate;
+    }
+    .glitch::after {
+      color: var(--st-accent2);
+      clip-path: inset(58% 0 0 0);
+      animation: glitch-b 2.9s infinite linear alternate;
+    }
+    [data-skin='web3'] .glitch {
+      text-shadow: none;
+    }
+
+    /* marquee (retro) */
+    .s-marquee {
+      display: block;
+      visibility: hidden; /* reserves its height under every skin */
+      width: 100%;
+      overflow: hidden;
+      border-block: var(--st-bw) solid var(--st-line);
+      padding: 0.35rem 0;
+      background: #000;
+    }
+    [data-skin='retro'] .s-marquee {
+      visibility: visible;
+    }
+    .s-marquee span {
+      display: inline-block;
+      white-space: nowrap;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      color: #4be08a;
+      animation: scroll-x 16s linear infinite;
+    }
+    .s-counter.big {
+      display: none;
+      font-size: 0.95rem;
+      color: var(--st-ink);
+    }
+    [data-skin='retro'] .s-counter.big {
+      display: block;
+    }
+
+    .stage-hint {
+      margin-top: 1.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--st-muted); /* reads against the page skin, not cream */
+      text-align: center;
+    }
+
+    /* ---------- keyframes ---------- */
+    @keyframes morph {
+      50% {
+        border-radius: 60% 40% 33% 67% / 55% 62% 38% 45%;
+        transform: translate(6%, 8%) scale(1.12);
+      }
+    }
+    @keyframes tron {
+      to {
+        background-position:
+          0 42px,
+          0 42px;
+      }
+    }
+    @keyframes rise {
+      to {
+        transform: translateY(-46vh);
+        opacity: 0;
+      }
+    }
+    @keyframes wobble {
+      15% {
+        transform: rotate(-4deg) scale(1.04);
+      }
+      45% {
+        transform: rotate(3deg) scale(1.02);
+      }
+      75% {
+        transform: rotate(-2deg);
+      }
+    }
+    @keyframes glowpulse {
+      50% {
+        box-shadow:
+          0 0 34px var(--st-accent),
+          inset 0 0 18px color-mix(in srgb, var(--st-accent) 45%, transparent);
+      }
+    }
+    @keyframes flicker {
+      50% {
+        opacity: 0.72;
+      }
+    }
+    @keyframes scroll-x {
+      to {
+        transform: translateX(-100%);
+      }
+    }
+    @keyframes glitch-a {
+      0%,
+      100% {
+        transform: translate(0);
+      }
+      40% {
+        transform: translate(-3px, -1px);
+      }
+      60% {
+        transform: translate(2px, 1px);
+      }
+    }
+    @keyframes glitch-b {
+      0%,
+      100% {
+        transform: translate(0);
+      }
+      35% {
+        transform: translate(3px, 1px);
+      }
+      65% {
+        transform: translate(-2px, -1px);
+      }
+    }
+
+    /* ---------- bonus techniques (tilt + konami) ---------- */
+    .extra-sec {
+      max-width: 1120px;
+      margin-inline: auto;
+      padding: clamp(2.5rem, 7vh, 4.5rem) 6vw;
+    }
+    .extra-inner {
+      max-width: 640px;
+    }
+    .extra-inner h2 {
+      font-family: var(--font-quiet);
+      font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+      margin-bottom: 0.7rem;
+      color: var(--st-ink);
+    }
+    .extra-inner > p {
+      color: var(--st-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      max-width: 52ch;
+      margin-bottom: 1.4rem;
+    }
+    .extra-inner kbd {
+      font-family: var(--font-mono);
+      font-size: 0.82em;
+      padding: 0.05em 0.3em;
+      margin: 0 0.05em;
+      border: 1px solid var(--st-line);
+      border-radius: 4px;
+      background: var(--st-panel);
+      color: var(--st-ink);
+    }
+    .tilt-stage {
+      perspective: 600px;
+      margin-bottom: 1.6rem;
+    }
+    .tilt-card {
+      width: 190px;
+      height: 130px;
+      display: grid;
+      place-items: center;
+      font-family: var(--st-head);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--st-btn-ink);
+      background: var(--st-accent);
+      border-radius: calc(var(--st-radius) * 0.6);
+      box-shadow: var(--st-shadow);
+      transition: transform 0.25s ease;
+      transform-style: preserve-3d;
+      cursor: grab;
+    }
+    .konami-pad {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.6rem;
+    }
+    .konami-pad button {
+      width: 2.4rem;
+      height: 2.4rem;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      border: 1px solid var(--st-line);
+      border-radius: 6px;
+      background: var(--st-panel);
+      color: var(--st-ink);
+      cursor: pointer;
+      transition:
+        transform 0.1s ease,
+        background 0.2s ease;
+    }
+    .konami-pad button:active {
+      transform: scale(0.9);
+      background: var(--st-accent);
+      color: var(--st-btn-ink);
+    }
+
+    /* ---------- outro (site chrome, not a skin) ---------- */
+    .st-outro {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 12vh 8vw;
+      margin-top: 2rem;
+    }
+    .outro-kicker {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+    .outro-line {
+      font-family: var(--font-loud);
+      font-size: clamp(2.2rem, 7vw, 5.5rem);
+      text-transform: uppercase;
+      line-height: 1;
+      max-width: 20ch;
+      margin-bottom: 2rem;
+    }
+    .outro-line em {
+      font-family: var(--font-quiet);
+      font-style: italic;
+      text-transform: none;
+      color: #ff8fbf;
+    }
+    .outro-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      text-decoration: none;
+      padding: 0.85rem 1.4rem;
+      border-radius: 4px;
+    }
+    .btn.solid {
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .btn.ghost {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: var(--paper);
+    }
+
+    @media (max-width: 760px) {
+      .sig-sec {
+        grid-template-columns: 1fr;
+      }
+      .sig-sec.reverse .sig {
+        order: 0;
+      }
+      .skin-btn {
+        padding: 0.4rem 0.5rem;
+        font-size: 0.66rem;
+      }
+    }
+  </style>
+</BaseLayout>
